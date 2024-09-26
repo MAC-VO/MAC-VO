@@ -1,0 +1,80 @@
+#*IS_DATASET_TYPE*#
+# This file contains the test dataset released along with TartanAirv2 
+# that are considered as "challenging" for current SLAM systems.
+# We will use this in paper as a major evaluation.
+type: TartanAirv2
+ips: 100
+compressed: true
+useIMU: false
+
+# Controls optional data sources
+gtDepth: false
+gtFlow: false
+gtPose: true
+
+begin_idx: 0
+end_idx: -1
+
+dataroot: PATH_FOR_TARTANAIRv2
+
+# Paths
+roots:
+  # Data_hard
+  - root: /Data_hard/P000
+    name: v2_H000
+  - root: /Data_hard/P001
+    name: v2_H001
+  - root: /Data_hard/P002
+    name: v2_H002
+  - root: /Data_hard/P003
+    name: v2_H003
+  - root: /Data_hard/P004
+    name: v2_H004
+  - root: /Data_hard/P005
+    name: v2_H005
+  - root: /Data_hard/P006
+    name: v2_H006
+  - root: /Data_hard/P007
+    name: v2_H007
+  - root: /Data_hard/P008
+    name: v2_H008
+  - root: /Data_hard/P009
+    name: v2_H009
+  - root: /Data_hard/P010
+    name: v2_H010
+  - root: /Data_hard/P011
+    name: v2_H011
+  - root: /Data_hard/P012
+    name: v2_H012
+  - root: /Data_hard/P013
+    name: v2_H013
+
+  # Data_easy
+  - root: /Data_easy/P000
+    name: v2_E000
+  - root: /Data_easy/P001
+    name: v2_E001
+  - root: /Data_easy/P002
+    name: v2_E002
+  - root: /Data_easy/P003
+    name: v2_E003
+  - root: /Data_easy/P004
+    name: v2_E004
+  - root: /Data_easy/P005
+    name: v2_E005
+  - root: /Data_easy/P006
+    name: v2_E006
+  - root: /Data_easy/P007
+    name: v2_E007
+  - root: /Data_easy/P008
+    name: v2_E008
+  - root: /Data_easy/P009
+    name: v2_E009
+  - root: /Data_easy/P010
+    name: v2_E010
+  - root: /Data_easy/P011
+    name: v2_E011
+  - root: /Data_easy/P012
+    name: v2_E012
+  - root: /Data_easy/P013
+    name: v2_E013

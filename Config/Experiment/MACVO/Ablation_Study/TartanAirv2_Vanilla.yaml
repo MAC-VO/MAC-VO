@@ -1,0 +1,82 @@
+#
+# ---Ablation Study---
+# No covariance at all. Random Selector + Vanilla backend optimization (identity as weight matrix)
+#
+#
+
+Common:
+  # Some configurations are shared across multiple modules in Odometry, so I write them here.
+  device: &device cuda
+  max_depth: &max_depth auto
+
+Odometry:
+  name: MACVO_Ablation_vanilla
+  args:
+    device: *device
+    edgewidth: 32
+    num_point: 200 # Upper bound of KPs in each frame
+
+    # Match covariance for keypoint on first observation (sub-pixel uncertainty
+    # caused by the quantized pixel)
+    match_cov_default: 0.25
+
+    # Profiling the system using torch, generate chrome json trace file.
+    profile: false
+
+  cov:
+    obs:
+      type: NoCovariance
+      args:
+
+  keypoint:
+    type: RandomSelector
+    args:
+      mask_width: 32
+      device: *device
+
+  frontend:
+    type: FrontendCompose
+    args:
+      depth:
+        type: FlowFormerDepth
+        args:
+          device: *device
+          weight: ./Model/Flowformer_things_kitti.pth
+      match:
+        type: FlowFormerMatcher
+        args:
+          device: *device
+          weight: ./Model/Flowformer_things_kitti.pth
+
+  motion:
+    type: TartanMotionNet
+    args:
+      weight: ./Model/MACVO_posenet.pkl
+      device: *device
+
+  outlier:
+    type: FilterCompose
+    args:
+      filter_args:
+        - type: SimpleDepthFilter
+          args:
+            min_depth: 0.05
+            max_depth: *max_depth
+  
+  postprocess:
+    type: DisplacementInterpolate
+    args:
+  
+  keyframe:
+    type: AllKeyframe
+    args:
+  
+  optimizer:
+    type: PyPoseTwoFramePGO
+    args:
+      device: cpu
+      vectorize: true
+      parallel: true
+
+Datas: !flatten_seq
+  - !include_dataset  ../../../Sequence/TartanAir2_Test.yaml

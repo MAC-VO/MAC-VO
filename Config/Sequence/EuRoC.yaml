@@ -1,0 +1,40 @@
+#*IS_DATASET_TYPE*#
+# This file contains the two test environments used by TartanVO Stereo Module
+type: EuRoC
+
+# Controls optional data sources
+gtDepth: false
+gtFlow: false
+gtPose: true
+useIMU: false
+
+begin_idx: 0
+end_idx: -1
+
+dataroot: PATH_FOR_EUROC
+
+# Paths
+roots:
+  - root: /MH_01_easy/mav0
+    name: MH01
+  - root: /MH_02_easy/mav0
+    name: MH02
+  - root: /MH_03_medium/mav0
+    name: MH03
+  - root: /MH_04_difficult/mav0
+    name: MH04
+  - root: /MH_05_difficult/mav0
+    name: MH05
+  
+  - root: /V1_01_easy/mav0
+    name: V101
+  - root: /V1_02_medium/mav0
+    name: V102
+  - root: /V1_03_difficult/mav0
+    name: V103
+  - root: /V2_01_easy/mav0
+    name: V201
+  - root: /V2_02_medium/mav0
+    name: V202
+  - root: /V2_03_difficult/mav0
+    name: V203

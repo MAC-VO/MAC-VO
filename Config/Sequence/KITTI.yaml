@@ -1,0 +1,4 @@
+!flatten_seq 
+- !include_dataset ./KITTI/KITTI_00-02.yaml
+- !include_dataset ./KITTI/KITTI_03.yaml
+- !include_dataset ./KITTI/KITTI_04-10.yaml

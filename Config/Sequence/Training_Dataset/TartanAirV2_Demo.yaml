@@ -1,0 +1,28 @@
+#*IS_DATASET_TYPE*#
+# This file contains the test dataset released along with TartanAirv2 
+# that are considered as "challenging" for current SLAM systems.
+# We will use this in paper as a major evaluation.
+type: TartanAirv2
+ips: 100
+compressed: true
+
+# Controls optional data sources
+gtDepth: false
+gtFlow: true
+gtPose: true
+useIMU: false
+
+begin_idx: 0
+end_idx: -1
+
+dataroot: PATH_FOR_TARTANAIRv2
+
+# Paths
+roots:
+  # Data_hard
+  - root: /Data_hard/P000
+    name: v2_H000
+
+  # Data_easy
+  - root: /Data_easy/P000
+    name: v2_E000

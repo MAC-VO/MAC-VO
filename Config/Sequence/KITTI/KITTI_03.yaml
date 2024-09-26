@@ -1,0 +1,28 @@
+#*IS_DATASET_TYPE*#
+# This file contains the KITTI Odometry sequence 00 to 02 (inclusive)
+
+type: KITTISequence
+
+# Camera calibration and distortion parameters (OpenCV) 
+fx: 721.5377
+fy: 721.5377
+cx: 609.5593
+cy: 172.854
+bl: 0.53715
+
+target_size: [376, 680]
+
+# Controls optional data sources
+gtDepth: false
+gtFlow: false
+gtPose: true
+
+begin_idx: 0
+end_idx: -1
+
+dataroot: PATH_FOR_KITTI
+
+# Paths
+roots:
+  - root: sequences/03
+    name: K03

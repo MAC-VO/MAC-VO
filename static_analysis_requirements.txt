@@ -1,0 +1,21 @@
+pypose >= 0.6.8
+opencv-python-headless
+evo
+matplotlib==3.8.4
+tabulate
+tqdm
+rich
+einops
+timm==0.9.12
+rerun-sdk
+yacs
+torch
+numpy
+pyyaml
+wandb
+torchvision
+pillow
+scipy
+flow_vis
+tensorrt
+h5py

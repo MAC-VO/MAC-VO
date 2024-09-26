@@ -1,0 +1,10 @@
+Odometry:
+  name: DPVO
+  args:
+    config_file: ./Baseline/DPVO/config/default.yaml
+    weight_file: ./Model/DPVO.pth
+
+Datas: !flatten_seq
+  - !include_dataset  ../../../Sequence/TartanAir2_Test.yaml
+  # - !include_dataset  ../Sequence/EuRoC.yaml
+  # - !include ../Sequence/KITTI.yaml

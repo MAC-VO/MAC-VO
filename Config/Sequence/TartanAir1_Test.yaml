@@ -1,0 +1,52 @@
+#*IS_DATASET_TYPE*#
+# This file contains the two test environments used by TartanVO Stereo Module
+type: TartanAir
+ips: 100
+compressed: true
+useIMU: false
+
+# Controls optional data sources
+gtDepth: false
+gtFlow: false
+gtPose: true
+
+begin_idx: 0
+end_idx: -1
+
+dataroot: PATH_FOR_TARTANAIRV2
+
+# Paths
+roots:
+  - root: SE000
+    name: SE000
+  - root: SE001
+    name: SE001
+  - root: SE002
+    name: SE002
+  - root: SE003
+    name: SE003
+  - root: SE004
+    name: SE004
+  - root: SE005
+    name: SE005
+  - root: SE006
+    name: SE006
+  - root: SE007
+    name: SE007
+  
+  - root: SH000
+    name: SH000
+  - root: SH001
+    name: SH001
+  - root: SH002
+    name: SH002
+  - root: SH003
+    name: SH003
+  - root: SH004
+    name: SH004
+  - root: SH005
+    name: SH005
+  - root: SH006
+    name: SH006
+  - root: SH007
+    name: SH007
