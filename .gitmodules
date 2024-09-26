@@ -6,3 +6,6 @@
 	path = Module/Network/FlowFormer
 	url = git@github.com:MarkChenYutian/FlowFormer.git
 	update = merge
+[submodule "Module/Network/FlowFormer"]
+	path = Module/Network/FlowFormer
+	url = git@github.com:MarkChenYutian/FlowFormer.git
