@@ -1,0 +1,40 @@
+.idea/
+.vscode/
+.hypothesis/
+__pycache__/
+exp/
+Temp/
+cache/
+
+wandb/
+*.pth
+*.pkl
+*.json
+*.rrd
+*.png
+
+Draft/
+Results/
+Model/
+Model
+
+# Config Local (specific to the platform etc.) are not shared
+Config/**/local_*.yaml
+Config/**/_*.yaml
+Config/**/**/_*.yaml
+meta/
+
+# For SLURM cluster
+SLURM/
+main.sh
+SLURM.sh
+
+# For Notion Logging
+**/secret.txt
+./*.ipynb
+.trunk/
+
+**/.DS_Store
+.pytest_cache/
+
+!Scripts/UnitTest/assets/**/*.png
