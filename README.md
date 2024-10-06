@@ -173,10 +173,4 @@ Expand All (4 commands)
 
 > This codebase is designed with *modularization* in mind so it's easy to modify, replace, and re-configure modules of MAC-VO. One can easily use or replase the provided modules like flow estimator, depth estimator, keypoint selector, etc. to create a new visual odometry.
 
-### Define a New Dataset (Data loading for new Dataset)
-
-For details on how to customize your own datasets, please see our [custom dataset documentation](DataLoader/Customize.md).
-
-### Configuring the modules of MAC-VO
-
-For details on reconfiguring the MAC-VO or further development, please see our [configuration documentation](Config/README.md).
+🤗 We welcome everyone to extend and redevelop the MAC-VO. For documentation please visit the [Documentation Site](https://mac-vo.github.io/wiki/)
