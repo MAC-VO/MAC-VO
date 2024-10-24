@@ -1,11 +1,7 @@
 # <div align="center">MAC-VO: Metrics-aware Covariance for Learning-based Stereo Visual Odometry<br/><a href="https://mac-vo.github.io">Homepage</a> | <a href="https://arxiv.org/abs/2409.09479v1">arXiv</a></div> [![License: BSD 3-Clause](https://img.shields.io/badge/License-BSD%203--Clause-yellow.svg)](./LICENSE) [![YouTube](https://img.shields.io/badge/YouTube-b31b1b?style=flat&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=O_HowJk-GDw)
 
 
-
-
-https://github.com/user-attachments/assets/faae44f3-ee8a-4e68-9646-a0ed5aa3168
-
-
+https://github.com/user-attachments/assets/f7f33f28-5de7-412b-8f60-b0fcab91d48e
 
 
 > [!NOTE]  
