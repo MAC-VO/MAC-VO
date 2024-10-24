@@ -1,26 +1,22 @@
-# MAC-VO: Metrics-aware Covariance for Learning-based Stereo Visual Odometry
-
-<div align="center">
-
-[![License: BSD 3-Clause](https://img.shields.io/badge/License-BSD%203--Clause-yellow.svg)](./LICENSE)
-[![YouTube](https://img.shields.io/badge/YouTube-b31b1b?style=flat&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=O_HowJk-GDw)
-[![arXiv](https://img.shields.io/badge/arXiv-MACVO-orange.svg)](https://arxiv.org/abs/2409.09479v1)
-[![githubio](https://img.shields.io/badge/-homepage-blue?logo=Github&color=FF0000)](https://mac-vo.github.io)
-
-</div>
+# <div align="center">MAC-VO: Metrics-aware Covariance for Learning-based Stereo Visual Odometry<br/><a href="https://mac-vo.github.io">Homepage</a> | <a href="https://arxiv.org/abs/2409.09479v1">arXiv</a></div> [![License: BSD 3-Clause](https://img.shields.io/badge/License-BSD%203--Clause-yellow.svg)](./LICENSE) [![YouTube](https://img.shields.io/badge/YouTube-b31b1b?style=flat&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=O_HowJk-GDw)
 
 
 
-https://github.com/user-attachments/assets/faae44f3-ee8a-4e68-9646-a0ed5aa38168
+
+https://github.com/user-attachments/assets/faae44f3-ee8a-4e68-9646-a0ed5aa3168
 
 
+
+
+> [!NOTE]  
+> We plan to continue to develop and release updates to the MAC-VO system. This includes releasing TensorRT accelerated implementation, adapting more frontend networks, and integrating with ROS2. If you are interested, please consider star ⭐ this repo to stay tuned.
 
 ## Environment & Requirements
 
 **Docker Image** See `/Docker/DockerfileRoot` to build the container.
 **Virtual Environment**, Need Python 3.10+. See `requirements.txt` for environment requirements. Only tested on `PyTorch >=2.0` and `NumPy < 2.0.0`. *Breaking Change: must have PyPose >= 0.6.8*
 
-* pretrained model for MACVO, stereo TartanVO and DPVO is in our [release](https://github.com/MAC-VO/MAC-VO/releases/tag/model) 
+* The pre-trained model for MACVO, stereo TartanVO, and DPVO is in our [release](https://github.com/MAC-VO/MAC-VO/releases/tag/model) 
 
 ## Demo
 
@@ -35,7 +31,7 @@ https://github.com/user-attachments/assets/faae44f3-ee8a-4e68-9646-a0ed5aa38168
   $ python MACVO.py --odom [PATH_TO_ODOM_CONFIG] --data [PATH_TO_DATA_CONFIG] --useRR
   ```
 
-  see `python MACVO.py --help` for the more flags and configurations.
+  see `python MACVO.py --help` for more flags and configurations.
 
   <details>
   <summary>
@@ -62,8 +58,8 @@ https://github.com/user-attachments/assets/faae44f3-ee8a-4e68-9646-a0ed5aa38168
 
 * **Run MAC-VO Mapping Mode**
 
-  Mapping mode only reproject pixels to 3D space and does *not* optimize the pose. To run the mapping mode, you need to first run a trajectory through the original mode (MAC-VO), 
-  and pass the resulted pose file to MAC-VO mapping mode by modifying the config. (Specifically, `motion > args > pose_file` in config file)
+  Mapping mode only reprojects pixels to 3D space and does *not* optimize the pose. To run the mapping mode, you need to first run a trajectory through the original mode (MAC-VO), 
+  and pass the resulting pose file to MAC-VO mapping mode by modifying the config. (Specifically, `motion > args > pose_file` in config file)
 
   ```bash
   $ python MACVO.py --odom ./Config/Experiment/MACVO/MACVO_MappingMode.yaml --data ./Config/Sequence/TartanAir_abandonfac_001.yaml
