@@ -10,6 +10,7 @@ https://github.com/user-attachments/assets/f7f33f28-5de7-412b-8f60-b0fcab91d48e
 ## Environment & Requirements
 
 **Docker Image** See `/Docker/DockerfileRoot` to build the container.
+
 **Virtual Environment**, Need Python 3.10+. See `requirements.txt` for environment requirements. Only tested on `PyTorch >=2.0` and `NumPy < 2.0.0`. *Breaking Change: must have PyPose >= 0.6.8*
 
 * The pre-trained model for MACVO, stereo TartanVO, and DPVO is in our [release](https://github.com/MAC-VO/MAC-VO/releases/tag/model) 
