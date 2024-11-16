@@ -50,6 +50,8 @@ Odometry:
       weight: ./Model/MACVO_FrontendCov.pth
       use_jit: true
       enforce_positive_disparity: false
+      use_aot: false
+      dtype: fp32
 
   motion:
     type: TartanMotionNet

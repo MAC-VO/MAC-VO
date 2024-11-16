@@ -1,11 +1,11 @@
 from typing import Callable
 from types  import SimpleNamespace
 
-import warnings
 import torch.multiprocessing as mp
 
 from .SequenceBase import GenericSequence
 from .Interface import FramePair
+from Utility.PrettyPrint import Logger
 
 
 class TrainDataset(GenericSequence[FramePair]):
@@ -37,7 +37,7 @@ class TrainDataset(GenericSequence[FramePair]):
         try:
             return TrainDataset(from_idx, to_idx, **vars(config.args))
         except Exception as e:
-            warnings.warn(f"Failed to load dataset with config {config} - Reason: {e}")
+            Logger.write("warn", f"Failed to load dataset with config {config} - Reason: {e}")
             return None
 
     @classmethod

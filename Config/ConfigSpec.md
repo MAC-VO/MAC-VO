@@ -65,7 +65,7 @@
 
   ```yaml
   type: NaiveCovariance
-  kwargs:
+  args:
     depth_cov_min: 0.05
     depth_cov_max: 1.
   ```
@@ -74,14 +74,14 @@
 
   ```yaml
   type: DepthCovariance
-  kwargs:
+  args:
   ```
 
 - Match Only
 
   ```yaml
   type: MatchCovariance
-  kwargs:
+  args:
     match_cov_default: 0.25 # default match cov when not available (when KP is just created)
     kernel_size: 31 # Local patch size
     min_flow_cov: 0.16
@@ -91,7 +91,7 @@
 
   ```yaml
   type: GaussianMixtureCovariance
-  kwargs: # Same meaning as MatchOnly
+  args: # Same meaning as MatchOnly
     match_cov_default: 0.25
     kernel_size: 31
     min_flow_cov: 0.16
@@ -121,11 +121,11 @@
 
 ## Outlier Rejection
 
-- Compose
+- FilterCompose
 
   ```yaml
   outlier:
-    type: Compose
+    type: FilterCompose
     args:
       filter_args:
         - Subfilters to compose...

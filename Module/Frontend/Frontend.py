@@ -26,6 +26,7 @@ from abc import ABC, abstractmethod
 from DataLoader import SourceDataFrame
 from Utility.PrettyPrint import Logger
 from Utility.Extensions import ConfigTestableSubclass
+from Utility.Utils import reflect_torch_dtype
 
 from .StereoDepth import IStereoDepth
 from .Matching    import IMatcher
@@ -190,6 +191,7 @@ class FlowFormerCovFrontend(IFrontend[ModelContext]):
         
         model.eval()
         model.to(self.config.device)
+        model.to(reflect_torch_dtype(self.config.dtype))
         model.load_ddp_state_dict(ckpt)
         
         return ModelContext(model=model, cuda_graph=None, compiled_model=None)
@@ -218,11 +220,15 @@ class FlowFormerCovFrontend(IFrontend[ModelContext]):
         else:
             input_A, input_B = depth_pair
         
+        input_A = input_A.to(reflect_torch_dtype(self.config.dtype))
+        input_B = input_B.to(reflect_torch_dtype(self.config.dtype))
+        
         if frame_t1 is not None and self.config.use_jit and ('cuda' in self.config.device.lower()):
             est_flow, est_cov = self.cuda_graph_estimate(input_A, input_B)
-            time.sleep(0.0) # Hint OS scheduler for context switch
         else:
             est_flow, est_cov = self.context["model"].inference(input_A, input_B)
+        
+        est_flow, est_cov = est_flow.float(), est_cov.float()
         
         # Depth estimation
         disparity, disparity_cov = est_flow[0:1, :1].abs(), est_cov[0:1, :1]
@@ -296,6 +302,7 @@ class FlowFormerCovFrontend(IFrontend[ModelContext]):
             static_input_B.copy_(inp_B)
             
             cuda_graph.replay()
+            time.sleep(0.0) # Hint OS scheduler for context switch
             
             result_val.copy_(static_output)
             result_cov.copy_(static_output_cov)

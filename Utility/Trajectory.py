@@ -9,7 +9,7 @@ from evo.core.trajectory import PoseTrajectory3D
 
 from Module.Map import TensorMap
 from Utility.Math import interpolate_pose, NormalizeQuat
-from Utility.Space import Sandbox
+from Utility.Sandbox import Sandbox
 
 T = TypeVar("T")
 T2 = TypeVar("T2")

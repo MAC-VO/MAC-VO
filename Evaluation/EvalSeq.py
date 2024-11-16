@@ -4,7 +4,7 @@ from statistics import mean
 from Evaluation.MetricsSeq import evaluateATE, evaluateROE, evaluateRTE, evaluateRPE
 from Utility.Plot import getColor
 from Utility.PrettyPrint import ColoredTqdm, Logger, print_as_table, save_as_csv
-from Utility.Space import Sandbox
+from Utility.Sandbox import Sandbox
 from Utility.Trajectory import Trajectory
 
 

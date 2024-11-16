@@ -60,19 +60,16 @@ class MemoryCovDecoder(MemoryDecoder):
         coords0, coords1 = initialize_flow(context)
         cov0, cov1 = initialize_flow(context)
         if flow_init is not None:
-            # print("[Using warm start]")
             coords1 = coords1 + flow_init
-
-        # flow = coords1
 
         flow_predictions = []
         cov_predictions = []
 
         context = self.proj(context)
         net, inp = torch.split(context, [128, 128], dim=1)
-        net = torch.tanh_(net)
+        net = torch.tanh(net)
         cov_net = net.clone()
-        inp = torch.relu_(inp)
+        inp = torch.relu(inp)
         attention = None
         if self.cfg.gma:
             attention = self.att(inp)            

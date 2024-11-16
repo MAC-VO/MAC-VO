@@ -4,7 +4,7 @@ import rerun as rr
 from pathlib import Path
 
 from Utility.Visualizer import RerunVisualizer
-from Utility.Space import Sandbox
+from Utility.Sandbox import Sandbox
 from Utility.Config import load_config
 from Utility.PrettyPrint import ColoredTqdm
 from DataLoader import GenericSequence

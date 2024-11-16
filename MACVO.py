@@ -8,7 +8,7 @@ from Evaluation.EvalSeq import EvaluateSequences
 from Odometry.MACVO import MACVO
 from Utility.Config import load_config, asNamespace
 from Utility.PrettyPrint import print_as_table, ColoredTqdm
-from Utility.Space import Sandbox
+from Utility.Sandbox import Sandbox
 from Utility.Visualizer import PLTVisualizer
 from Utility.Visualizer import RerunVisualizer as rrv
 
@@ -119,7 +119,7 @@ if __name__ == "__main__":
     if args.preload:
         sequence = sequence.preload()
     
-    system = MACVO.from_config(asNamespace(exp_space.config), sequence)
+    system = MACVO.from_config(asNamespace(exp_space.config))
     system.receive_frames(sequence, exp_space, on_frame_finished=VisualizeRerunCallback)
     
     rrv.visualizeTrajectory(system.get_map())

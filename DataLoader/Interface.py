@@ -4,7 +4,7 @@ from typing_extensions import Self
 import numpy as np
 import pypose as pp
 import torch
-
+from torchvision.transforms.functional import resize
 
 T = TypeVar("T")
 CollateFn = Callable[[Sequence[T],], T]
@@ -60,10 +60,14 @@ class MetaInfo:
         self.width = width
         self.height = height
 
-        self.fx: float = K[0, 0].item()
-        self.fy: float = K[1, 1].item()
-        self.cx: float = K[0, 2].item()
-        self.cy: float = K[1, 2].item()
+    @property
+    def fx(self) -> float: return self.K[0, 0].item()
+    @property
+    def fy(self) -> float: return self.K[1, 1].item()
+    @property
+    def cx(self) -> float: return self.K[0, 2].item()
+    @property
+    def cy(self) -> float: return self.K[1, 2].item()
 
 
 class IMUData:
@@ -104,6 +108,26 @@ class SourceDataFrame(DataFrame):
         self.flowMask = flowMask
         self.gtDepth = gtDepth
         self.gtPose = gtPose
+    
+    def resize_image(self, scale_u: float, scale_v: float) -> "SourceDataFrame":
+        raw_height = self.meta.height
+        raw_width  = self.meta.width
+        
+        target_h   = int(raw_height / scale_v)
+        target_w   = int(raw_width  / scale_u)
+        
+        round_scale_v = raw_height / target_h
+        round_scale_u = raw_width  / target_w
+        
+        self.meta.height = target_h
+        self.meta.width  = target_w
+        self.meta.K[0] /= round_scale_u
+        self.meta.K[1] /= round_scale_v
+        
+        self.imageL = resize(self.imageL, [target_h, target_w])
+        self.imageR = resize(self.imageR, [target_h, target_w])
+        
+        return self
 
     @staticmethod
     def _collate_tensor(batch: Sequence[Optional[torch.Tensor]]) -> Optional[torch.Tensor]:

@@ -7,9 +7,9 @@ from typing_extensions import Self
 from types import SimpleNamespace
 from abc import ABC, abstractmethod
 
+from Utility.Sandbox import Sandbox
 from DataLoader import GenericSequence, DataFrame
 from Module.Map import TensorMap
-from Utility.Space import Sandbox
 from Utility.PrettyPrint import ColoredTqdm, Logger
 
 from torch.profiler import profile, ProfilerActivity

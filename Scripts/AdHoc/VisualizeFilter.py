@@ -27,7 +27,7 @@ kpcfg, _ = build_dynamic_config(
 )
 outliercfg, _ = build_dynamic_config(
     {
-        "type": "Compose",
+        "type": "FilterCompose",
         "args": {
             "verbose": True,
             "filter_args": [

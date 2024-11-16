@@ -3,6 +3,7 @@ import torch
 
 from rich.columns import Columns
 from rich.panel import Panel
+from typing import Callable
 
 import Module
 from DataLoader.SequenceBase import GenericSequence
@@ -16,6 +17,9 @@ from Utility.Extensions import ConfigTestable
 from .Interface import IVisualOdometry
 
 class MACVO(IVisualOdometry[SourceDataFrame], ConfigTestable):
+    
+    T_SYSHOOK = Callable[["MACVO",], None]
+    
     def __init__(
         self,
         device, num_point, edgewidth, match_cov_default, profile,
@@ -57,11 +61,14 @@ class MACVO(IVisualOdometry[SourceDataFrame], ConfigTestable):
         self.prev_handle: int | None = None
         self.prev_depth_map: torch.Tensor | None = None
         self.prev_depth_map_cov: torch.Tensor | None = None
+        
+        # Hooks
+        self.on_optimize_writeback: list[MACVO.T_SYSHOOK] = []
 
         self.report_config()
     
     @classmethod
-    def from_config(cls: type["MACVO"], cfg: SimpleNamespace, seq: GenericSequence[SourceDataFrame]) -> "MACVO":
+    def from_config(cls: type["MACVO"], cfg: SimpleNamespace) -> "MACVO":
         odomcfg = cfg.Odometry
         # Initialize modules for VO
         Frontend            = Module.IFrontend.instantiate(odomcfg.frontend.type, odomcfg.frontend.args)
@@ -249,6 +256,10 @@ class MACVO(IVisualOdometry[SourceDataFrame], ConfigTestable):
         self.gmap.add_frame(curr_frame.meta.K, est_pose, 0, None)
         self.MotionEstimator.update(self.gmap.frames[-1].squeeze().pose)
         
+        # Trigger callback functions on optimization finish (though there is no optimization
+        # happening) for the first frame.
+        for func in self.on_optimize_writeback: func(self)
+        
         # Store context
         self.epilog(curr_frame, depth_map, depth_map_cov)
 
@@ -269,6 +280,9 @@ class MACVO(IVisualOdometry[SourceDataFrame], ConfigTestable):
         # NOTE: should always writeback optimized pose to global map before selecting new keypoints (register
         # new 3D point) on that frame.
         self.Optimizer.write_map(self.gmap)
+        # Trigger callback functions (useful in online systems like ROS where 
+        # we want to do something immediately after the optimization result is ready)
+        for func in self.on_optimize_writeback: func(self)
         
         # Update motion model (this must be after write_back to get latest result)
         self.MotionEstimator.update(self.gmap.frames[self.prev_handle].squeeze().pose)
@@ -322,6 +336,12 @@ class MACVO(IVisualOdometry[SourceDataFrame], ConfigTestable):
     def get_map(self) -> TensorMap:
         return self.gmap
     
+    def register_on_optimize_finish(self, func: T_SYSHOOK):
+        """
+        Install a callback hook when optimization result is written back to the map
+        """
+        self.on_optimize_writeback.append(func)
+    
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None:
         assert config is not None
@@ -338,6 +358,5 @@ class MACVO(IVisualOdometry[SourceDataFrame], ConfigTestable):
             "num_point"         : lambda b: isinstance(b, int) and b > 0, 
             "edgewidth"         : lambda b: isinstance(b, int) and b > 0, 
             "match_cov_default" : lambda b: isinstance(b, (float, int)) and b > 0.0, 
-            "profile"           : lambda b: isinstance(b, bool),
         })
 

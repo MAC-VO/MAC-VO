@@ -33,11 +33,12 @@ class IObservationCov(ABC, ConfigTestableSubclass):
 
         Parameters:
 
-        * frame     - SourceDataFrame from GenericSequence.
-        * kp        - N * 2 FloatTensor, [[u0, v0], ...], uv coordinate of keypoints on current frame
-        * depth_map - H * W FloatTensor, Dense depth map for current frame
-        * depth_cov - N     FloatTensor, [cov0, ...], depth covariance for each keypoint on current frame
-        * flow_cov  - N * 2 FloatTensor, [[σ²u, σ²v], ...], covariance of flow on u and v direction for keypoint on current frame
+        * frame         - SourceDataFrame from GenericSequence.
+        * kp            - N * 2 FloatTensor, [[u0, v0], ...], uv coordinate of keypoints on current frame
+        * depth_cov_map - H * W FloatTensor, Dense depth covariance map for current frame
+        * depth_map     - H * W FloatTensor, Dense depth map for current frame
+        * depth_cov     - N     FloatTensor, [cov0, ...], depth covariance for each keypoint on current frame
+        * flow_cov      - N * 2 FloatTensor, [[σ²u, σ²v], ...], covariance of flow on u and v direction for keypoint on current frame
         """
         ...
     
@@ -210,7 +211,7 @@ class MatchCovariance(IObservationCov):
             if PLTVisualizer.isActive(PLTVisualizer.visualize_image_patches):
                 PLTVisualizer.visualize_image_patches(
                     "image_patch", 
-                    frame.imageL[0, ..., all_v_indices, all_u_indices].view(
+                    frame.imageL[0, ..., all_v_indices.cpu(), all_u_indices.cpu()].view(
                         3, n_sample, self.config.kernel_size, self.config.kernel_size
                     ).permute(1, 2, 3, 0))
 

@@ -3,7 +3,7 @@ from pathlib import Path
 from DataLoader import GenericSequence, SourceDataFrame
 from Odometry.BaselineDPVO import DeepPatchVO
 from Utility.Config import load_config
-from Utility.Space import Sandbox
+from Utility.Sandbox import Sandbox
 
 
 if __name__ == "__main__":

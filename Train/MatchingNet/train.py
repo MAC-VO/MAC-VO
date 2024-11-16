@@ -11,9 +11,9 @@ from pathlib import Path
 from torch.amp.grad_scaler import GradScaler
 from torch.utils.data import ConcatDataset, DataLoader
 from DataLoader import TrainDataset, FramePair, SourceDataFrame
-from Train.MatchingNet.loss import sequence_loss
+from Train.MatchingNet.loss import sequence_loss, sequence_metric
 from Utility.Config import load_config, namespace_to_cfgnode
-from Utility.PrettyPrint import ColoredTqdm
+from Utility.PrettyPrint import ColoredTqdm, Logger
 
 from .utils import (
     T_DataType, T_TrainType, 
@@ -81,7 +81,6 @@ def CastDatatype(data_type: T_DataType) -> Callable[[FramePair,], FramePair]:
         if frame.nxt.gtDepth is not None : frame.nxt.gtDepth  = frame.nxt.gtDepth.to(dtype=target_dtype)
         if frame.nxt.flowMask is not None: frame.nxt.flowMask = frame.nxt.flowMask.to(dtype=target_dtype)
         return frame
-        
     return _cast_datatype
 
 
@@ -124,7 +123,6 @@ def train(modelcfg, cfg, loader, eval_loader=None):
     )
     scaler = GradScaler(enabled=modlecfg.mixed_precision)
     model_ptr = model.module if isinstance(model, nn.DataParallel) else model
-    
     match train_mode:
         case "flow":
             for param in model_ptr.memory_decoder.cov_update.parameters():
@@ -143,7 +141,6 @@ def train(modelcfg, cfg, loader, eval_loader=None):
     should_keep_training = True
     while should_keep_training:
         for frameData in ColoredTqdm(loader):
-            metric_list = []
             assert frameData.cur.gtFlow is not None
             optimizer.zero_grad()
             img1, img2 = frameData.cur.imageL.cuda(), frameData.nxt.imageL.cuda()
@@ -151,26 +148,21 @@ def train(modelcfg, cfg, loader, eval_loader=None):
             flow_mask = frameData.cur.flowMask.cuda()
             
             flow, cov = model(img1, img2)
-            loss, metrics = sequence_loss(
-                                cfg=modlecfg,
-                                preds=flow,
-                                gt=gt_flow,
-                                flow_mask=flow_mask,
-                                cov_preds=cov)
-            metric_list.append(metrics)
+            loss = sequence_loss(cfg=modlecfg, preds=flow, gt=gt_flow, flow_mask=flow_mask, cov_preds=cov)
+            
             scaler.scale(loss).backward()
             scaler.unscale_(optimizer)
             torch.nn.utils.clip_grad_norm_(model.parameters(), modlecfg.clip)
             scaler.step(optimizer)
             scheduler.step()
             lr = optimizer.param_groups[0]["lr"]
-            metrics["lr"] = lr
             scaler.update()
             if total_steps % int(modlecfg.log_freq) == 0:
-                print("Iter: %d, Loss: %.4f" % (total_steps, loss.item()))
+                Logger.write("info", "Iter: %d, Loss: %.4f" % (total_steps, loss.item()))
                 if modlecfg.wandb:
-                    wandb.log(merge_matrices(metric_list))
-                metric_list = []
+                    metrics = merge_matrices([sequence_metric(modelcfg, flow, cov, gt_flow, flow_mask)[1]])
+                    metrics["lr"] = lr
+                    wandb.log(metrics)
                 
             total_steps += 1
 
@@ -180,7 +172,7 @@ def train(modelcfg, cfg, loader, eval_loader=None):
 
             if modelcfg.autosave_freq and total_steps % modelcfg.autosave_freq == 0:
                 PATH = "%s/%s/%d.pth" % (modelcfg.autosave_dir, modelcfg.name + modelcfg.time, total_steps)  
-                
+                Logger.write("info", f"Save model to {PATH}")
                 if isinstance(model, nn.DataParallel):
                     # We don't want to have a layer of `module.` on all weights. Since we are definitely not
                     # using DDP during inference, I will just save the "real weights" of the model.
@@ -229,7 +221,7 @@ if __name__ == "__main__":
             import wandb
             wandb.init(project="FlowFormerCov", name = modlecfg.name,  config=modlecfg)
         except ImportError:
-            print("Wandb is not installed, disabling it.")
+            Logger.write("warn", "Wandb is not installed, disabling it.")
             modlecfg.wandb = False
 
     train(modlecfg, cfg, trainloader)

@@ -14,7 +14,7 @@ def flow_loss(gamma: float, preds: torch.Tensor, gt: torch.Tensor, mask: torch.T
 
 
 @torch.compile()
-def cov_loss(gamma: float, preds: torch.Tensor, gt: torch.Tensor, cov_preds: list[torch.Tensor]):
+def flow_cov_loss(gamma: float, preds: torch.Tensor, cov_preds: list[torch.Tensor], gt: torch.Tensor) -> torch.Tensor:
     n_predictions = len(preds)
     cov_loss = torch.zeros_like(gt)
     for i in range(n_predictions):
@@ -25,7 +25,47 @@ def cov_loss(gamma: float, preds: torch.Tensor, gt: torch.Tensor, cov_preds: lis
     return cov_loss.mean()
 
 
-def sequence_loss(cfg, preds: torch.Tensor, gt: torch.Tensor, flow_mask: torch.Tensor | None, cov_preds: list[torch.Tensor] | None):
+@torch.compile()
+def depth_loss(gamma: float, preds: torch.Tensor, gt_depth: torch.Tensor, Ks: torch.Tensor, bls: torch.Tensor) -> torch.Tensor:
+    n_predictions = len(preds)
+    
+    fxs = Ks[:, 0, 0]
+    gt_disparity  = (fxs * bls).unsqueeze(-1).unsqueeze(-1) / gt_depth 
+    est_disparity = preds[..., 0]
+    
+    depth_loss = torch.tensor(0.0, device=gt_disparity.device)
+    for i in range(n_predictions):
+        i_weight = gamma ** (n_predictions - i - 1)
+        i_loss   = (est_disparity[i] + gt_disparity)
+        depth_loss = i_weight * i_loss.mean()
+    
+    return depth_loss
+
+
+
+def sequence_loss(cfg, preds: torch.Tensor, gt: torch.Tensor, flow_mask: torch.Tensor | None, cov_preds: list[torch.Tensor] | None):    
+    gt_mag = gt.norm(dim=1)
+    mask = gt_mag < cfg.max_flow
+    if flow_mask is not None: mask &= flow_mask >= 0.5
+    
+    match cfg.training_mode:
+        case "flow":
+            loss = flow_loss(cfg.gamma, preds, gt, mask)
+        
+        case "cov":
+            assert cov_preds is not None
+            loss = flow_cov_loss(cfg.gamma, preds, cov_preds, gt)
+
+        case "flow+cov":
+            assert cov_preds is not None
+            loss = flow_loss(cfg.gamma, preds, gt, mask) + flow_cov_loss(cfg.gamma, preds, cov_preds, gt)
+            
+        case default:
+            raise ValueError(f"Unavailable training mode {default}")      
+    return loss
+
+
+def sequence_metric(cfg, preds: torch.Tensor, cov_preds: list[torch.Tensor] | None, gt: torch.Tensor, flow_mask: torch.Tensor | None):
     sqe = (preds[-1] - gt)**2
     epe = torch.sum(sqe, dim=1).sqrt()
     
@@ -49,16 +89,30 @@ def sequence_loss(cfg, preds: torch.Tensor, gt: torch.Tensor, flow_mask: torch.T
     match cfg.training_mode:
         case "flow":
             loss = flow_loss(cfg.gamma, preds, gt, mask)
+            
         case "cov":
             assert cov_preds is not None
-            loss = cov_loss(cfg.gamma, preds, gt, cov_preds)
+            loss = flow_cov_loss(cfg.gamma, preds, cov_preds, gt)
             
             cov = torch.exp(2 * cov_preds[-1])
             cov_mag = cov.sum(dim=1).sqrt()
             cov_ratio = (cov_mag / epe)
             metrics.update({"cov_loss": loss.mean().item()})
             metrics.update({"cov_mag": cov_mag.mean().item()})
-            metrics.update({"cov_ratio": cov_ratio.mean().item()})
+            metrics.update({"cov_ratio": cov_ratio.nanmean().item()})
+        
+        case "flow+cov":
+            assert cov_preds is not None
+            loss = flow_loss(cfg.gamma, preds, gt, mask) + flow_cov_loss(cfg.gamma, preds, cov_preds, gt)
+            
+            cov = torch.exp(2 * cov_preds[-1])
+            cov_mag = cov.sum(dim=1).sqrt()
+            cov_ratio = (cov_mag / epe)
+            metrics.update({"cov_loss": loss.mean().item()})
+            metrics.update({"cov_mag": cov_mag.mean().item()})
+            metrics.update({"cov_ratio": cov_ratio.nanmean().item()})
+            
         case default:
-            raise ValueError(f"Unavailable training mode {default}")        
+            raise ValueError(f"Unavailable training mode {default}")      
+    
     return loss, metrics

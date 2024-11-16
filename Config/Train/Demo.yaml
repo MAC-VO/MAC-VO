@@ -82,7 +82,8 @@ Model:
   folderlength: None
   autosave_freq: 5000
   num_workers: 0
-  mixed_precision: True
+  mixed_precision: False
+  datatype: bf16
 
   seed: 1234
   log_freq: 100

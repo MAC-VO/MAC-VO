@@ -7,7 +7,7 @@ from Evaluation.EvalSeq import EvaluateSequences
 from Odometry.MACVO import MACVO
 from Utility.Config import build_dynamic_config, load_config
 from Utility.PrettyPrint import Logger, print_as_table
-from Utility.Space import Sandbox
+from Utility.Sandbox import Sandbox
 
 
 def execute_experiment(name, cfg, cfg_dict, root_box: Sandbox) -> str:
@@ -19,7 +19,7 @@ def execute_experiment(name, cfg, cfg_dict, root_box: Sandbox) -> str:
         GenericSequence.instantiate(**vars(cfg.Data.args))
         .clip(cfg.Data.begin_idx, cfg.Data.end_idx)
     ).preload()
-    system = MACVO.from_config(cfg, sequence)
+    system = MACVO.from_config(cfg)
     system.receive_frames(sequence, exp_space)
     
     return str(exp_space.folder)

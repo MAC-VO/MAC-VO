@@ -6,7 +6,7 @@ from Odometry.BaselineTartanVO import TartanVO
 from Evaluation.EvalSeq import EvaluateSequences
 from Utility.Config import load_config, asNamespace
 from Utility.PrettyPrint import print_as_table
-from Utility.Space import Sandbox
+from Utility.Sandbox import Sandbox
 
 
 if __name__ == "__main__":

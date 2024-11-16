@@ -3,7 +3,7 @@ from pathlib import Path
 
 from Utility.Plot import getColor, AnalyzeRotation, AnalyzeTranslation, PlotTrajectory
 from Utility.PrettyPrint import ColoredTqdm, Logger
-from Utility.Space import Sandbox
+from Utility.Sandbox import Sandbox
 from Utility.Trajectory import Trajectory
 
 NEED_ALIGN_SCALE = {"dpvo", "droid", "tartanvo_mono"}

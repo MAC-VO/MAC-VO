@@ -219,7 +219,7 @@ class TartanVODepth(IStereoDepth[ModelContext]):
             })
 
 
-class ApplyGTCov(IStereoDepth[IStereoDepth]):
+class ApplyGTDepthCov(IStereoDepth[IStereoDepth]):
     """
     A higher-order-module that encapsulates a IStereoDepth module. 
     

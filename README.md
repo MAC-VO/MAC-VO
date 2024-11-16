@@ -7,6 +7,13 @@ https://github.com/user-attachments/assets/f7f33f28-5de7-412b-8f60-b0fcab91d48e
 > [!NOTE]  
 > We plan to continue to develop and release updates to the MAC-VO system. This includes releasing TensorRT accelerated implementation, adapting more frontend networks, and integrating with ROS2. If you are interested, please consider star ⭐ this repo to stay tuned.
 
+> [!NOTE]  
+> Clone the repository using the following command to include all submodules automatically.
+> ```bash
+> git clone git@github.com:MAC-VO/MAC-VO.git --recursive
+> ```
+
+
 ## Environment & Requirements
 
 **Docker Image** See `/Docker/DockerfileRoot` to build the container.

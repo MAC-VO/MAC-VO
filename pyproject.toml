@@ -17,6 +17,9 @@ include = [
 exclude = [
     "./Module/Network/PWCNet",              # Third-party lib
     "./Module/Network/FlowFormer",          # Third-party lib
+    "./Module/Network/UniMatch",            # Third-party lib
+    "./Module/Network/UniCeption",          # Third-party lib
+    "./Module/Network/GMFlow",              # Third-party lib
     "./Odometry/BaselineDPVO.py",           # Need install DPVO and compile cuda kernel
     "./Scripts/AdHoc/FLOPS_analyzer.py",    # Need additional package fvcore
 ]

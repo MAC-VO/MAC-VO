@@ -1,10 +1,16 @@
 import numpy as np
 import torch
-from typing import TypeVar, Sequence, Callable
+from typing import TypeVar, Sequence, Callable, Literal
 from .PrettyPrint import Logger
 
 
 I = TypeVar("I")
+
+def reflect_torch_dtype(type_string: Literal["fp32", "bf16"]) -> torch.dtype:
+    match type_string:
+        case "fp32": return torch.float32
+        case "bf16": return torch.bfloat16
+        case default: raise ValueError(f"Expect to be one of fp32/bf16, but get `{default}`")
 
 
 def StructuralMove(obj, device) -> torch.Tensor | list | dict | None:

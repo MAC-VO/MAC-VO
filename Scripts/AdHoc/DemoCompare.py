@@ -4,8 +4,8 @@ import rerun as rr
 import pypose as pp
 from pathlib import Path
 
+from Utility.Sandbox import Sandbox
 from Module.Map import TensorMap
-from Utility.Space import Sandbox
 from Utility.Visualizer import RerunVisualizer
 from Utility.Trajectory import Trajectory, Plotable
 

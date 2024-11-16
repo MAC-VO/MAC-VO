@@ -38,3 +38,5 @@ SLURM.sh
 .pytest_cache/
 
 !Scripts/UnitTest/assets/**/*.png
+
+**/_*

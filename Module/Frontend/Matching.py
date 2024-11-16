@@ -235,7 +235,7 @@ class TartanVOCovMatcher(IMatcher[ModelContext]):
             })
 
 
-class ApplyGTCov(IMatcher[IMatcher]):
+class ApplyGTMatchCov(IMatcher[IMatcher]):
     """
     A higher-order-module that encapsulates a IMatcher module. 
     

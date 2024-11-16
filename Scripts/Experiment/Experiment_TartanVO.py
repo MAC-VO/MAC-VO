@@ -7,7 +7,7 @@ from Evaluation.EvalSeq import EvaluateSequences
 from Odometry.BaselineTartanVO import TartanVO
 from Utility.Config import build_dynamic_config, load_config
 from Utility.PrettyPrint import Logger, print_as_table
-from Utility.Space import Sandbox
+from Utility.Sandbox import Sandbox
 
 
 def execute_experiment(name, cfg, cfg_dict, root_box: Sandbox) -> str:

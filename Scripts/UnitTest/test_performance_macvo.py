@@ -5,7 +5,7 @@ from Odometry.MACVO import MACVO
 from DataLoader import TartanAirV2Sequence
 from Evaluation.EvalSeq import EvaluateSequences
 from Utility.Config import load_config
-from Utility.Space  import Sandbox
+from Utility.Sandbox  import Sandbox
 
 @pytest.mark.local
 def test_macvo_performance():
@@ -20,7 +20,7 @@ def test_macvo_performance():
     result.set_autoremove()
     result.config = cfg_dict | {"Project": "MACVO_Test"}
     
-    system = MACVO.from_config(cfg, seq)
+    system = MACVO.from_config(cfg)
     system.receive_frames(seq, result)
     
     headers, metrics = EvaluateSequences([str(result.folder)], False)

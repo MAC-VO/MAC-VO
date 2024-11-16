@@ -6,7 +6,7 @@ from matplotlib.colors import Normalize
 
 from Module.Map import TensorMap
 from Utility.Visualizer import RerunVisualizer
-from Utility.Space import Sandbox
+from Utility.Sandbox import Sandbox
 from Utility.PrettyPrint import Logger, ColoredTqdm
 
 
