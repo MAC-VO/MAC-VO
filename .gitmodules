@@ -1,7 +1,6 @@
-[submodule "Baseline/DPVO"]
-	path = Baseline/DPVO
-	url = git@github.com:MarkChenYutian/DPVO.git
-	update = merge
 [submodule "Module/Network/FlowFormer"]
 	path = Module/Network/FlowFormer
 	url = git@github.com:MAC-VO/S_FlowFormer.git
+[submodule "Baseline/DPVO"]
+	path = Baseline/DPVO
+	url = git@github.com:MAC-VO/S_DPVO.git
