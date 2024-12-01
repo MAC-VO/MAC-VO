@@ -13,6 +13,10 @@ https://github.com/user-attachments/assets/f7f33f28-5de7-412b-8f60-b0fcab91d48e
 > git clone git@github.com:MAC-VO/MAC-VO.git --recursive
 > ```
 
+## Updates
+
+* [Nov 2024] We released the ROS-2 integration at https://github.com/MAC-VO/MAC-VO-ROS2 along with the documentation at https://mac-vo.github.io/wiki/ROS/
+
 
 ## Environment & Requirements
 
