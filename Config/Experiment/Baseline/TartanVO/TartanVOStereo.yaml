@@ -5,18 +5,17 @@ Odometry:
     type: TartanVODepth
     args:
       weight: ./Model/TartanVO_depth_cov.pth
-      cov_mode: None
       device: cuda
+      cov_mode: Est
 
   match:
     type: TartanVOMatcher
     args:
-      weight: ./Model/TartanVO_flow_pose.pkl
+      weight: ./Model/MACVO_posenet.pkl
       device: cuda
-      cov_mode: None
     
   tartanvo:
-      weight: ./Model/TartanVO_flow_pose.pkl
+      weight: ./Model/MACVO_posenet.pkl
       device: cuda
   
   keyframe:
@@ -24,7 +23,5 @@ Odometry:
     args:
       keyframe_freq: 1
 
-Datas: !flatten_seq
-  - !include_dataset  ../../../Sequence/TartanAir2_Test.yaml
-  # - !include_dataset  ../../Sequence/EuRoC.yaml
-  # - !include  ../../Sequence/KITTI.yaml
+Data: !include ../../Common/EvaluationDataset.yaml
+Preprocess: !include ../../Common/Preprocess.yaml

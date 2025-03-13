@@ -3,7 +3,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import torch
 
-from DataLoader import GenericSequence
+from DataLoader import SequenceBase, StereoFrame
 from Module.Frontend.Matching import IMatcher
 from Utility.Config import build_dynamic_config, LoadFrom
 from Utility.Plot import getColor
@@ -12,7 +12,7 @@ from Utility.PrettyPrint import ColoredTqdm
 
 
 def main(seq_cfg, match_cfgs):
-    sequence = GenericSequence.instantiate(**vars(seq_cfg)).preload()
+    sequence = SequenceBase.instantiate(seq_cfg.type, seq_cfg.args).preload()
 
     for match_cfg in match_cfgs:
         match_est = IMatcher.instantiate(match_cfg.type, match_cfg.args)
@@ -23,11 +23,13 @@ def main(seq_cfg, match_cfgs):
         low_est_q_errs = []
 
         for idx in ColoredTqdm(range(1, len(sequence))):
-            prev_frame = sequence[idx - 1]
-            est_match, flow_cov_map = match_est.estimate(prev_frame, sequence[idx])
+            prev_frame: StereoFrame = sequence[idx - 1]
+            est_out = match_est.estimate(prev_frame.stereo, sequence[idx])
+            est_match = est_out.flow
+            est_match_cov = est_out.cov
 
-            assert prev_frame.gtFlow is not None
-            ref_match = cropToMultiple(prev_frame.gtFlow, [64, 64], [2, 3])
+            assert prev_frame.stereo.gt_flow is not None
+            ref_match = cropToMultiple(prev_frame.stereo.gt_flow, [64, 64], [2, 3])
 
             err_flow = torch.abs(est_match - ref_match)
 
@@ -35,8 +37,8 @@ def main(seq_cfg, match_cfgs):
             mid_errs.append(err_flow.median().item())
             high_q_errs.append(err_flow.quantile(0.75).item())
             
-            if flow_cov_map is not None:
-                low_est_q_errs.append(flow_cov_map.median().sqrt().item())
+            if est_match_cov is not None:
+                low_est_q_errs.append(est_match_cov.median().sqrt().item())
 
         _ = plt.figure(figsize=(10, 3), dpi=300)
         plt.plot(low_q_errs, color=getColor("-", 4, 0), label="1st quarter Error")
@@ -55,7 +57,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--seqcfg",
         type=str,
-        default="./Config/Run/Sequence/TartanAir_abandonedfac_000.yaml",
+        default="./Config/Sequence/TartanAir_abandonfac_001.yaml",
     )
     args = parser.parse_args()
     

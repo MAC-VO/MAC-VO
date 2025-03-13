@@ -5,6 +5,7 @@ __pycache__/
 exp/
 Temp/
 cache/
+**/.venv/
 
 wandb/
 *.pth
@@ -15,11 +16,12 @@ wandb/
 
 Draft/
 Results/
+Results
 Model/
 Model
 
 # Config Local (specific to the platform etc.) are not shared
-Config/**/local_*.yaml
+**/local_*
 Config/**/_*.yaml
 Config/**/**/_*.yaml
 meta/
@@ -40,3 +42,7 @@ SLURM.sh
 !Scripts/UnitTest/assets/**/*.png
 
 **/_*
+!**/__init__.py
+!**/__init__.pyi
+!**/__main__.py
+!**/__main__.pyi

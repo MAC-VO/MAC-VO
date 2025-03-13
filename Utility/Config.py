@@ -42,49 +42,15 @@ class IncludeLoader(yaml.SafeLoader):
         with open(filename, "r") as f:
             return yaml.load(f, IncludeLoader)
 
-    def include_dataset(self, node):
-        # Basically, this inflates a compressed representation of dataset into full form of dataset config.
-        filename = os.path.join(self._root, str(self.construct_scalar(node)))
-        if not Path(filename).exists():
-            raise ValueError(
-                f"Tried to include file {filename} to *.yaml, but cannot find it."
-            )
-
-        with open(filename, "r") as f:
-            assert (
-                "#*IS_DATASET_TYPE*#" in f.readline()
-            ), "!include_dataset can only be applied to *.yaml file with special header #*IS_DATASET_TYPE*#"
-
-        with open(filename, "r") as f:
-            compressed_datacfg = yaml.load(f, IncludeLoader)
-
-        data_root = compressed_datacfg["dataroot"]
-        shared_data = {
-            k: compressed_datacfg[k]
-            for k in compressed_datacfg.keys()
-            if k not in {"roots", "begin_idx", "end_idx"}
-        }
-        inflate_data = [
-            shared_data | {"root": data_root + cfg["root"], "name": cfg["name"]}
-            for cfg in compressed_datacfg["roots"]
-        ]
-
-        return [
-            {
-                "begin_idx": compressed_datacfg["begin_idx"],
-                "end_idx": compressed_datacfg["end_idx"],
-                "args": args,
-            }
-            for args in inflate_data
-        ]
 
 
 IncludeLoader.add_constructor("!include", IncludeLoader.include)
-IncludeLoader.add_constructor("!include_dataset", IncludeLoader.include_dataset)
 IncludeLoader.add_constructor("!flatten_seq", IncludeLoader.flatten_sequence)
 
 
-def __build_dynamic_config(spec: dict[str, Any] | list | LoadFrom):
+DynamicConfigSpec = dict[str, "DynamicConfigSpec"] | list["DynamicConfigSpec"] | LoadFrom | str | int | float | bool | None
+
+def __build_dynamic_config(spec: DynamicConfigSpec):
     if isinstance(spec, LoadFrom):
         if not spec.path.exists():
             Logger.write(
@@ -105,9 +71,9 @@ def __build_dynamic_config(spec: dict[str, Any] | list | LoadFrom):
     return spec
 
 
-def build_dynamic_config(spec: dict[str, Any] | list | LoadFrom) -> tuple[types.SimpleNamespace, dict[str, Any]]:
+def build_dynamic_config(spec: DynamicConfigSpec):
     cfg = __build_dynamic_config(spec)
-    return asNamespace(cfg), cfg    #type: ignore
+    return asNamespace(cfg), cfg
 
 
 def load_config(path: Path):
@@ -128,12 +94,6 @@ def namespace_to_cfgnode(ns: SimpleNamespace):
         else:
             cfg[key] = value
     return cfg
-
-
-def dump_config(path: Path, cfg: dict):
-    assert path.parent.exists()
-    with open(path, "w") as f:
-        yaml.dump(cfg, f)
 
 
 def asNamespace(dictionary) -> types.SimpleNamespace:

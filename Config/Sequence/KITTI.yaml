@@ -1,4 +1,55 @@
-!flatten_seq 
-- !include_dataset ./KITTI/KITTI_00-02.yaml
-- !include_dataset ./KITTI/KITTI_03.yaml
-- !include_dataset ./KITTI/KITTI_04-10.yaml
+-   type: KITTI
+    name: K00
+    args:
+        root: /data2/datasets/yutianch/KITTI_odometry/dataset/sequences/00
+        gt_pose: true
+-   type: KITTI
+    name: K01
+    args:
+        root: /data2/datasets/yutianch/KITTI_odometry/dataset/sequences/01
+        gt_pose: true
+-   type: KITTI
+    name: K02
+    args:
+        root: /data2/datasets/yutianch/KITTI_odometry/dataset/sequences/02
+        gt_pose: true
+-   type: KITTI
+    name: K03
+    args:
+        root: /data2/datasets/yutianch/KITTI_odometry/dataset/sequences/03
+        gt_pose: true
+-   type: KITTI
+    name: K04
+    args:
+        root: /data2/datasets/yutianch/KITTI_odometry/dataset/sequences/04
+        gt_pose: true
+-   type: KITTI
+    name: K05
+    args:
+        root: /data2/datasets/yutianch/KITTI_odometry/dataset/sequences/05
+        gt_pose: true
+-   type: KITTI
+    name: K06
+    args:
+        root: /data2/datasets/yutianch/KITTI_odometry/dataset/sequences/06
+        gt_pose: true
+-   type: KITTI
+    name: K07
+    args:
+        root: /data2/datasets/yutianch/KITTI_odometry/dataset/sequences/07
+        gt_pose: true
+-   type: KITTI
+    name: K08
+    args:
+        root: /data2/datasets/yutianch/KITTI_odometry/dataset/sequences/08
+        gt_pose: true
+-   type: KITTI
+    name: K09
+    args:
+        root: /data2/datasets/yutianch/KITTI_odometry/dataset/sequences/09
+        gt_pose: true
+-   type: KITTI
+    name: K10
+    args:
+        root: /data2/datasets/yutianch/KITTI_odometry/dataset/sequences/10
+        gt_pose: true

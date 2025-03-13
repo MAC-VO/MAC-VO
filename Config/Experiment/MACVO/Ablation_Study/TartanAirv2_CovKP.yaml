@@ -21,6 +21,8 @@ Odometry:
 
     # Profiling the system using torch, generate chrome json trace file.
     profile: false
+    # Mapping mode provides the dense mapping
+    mapping: false
 
   cov:
     obs:
@@ -37,15 +39,24 @@ Odometry:
       max_depth_cov: 250.0
       max_match_cov: 100.0
 
+  mappoint:
+    # Mapping feature can be conveniently turn off by using 
+    # "type: NoKeypointSelector" instead of the config below.
+    type: MappingPointSelector
+    args:
+      device: *device
+      max_depth: 5.0
+      max_depth_cov: 0.005
+      mask_width: 32
+
   frontend:
-    type: FlowFormerCovFrontend
+    type: CUDAGraph_FlowFormerCovFrontend
     args:
       device: *device
       weight: ./Model/MACVO_FrontendCov.pth
-      use_jit: true
       enforce_positive_disparity: false
-      use_aot: false
       dtype: fp32
+      max_flow: -1
 
   motion:
     type: TartanMotionNet
@@ -67,7 +78,7 @@ Odometry:
           args:
   
   postprocess:
-    type: DisplacementInterpolate
+    type: MotionInterpolate
     args:
   
   keyframe:
@@ -75,11 +86,12 @@ Odometry:
     args:
   
   optimizer:
-    type: PyPoseTwoFramePGO
+    type: TwoFramePoseOptimizer
     args:
       device: cpu
       vectorize: true
       parallel: true
 
-Datas: !flatten_seq
-  - !include_dataset  ../../../Sequence/TartanAir2_Test.yaml
+Datas: !include ../../../Sequence/TartanAir2_Test.yaml
+
+Preprocess: []

@@ -79,9 +79,9 @@ Model:
 
 Train:
   data: !flatten_seq 
-    - !include_dataset ../Sequence/Training_Dataset/TartanAir_Train.yaml
-    - !include_dataset ../Sequence/Training_Dataset/TartanAir_TrainHard.yaml
+    - !include ../Sequence/Training_Dataset/TartanAir_Train.yaml
+    - !include ../Sequence/Training_Dataset/TartanAir_TrainHard.yaml
 
 Evaluate:
   data: !flatten_seq 
-    - !include_dataset ../Sequence/Training_Dataset/TartanAirV2_Test.yaml
+    - !include ../Sequence/Training_Dataset/TartanAirV2_Test.yaml

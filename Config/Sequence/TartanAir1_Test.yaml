@@ -1,52 +1,128 @@
-#*IS_DATASET_TYPE*#
-# This file contains the two test environments used by TartanVO Stereo Module
-type: TartanAir
-ips: 100
-compressed: true
-useIMU: false
-
-# Controls optional data sources
-gtDepth: false
-gtFlow: false
-gtPose: true
-
-begin_idx: 0
-end_idx: -1
-
-dataroot: PATH_FOR_TARTANAIRV2
-
-# Paths
-roots:
-  - root: SE000
+-   type: TartanAir_NoIMU
     name: SE000
-  - root: SE001
+    args:
+        root: /data2/datasets/wenshanw/tartanair_test_release/stereo/SE000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: SE001
-  - root: SE002
+    args:
+        root: /data2/datasets/wenshanw/tartanair_test_release/stereo/SE001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: SE002
-  - root: SE003
+    args:
+        root: /data2/datasets/wenshanw/tartanair_test_release/stereo/SE002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: SE003
-  - root: SE004
+    args:
+        root: /data2/datasets/wenshanw/tartanair_test_release/stereo/SE003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: SE004
-  - root: SE005
+    args:
+        root: /data2/datasets/wenshanw/tartanair_test_release/stereo/SE004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: SE005
-  - root: SE006
+    args:
+        root: /data2/datasets/wenshanw/tartanair_test_release/stereo/SE005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: SE006
-  - root: SE007
+    args:
+        root: /data2/datasets/wenshanw/tartanair_test_release/stereo/SE006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: SE007
-  
-  - root: SH000
+    args:
+        root: /data2/datasets/wenshanw/tartanair_test_release/stereo/SE007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: SH000
-  - root: SH001
+    args:
+        root: /data2/datasets/wenshanw/tartanair_test_release/stereo/SH000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: SH001
-  - root: SH002
+    args:
+        root: /data2/datasets/wenshanw/tartanair_test_release/stereo/SH001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: SH002
-  - root: SH003
+    args:
+        root: /data2/datasets/wenshanw/tartanair_test_release/stereo/SH002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: SH003
-  - root: SH004
+    args:
+        root: /data2/datasets/wenshanw/tartanair_test_release/stereo/SH003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: SH004
-  - root: SH005
+    args:
+        root: /data2/datasets/wenshanw/tartanair_test_release/stereo/SH004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: SH005
-  - root: SH006
+    args:
+        root: /data2/datasets/wenshanw/tartanair_test_release/stereo/SH005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: SH006
-  - root: SH007
+    args:
+        root: /data2/datasets/wenshanw/tartanair_test_release/stereo/SH006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: SH007
+    args:
+        root: /data2/datasets/wenshanw/tartanair_test_release/stereo/SH007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true

@@ -16,7 +16,7 @@ from Utility.Config import load_config, namespace_to_cfgnode
 from Utility.PrettyPrint import ColoredTqdm
 from typing import List, Dict
 
-from Train.MatchingNet.train import merge_matrices
+from .train_flowformer import merge_matrices
 
 try :
     import wandb

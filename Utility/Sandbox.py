@@ -65,7 +65,8 @@ class Sandbox:
     @classmethod
     def create(cls, project_root: Path, project_name: str):
         timestr = cls.__get_curr_time()
-        gitver = cls.__get_git_version()
+        try: gitver = cls.__get_git_version()
+        except: gitver = "NOT_AVAILABLE"
         cmd = cls.__get_sys_command()
 
         box = cls(Path(project_root, project_name, timestr))
@@ -123,20 +124,6 @@ class Sandbox:
         for child in children:
             result.extend(child.get_leaves())
         return result
-
-    @property
-    def is_finished(self) -> bool:
-        meta_path = Path(self.folder, "metadata.yaml")
-        if not meta_path.exists():
-            return False
-
-        with open(meta_path, "r") as f:
-            return "finish" in yaml.safe_load(f)
-
-    def finish(self):
-        with open(Path(self.folder, "metadata.yaml"), "a") as f:
-            f.write("\nfinish: true")
-        Logger.write("info", f"Close sandbox at '{str(self.folder)}'")
 
     def set_autoremove(self):
         Logger.write(

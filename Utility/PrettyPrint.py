@@ -1,10 +1,12 @@
 import logging
 import os
+import sys
 from typing import Any, Literal, Callable
 
 from rich import box
 from rich.console import Console
 from rich.logging import RichHandler
+from rich.traceback import install
 from rich.table import Table
 from rich.text import Text
 from rich.live import Live
@@ -14,12 +16,21 @@ IS_TERMINAL_MODE = False
 TERMINAL_WIDTH = 150
 try:
     TERMINAL_WIDTH = os.get_terminal_size().columns
-    IS_TERMINAL_MODE = True
+    IS_TERMINAL_MODE = False
 except OSError:
     pass
-IS_TERMINAL_MODE = True  # For debugging
-GlobalConsole = Console(width=TERMINAL_WIDTH)
 
+GlobalConsole = Console(width=TERMINAL_WIDTH)
+install(console=GlobalConsole)
+
+
+#
+def on_breakpoint():
+    global IS_TERMINAL_MODE
+    IS_TERMINAL_MODE = False
+    import pdb; pdb.set_trace(header="Press <S> to step to the actual breakpoint location.")
+sys.breakpointhook = on_breakpoint
+#
 
 def print_as_table(headers: list[str], rows: list[list[Any]], title=None, sort_rows: None | Callable[[list[Any],], Any]=None):
     def cvt2str(i) -> str:
@@ -43,6 +54,8 @@ class ColoredTqdm(tqdm):
             self.rich_container = Text()
             self.rich_displayer = Live(self.rich_container, console=GlobalConsole, auto_refresh=False, vertical_overflow="crop")
             self.rich_displayer.start()
+        else:
+            self.rich_displayer = None
         super().__init__(
             *args, colour="yellow", ascii=False, ncols=GlobalConsole.width - 10, **kwargs
         )
@@ -56,16 +69,22 @@ class ColoredTqdm(tqdm):
             self.desc = "✅" + self.desc 
         super().close(*args, **kwargs)
         
-        if IS_TERMINAL_MODE: self.rich_displayer.stop()
+        if self.rich_displayer: self.rich_displayer.stop()
     
     def display(self, msg: str | None = None, pos: int | None = None) -> None:
-        if IS_TERMINAL_MODE:
+        if IS_TERMINAL_MODE and self.rich_displayer:
             # Custom display logic
             if msg is None: msg = self.__str__()
             self.rich_container.plain = msg
             self.rich_displayer.refresh()
         else:
+            if self.rich_displayer:
+                self.rich_displayer.stop()
+                self.rich_displayer = None
             super().display(msg, pos)
+    
+    def __call__(self, arg, *args, **kwds: Any):
+        return super().__call__(arg, *args, **kwds) # type: ignore
 
 
 class GlobalLog:
@@ -102,6 +121,9 @@ class GlobalLog:
     def write(self, level: LogLevel, msg: Any, marked: bool = False) -> None:
         lg_level = self.Translate[level]
         self.__logger.log(lg_level, msg, stacklevel=2, extra={"markup": marked})
+    
+    def show_exception(self) -> None:
+        GlobalConsole.print_exception()
 
 Logger = GlobalLog()
 

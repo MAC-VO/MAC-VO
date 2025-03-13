@@ -1,10 +1,10 @@
 import torch
 import warnings
-from typing import get_args, get_origin, Literal, TypeGuard, TypeVar, overload, Any
+from typing import get_args, get_origin, Literal, TypeGuard, TypeVar
 
 
 T_DataType  = Literal["fp32", "fp16", "bf16"]
-T_TrainType = Literal["flow", "cov", "flow+cov"]
+T_TrainType = Literal["flow", "cov", "flow+cov", "finalcov"]
 T_Scheduler = Literal["OneCycleLR"]
 T_Optimizer = Literal["AdamW"]
 

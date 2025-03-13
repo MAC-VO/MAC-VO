@@ -2,6 +2,8 @@ import torch
 import numpy as np
 import pypose as pp
 
+from Utility.Extensions import OnCallCompiler
+
 def qinterp(qs, t, t_int):
     idxs = np.searchsorted(t, t_int)
     idxs0 = idxs-1
@@ -14,6 +16,7 @@ def qinterp(qs, t, t_int):
     dt = (t[idxs1]-t[idxs0])[idxs0 != idxs1]
     tau[idxs0 != idxs1] = (t_int-t[idxs0])[idxs0 != idxs1]/dt
     return slerp(q0, q1, tau)
+
 
 def slerp(q0, q1, tau, DOT_THRESHOLD = 0.9995):
     """Spherical linear interpolation."""
@@ -36,19 +39,28 @@ def slerp(q0, q1, tau, DOT_THRESHOLD = 0.9995):
     q[dot < DOT_THRESHOLD] = ((s0 * q0) + (s1 * q1))[dot < DOT_THRESHOLD]
     return q / q.norm(dim=1, keepdim=True)
 
-def gaussian_kernels(std_x: torch.Tensor, std_y: torch.Tensor, kernel_size: int):
-    """
-    creates gaussian kernel with side length `l` and a sigma of `sig`
-    """
-    ax = torch.linspace(-(kernel_size - 1) / 2., (kernel_size - 1) / 2., kernel_size, device=std_x.device).unsqueeze(0)
-    ay = torch.linspace(-(kernel_size - 1) / 2., (kernel_size - 1) / 2., kernel_size, device=std_x.device).unsqueeze(0)
-    gaussx = (-0.5 * ax.square() / std_x.square().unsqueeze(1)).exp()
-    gaussy = (-0.5 * ay.square() / std_y.square().unsqueeze(1)).exp()
 
-    gaussx = gaussx.unsqueeze(1)
-    gaussy = gaussy.unsqueeze(2)
-    kernel = gaussy * gaussx
-    return kernel / torch.sum(kernel, dim=[1, 2], keepdim=True)
+@OnCallCompiler()
+def gaussain_full_kernels(cov_2x2: torch.Tensor, kernel_size: int) -> torch.Tensor:
+    """
+    In:
+        cov_2x2: torch.Tensor of shape Nx2x2, full 2D covaraiance matrices
+        kernel_size: int, must be a positive odd number
+    Out:
+        kernels: Nx(kernel_size)x(kernel_size)
+    """
+    N = cov_2x2.size(0)
+    det_cov = cov_2x2.det()              # N
+    inv_cov = cov_2x2.pinverse().float() # N*2*2
+
+    x = torch.linspace(-(kernel_size - 1) / 2., (kernel_size - 1) / 2., kernel_size, device=cov_2x2.device)
+    y = torch.linspace(-(kernel_size - 1) / 2., (kernel_size - 1) / 2., kernel_size, device=cov_2x2.device)
+    indices = torch.stack(torch.meshgrid(x, y, indexing="ij"), dim=-1).unsqueeze(0).repeat(N, 1, 1, 1) # N*K*K*2
+    
+    z = torch.einsum('bxyi,bij,bxyj->bxy', indices, -0.5 * inv_cov, indices).exp()
+    kernel = z / (2 * torch.pi * torch.sqrt(det_cov)).view(N, 1, 1)
+    kernel_s = kernel.sum(dim=[-1, -2], keepdim=True)
+    return kernel / kernel_s
 
 
 def gaussian_mixture_mean_var(batch_means: torch.Tensor, batch_vars: torch.Tensor, batch_prob: torch.Tensor,
@@ -81,16 +93,17 @@ def gaussian_mixture_mean_var(batch_means: torch.Tensor, batch_vars: torch.Tenso
     return calc_mean, calc_var / 2
 
 
-def interpolate_pose(Ps: pp.LieTensor, ts: torch.Tensor, ts_ev: torch.Tensor) -> pp.LieTensor:
+def interpolate_pose(Ps: pp.LieTensor, ts: torch.Tensor, ts_ev: torch.Tensor) -> tuple[pp.LieTensor, torch.Tensor]:
     assert (ts[..., :-1] < ts[..., 1:]).all() # check ts is sorted and no duplication.
 
     P_container = torch.empty((*ts_ev.shape, 7), dtype=Ps.dtype)
-    before_mask, after_mask = ts_ev < ts[..., 0], ts_ev > ts[..., -1]
+    before_mask, after_mask = ts_ev <= ts[..., 0], ts_ev >= ts[..., -1]
     interp_mask = ~torch.logical_or(before_mask, after_mask)
 
     if before_mask.sum().item() > 0: P_container[before_mask] = Ps[..., 0, :]
     if after_mask.sum().item() > 0 : P_container[after_mask]  = Ps[..., -1, :]
 
+    ts_ev = ts_ev[interp_mask]
     idx_ev_end   = torch.searchsorted(ts, ts_ev, right=False)
     idx_ev_start = idx_ev_end - 1
 
@@ -103,12 +116,46 @@ def interpolate_pose(Ps: pp.LieTensor, ts: torch.Tensor, ts_ev: torch.Tensor) ->
     lie_algebra_diff =(P_seg_end @ P_seg_start.Inv()).Log()
     lie_type = lie_algebra_diff.ltype
 
-    P_interp = pp.LieTensor(t_ev_prop.unsqueeze(-1) * lie_algebra_diff, ltype=lie_type).Exp() @ P_seg_start
-    if interp_mask.sum().item() > 0: P_container[interp_mask] = P_interp
-    return pp.SE3(P_container)
+    P_interp = pp.LieTensor(t_ev_prop.unsqueeze(-1) * lie_algebra_diff, ltype=lie_type).Exp().to(P_seg_start) @ P_seg_start
+    if interp_mask.sum().item() > 0: P_container[interp_mask] = P_interp    
+    return pp.SE3(P_container), ~interp_mask
 
 
 def NormalizeQuat(x: pp.LieTensor) -> pp.LieTensor:
+    """
+    Argument
+        x       : pp.LieTensor of type SE3
+    Returns
+        x'      : pp.LieTensor of type SE3 but with normalized quarternion rotation.
+    """
     data, ltype = x.tensor(), x.ltype
     data[..., 3:] = data[..., 3:]/data[..., 3:].norm(dim=-1, keepdim=True)
     return pp.LieTensor(data, ltype=ltype)
+
+
+@OnCallCompiler()
+def MahalanobisDist(x: torch.Tensor, mu: torch.Tensor, sigma: torch.Tensor) -> torch.Tensor:
+    """
+    Argument
+        x       : torch.Tensor of shape N x F
+        mu      : torch.Tensor of shape N x F
+        sigma   : torch.Tensor of shape N X F x F
+    Returns
+        dist    : torch.Tensor of shape N x 1
+    """
+    return torch.bmm(torch.bmm((x - mu).unsqueeze(1), sigma.pinverse()), (x - mu).unsqueeze(2)).sqrt()
+
+
+@OnCallCompiler()
+def MahalanobisDist_Inv(x: torch.Tensor, mu: torch.Tensor, sigma_inv: torch.Tensor) -> torch.Tensor:
+    """
+    Use this if you have some smarter way to compute the inverse of sigma.
+    
+    Argument
+        x        : torch.Tensor of shape N x F
+        mu       : torch.Tensor of shape N x F
+        sigma_inv: torch.Tensor of shape N X F x F
+    Returns
+        dist     : torch.Tensor of shape N x 1
+    """
+    return torch.bmm(torch.bmm((x - mu).unsqueeze(1), sigma_inv), (x - mu).unsqueeze(2)).sqrt()

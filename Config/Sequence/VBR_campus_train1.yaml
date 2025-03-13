@@ -1,0 +1,5 @@
+type: VBR_Stereo
+name: campus_train1
+args:
+    root: /data1/datasets/MAC-SLAM/vbr_data/campus_train1
+    gt_pose: true

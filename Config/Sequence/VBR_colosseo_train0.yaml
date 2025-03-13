@@ -1,0 +1,5 @@
+type: VBR_Stereo
+name: colosseo_train0
+args:
+    root: /data1/datasets/MAC-SLAM/vbr_data/colosseo_train0/
+    gt_pose: false

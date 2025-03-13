@@ -3,7 +3,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import torch
 
-from DataLoader import GenericSequence, SourceDataFrame
+from DataLoader import SequenceBase, StereoFrame
 from Module.Frontend.StereoDepth import IStereoDepth
 from Utility.Config import load_config
 from Utility.Plot import getColor
@@ -14,25 +14,25 @@ def main(args):
     sequence_cfg, _ = load_config(Path(args.seqcfg))
     depth_cfg, _ = load_config(Path(args.depthcfg))
 
-    sequence = GenericSequence.instantiate(**vars(sequence_cfg))
+    sequence = SequenceBase.instantiate(**vars(sequence_cfg))
     depth_est = IStereoDepth.instantiate(depth_cfg.type, depth_cfg.args)
 
     avg_err_percentage = []
     avg_errs = []
 
-    frame: SourceDataFrame
+    frame: StereoFrame
     for frame in sequence:
-        if frame.meta.idx % 3 != 0:
+        if frame.frame_idx % 3 != 0:
             continue
-        est_depth, _ = depth_est.estimate(frame)
+        est_output = depth_est.estimate(frame.stereo)
         
-        assert est_depth is not None
-        assert frame.gtDepth is not None
+        assert est_output.depth is not None
+        assert frame.stereo.gt_depth is not None
         
-        ref_depth = cropToMultiple(frame.gtDepth, [64, 64], [2, 3])
+        ref_depth = cropToMultiple(frame.stereo.gt_depth, [64, 64], [2, 3])
 
-        est_disparity = (frame.meta.fx * frame.meta.baseline) / est_depth
-        ref_disparity = (frame.meta.fx * frame.meta.baseline) / ref_depth
+        est_disparity = (frame.stereo.fx * frame.stereo.frame_baseline) / est_output.depth
+        ref_disparity = (frame.stereo.fx * frame.stereo.frame_baseline) / ref_depth
 
         masking = est_disparity >= 1
 
@@ -42,7 +42,7 @@ def main(args):
         avg_err_percentage.append(err_percentage.mean().item())
         avg_errs.append((est_disparity[masking] - ref_disparity[masking]).mean().item())
         print(
-            f"{frame.meta.idx} | Average: ",
+            f"{frame.frame_idx} | Average: ",
             err_disparity.mean().item(),
             " Percent ",
             err_percentage.mean().item(),

@@ -1,19 +1,19 @@
 import torch
 import pypose as pp
+import pypose.module as pm
 
 from abc import ABC, abstractmethod
 from pathlib import Path
 
+from typing import Generic, cast
 from types import SimpleNamespace
-from Utility.Extensions import ConfigTestableSubclass
+from Utility.Extensions import ConfigTestableSubclass,TensorQueue
 from Utility.PrettyPrint import Logger
-from DataLoader import SourceDataFrame
-
-from .Network.TartanVOStereo import TartanStereoVOMotion
-
+from DataLoader import StereoFrame, StereoInertialFrame, T_Data
+from Utility.Timer import Timer
 
 
-class IMotionModel(ABC, ConfigTestableSubclass):
+class IMotionModel(ABC, Generic[T_Data], ConfigTestableSubclass):
     """
     A motion model class receives informations (e.g. frames, estimated flow and depth) and produce an
     initial guess to the pose of incoming frame **under global coordinate**.
@@ -22,7 +22,7 @@ class IMotionModel(ABC, ConfigTestableSubclass):
         self.config : SimpleNamespace = config
     
     @abstractmethod
-    def predict(self, frame: SourceDataFrame, flow: torch.Tensor | None, depth: torch.Tensor | None) -> pp.LieTensor:
+    def predict(self, frame: T_Data, flow: torch.Tensor | None, depth: torch.Tensor | None) -> pp.LieTensor:
         """
         Estimate the pose of next frame given current frame, estimated depth and flow.
         
@@ -42,7 +42,7 @@ class IMotionModel(ABC, ConfigTestableSubclass):
         ...
 
 
-class GTMotionwithNoise(IMotionModel):
+class GTMotionwithNoise(IMotionModel[StereoFrame]):
     """
     Apply GT motion with noise (can be disabled by setting `noise_std` to 0.0 in config) on previous optimized pose to predict next pose.
     """
@@ -59,20 +59,21 @@ class GTMotionwithNoise(IMotionModel):
         noise: pp.LieTensor = pp.randn_SE3(sigma=self.noise_std)    #type:ignore
         return noise
 
-    def predict(self, frame: SourceDataFrame, flow: torch.Tensor | None, depth: torch.Tensor | None) -> pp.LieTensor:
-        assert frame.gtPose is not None
+    def predict(self, frame: StereoFrame, flow: torch.Tensor | None, depth: torch.Tensor | None) -> pp.LieTensor:
+        assert frame.gt_pose is not None
+        frame_gtpose = cast(pp.LieTensor, frame.gt_pose.squeeze(0))
 
         if self.prev_pose is None or self.prev_gt_pose is None:
             self.prev_pose    = pp.identity_SE3()
-            self.prev_gt_pose = frame.gtPose
+            self.prev_gt_pose = frame_gtpose
             return pp.identity_SE3()
 
-        gtMotion = self.prev_gt_pose.Inv() @ frame.gtPose
+        gtMotion = self.prev_gt_pose.Inv() @ frame_gtpose
         gtMotion_w_noise = gtMotion @ self._stableNoiseModel()
         predict = self.prev_pose @ gtMotion_w_noise
         
         self.prev_pose = predict
-        self.prev_gt_pose = frame.gtPose
+        self.prev_gt_pose = frame_gtpose
         
         return predict
 
@@ -86,23 +87,27 @@ class GTMotionwithNoise(IMotionModel):
         })
 
 
-class TartanMotionNet(IMotionModel):
+class TartanMotionNet(IMotionModel[StereoFrame]):
     """
     Apply motion estimated by MotionNet adapted from TartanVO on previously optimized pose to predict next pose.
     """
     def __init__(self, config: SimpleNamespace):
+        from .Network.TartanVOStereo import TartanStereoVOMotion
+        
         super().__init__(config)
         self.model = TartanStereoVOMotion(self.config.weight, True, self.config.device)
         self.prev_pose = None
 
+    @Timer.cpu_timeit("MotionModel")
+    @Timer.gpu_timeit("MotionModel")
     @torch.inference_mode()
-    def predict(self, frame: SourceDataFrame, flow: torch.Tensor | None, depth: torch.Tensor | None) -> pp.LieTensor:
+    def predict(self, frame: StereoFrame, flow: torch.Tensor | None, depth: torch.Tensor | None) -> pp.LieTensor:
         if self.prev_pose is None:
             self.prev_pose = pp.identity_SE3(device=self.config.device)
             return pp.identity_SE3(device=self.config.device)
 
         assert flow is not None and depth is not None, "Motion model requires flow and depth to predict motion"
-        motion_se3: torch.Tensor = self.model.inference(frame.meta, frame, flow, depth)
+        motion_se3: torch.Tensor = self.model.inference(frame, flow, depth)
         new_pose = self.prev_pose @ pp.se3(motion_se3).Exp()
         self.prev_pose = new_pose
         return new_pose
@@ -118,7 +123,7 @@ class TartanMotionNet(IMotionModel):
         })
 
 
-class StaticMotionModel(IMotionModel):
+class StaticMotionModel(IMotionModel[StereoFrame]):
     """
     Assumes the camera is static and simply record and returns the pose of previous frame.
     """
@@ -126,7 +131,7 @@ class StaticMotionModel(IMotionModel):
         super().__init__(config)
         self.prev_pose: pp.LieTensor | None = None
     
-    def predict(self, frame: SourceDataFrame, flow: torch.Tensor | None, depth: torch.Tensor | None) -> pp.LieTensor:
+    def predict(self, frame: StereoFrame, flow: torch.Tensor | None, depth: torch.Tensor | None) -> pp.LieTensor:
         if self.prev_pose is None:
             self.prev_pose = pp.identity_SE3()
             return pp.identity_SE3()
@@ -140,7 +145,7 @@ class StaticMotionModel(IMotionModel):
     def is_valid_config(cls, config: SimpleNamespace | None) -> None: return
 
 
-class ReadPoseFile(IMotionModel):
+class ReadPoseFile(IMotionModel[StereoFrame]):
     """
     Use an external file of Nx7 SE3 poses as motion model output poses.
     
@@ -175,17 +180,17 @@ class ReadPoseFile(IMotionModel):
         poses = pp.SE3(poses_data)
         return poses
         
-    def predict(self, frame: SourceDataFrame, flow: torch.Tensor | None, depth: torch.Tensor | None) -> pp.LieTensor:
+    def predict(self, frame: StereoFrame, flow: torch.Tensor | None, depth: torch.Tensor | None) -> pp.LieTensor:
         if self.prev_pose is None or self.prev_gt_pose is None:
             self.prev_pose = pp.identity_SE3()
-            self.prev_gt_pose = pp.SE3(self.poses[frame.meta.idx])
+            self.prev_gt_pose = pp.SE3(self.poses[frame.frame_idx])
             return pp.identity_SE3()
 
-        motion = self.prev_gt_pose.Inv() @ pp.SE3(self.poses[frame.meta.idx])
+        motion = self.prev_gt_pose.Inv() @ pp.SE3(self.poses[frame.frame_idx])
         predict = self.prev_pose @ motion
         
         self.prev_pose = predict
-        self.prev_gt_pose = pp.SE3(self.poses[frame.meta.idx])
+        self.prev_gt_pose = pp.SE3(self.poses[frame.frame_idx])
         return predict
 
     def update(self, pose: pp.LieTensor) -> None:

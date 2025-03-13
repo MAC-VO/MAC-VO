@@ -8,7 +8,7 @@ from .Utility import (
     Compose, DownscaleFlow, Normalize, ToTensor, CropCenter,
     make_device_intrinsic_layer, make_intrinsics_layer
 )
-from DataLoader import MetaInfo, SourceDataFrame
+from DataLoader import StereoData, StereoFrame
 from Utility.Utils import centerCropTo
 
 
@@ -63,7 +63,7 @@ class TartanStereoVONetInterface:
 
     @staticmethod
     def frame2Sample(
-        meta: MetaInfo, imageL: torch.Tensor, imageR: torch.Tensor | None
+        meta: StereoData, imageL: torch.Tensor, imageR: torch.Tensor | None
     ):
         """
         Adapt the SourceDataFrame used in this project into the "sample" format used in TartanVO
@@ -86,7 +86,7 @@ class TartanStereoVONetInterface:
                         meta.cy,
                     )
                 ],
-                "blxfx": np.array([meta.fx * meta.baseline], dtype=np.float32),
+                "blxfx": np.array([meta.fx * meta.frame_baseline], dtype=np.float32),
             }
         else:
             return {
@@ -101,7 +101,7 @@ class TartanStereoVONetInterface:
                         meta.cy,
                     )
                 ],
-                "blxfx": np.array([meta.fx * meta.baseline], dtype=np.float32),
+                "blxfx": np.array([meta.fx * meta.frame_baseline], dtype=np.float32),
             }
 
     @staticmethod
@@ -124,7 +124,7 @@ class TartanStereoVONetInterface:
 class TartanStereoVOMatch(TartanStereoVONetInterface):
     @torch.no_grad()
     @torch.inference_mode()
-    def inference(self, meta: MetaInfo, img0: torch.Tensor, img1: torch.Tensor) -> torch.Tensor:
+    def inference(self, meta: StereoData, img0: torch.Tensor, img1: torch.Tensor) -> torch.Tensor:
         margin, crop_size = self.getCropMargin(img0.shape)
 
         # Preprocess
@@ -171,7 +171,8 @@ class TartanStereoVOMotion(TartanStereoVONetInterface):
         return x
     
     @torch.inference_mode()
-    def inference(self, meta: MetaInfo, frame0: SourceDataFrame, flow: torch.Tensor, depth: torch.Tensor) -> torch.Tensor:        
+    def inference(self, frame0: StereoFrame, flow: torch.Tensor, depth: torch.Tensor) -> torch.Tensor:        
+        meta = frame0.stereo
         tensor_intrinsic = make_device_intrinsic_layer(
             meta.height, meta.width, meta.fx, meta.fy, meta.cx, meta.cy, torch.device(self.device)
         ).unsqueeze(0).permute(0, 3, 1, 2)
@@ -182,10 +183,10 @@ class TartanStereoVOMotion(TartanStereoVONetInterface):
         depth_resize = self.cropAndResize(depth, (112, 160))
         flow_resize  = self.cropAndResize(flow, (112, 160)) * self.flow_norm
         
-        stereo = (meta.baseline * meta.fx) / depth_resize
+        stereo = (meta.frame_baseline * meta.fx) / depth_resize
         stereo = torch.nan_to_num(stereo * self.model.stereoNormFactor, nan=0.0).clamp(min=0.0)
 
-        depth_resize = stereo / (meta.baseline * meta.fx) / float(self.model.stereoNormFactor * self.model.poseDepthNormFactor)
+        depth_resize = stereo / (meta.frame_baseline * meta.fx) / float(self.model.stereoNormFactor * self.model.poseDepthNormFactor)
 
         inputTensor = torch.cat((flow_resize, depth_resize, tensor_intrinsic_resize), dim=1).to(self.device)
         pose = self.model.flowPoseNet(inputTensor, scale_disp=1.0)

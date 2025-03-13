@@ -12,6 +12,10 @@ def filterPointsInRange(pts1:torch.Tensor, u_range: tuple[int, int], v_range: tu
 
     return selector
 
-def pixel2point_NED(pixels, depths, intrinsics):
+def pixel2point_NED(pixels: torch.Tensor, depths: torch.Tensor, intrinsics: torch.Tensor):
     # pp.pixel2point will output points in EDN coordinate, we will convert it to NED coord.
     return pp.pixel2point(pixels, depths, intrinsics).roll(shifts=1, dims=-1)
+
+def point2pixel_NED(points: torch.Tensor, intrinsics: torch.Tensor):
+    # pp.pixel2point will output points in EDN coordinate, we will convert it to NED coord.
+    return pp.point2pixel(points.roll(shifts=-1, dims=-1), intrinsics)

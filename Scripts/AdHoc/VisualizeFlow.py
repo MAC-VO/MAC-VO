@@ -3,10 +3,10 @@ from pathlib import Path
 import numpy as np
 from scipy.stats import spearmanr
 
-from DataLoader import GenericSequence
+from DataLoader import SequenceBase
 from Module.Frontend.Matching import IMatcher
 from Utility.Config import build_dynamic_config, load_config
-from Utility.Visualizer import PLTVisualizer
+from Utility.Visualize import fig_plt
 
 
 def sparsification_plot(cov, mse):
@@ -34,6 +34,8 @@ def sparsification_plot(cov, mse):
 
 
 if __name__ == "__main__":
+    fig_plt.set_fn_mode(fig_plt.plot_imatcher, "image")
+    
     import argparse
     args = argparse.ArgumentParser()
     args.add_argument("--data", type=str, default="./Config/Sequence/TartanAir_seaside_000.yaml")
@@ -51,17 +53,14 @@ if __name__ == "__main__":
         }
     )
     gtmatchcfg, _ = build_dynamic_config({"type": "GTMatcher", "args": {}})
-
-    seq = GenericSequence.instantiate(**vars(datacfg))
+    seq = SequenceBase.instantiate(datacfg.type, datacfg.args)
     match_est = IMatcher.instantiate(matchcfg.type, matchcfg.args)
-    match_gt = IMatcher.instantiate(gtmatchcfg.type, gtmatchcfg.args)
-
-    PLTVisualizer.setup(state=PLTVisualizer.State.SAVE_FILE, save_path=Path("."), dpi=600)
 
     for idx in [0]:
         frameA, frameB = seq[idx], seq[idx + 1]
-        est_flow, est_flowcov = match_est.estimate(frameA, frameB)
-        gt_flow, _ = match_gt.estimate(frameA, frameB)
+        est_out = match_est.estimate(frameA, frameB)
+        est_flow, est_flowcov = est_out.flow, est_out.cov
+        
         flow_est = est_flow  # 2, 480, 640
         
         assert frameA.gtFlow is not None
@@ -74,11 +73,5 @@ if __name__ == "__main__":
         est, oracle, _, _, _ = sparsification_plot(
             np.linalg.norm(cov_est, axis=0), np.linalg.norm(cov_gt, axis=0)
         )
-                
-        PLTVisualizer.visualize_flow_grid(
-            "result",
-            frameA.imageL[0].permute(1, 2, 0), frameB.imageL[0].permute(1, 2, 0),
-            flow_est, flow_gt, 
-            cov_est.sum(dim=0), cov_gt.sum(dim=0),
-            est, oracle
-        )
+        
+        fig_plt.plot_imatcher("matching", est_out, frameA, frameB)

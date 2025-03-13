@@ -1,6 +1,7 @@
 import torch
+from Utility.Extensions import OnCallCompiler
 
-@torch.compile()
+@OnCallCompiler()
 def flow_loss(gamma: float, preds: torch.Tensor, gt: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
     n_predictions = len(preds)
     
@@ -8,24 +9,38 @@ def flow_loss(gamma: float, preds: torch.Tensor, gt: torch.Tensor, mask: torch.T
     for i in range(n_predictions):
         i_weight = gamma**(n_predictions - i - 1)
         i_loss = (preds[i] - gt).abs()
-        flow_loss += i_weight * (mask[:, None] * i_loss).mean()
+        flow_loss += i_weight * (mask * i_loss).nanmean()
 
     return flow_loss
 
 
-@torch.compile()
-def flow_cov_loss(gamma: float, preds: torch.Tensor, cov_preds: list[torch.Tensor], gt: torch.Tensor) -> torch.Tensor:
+@OnCallCompiler()
+def cov_loss(gamma: float, preds: torch.Tensor, gt: torch.Tensor, cov_preds: list[torch.Tensor], 
+             flow_mask: torch.Tensor | None = None, max_cov: float = 10., eps: float = 1e-7) -> tuple[torch.Tensor, torch.Tensor]:
     n_predictions = len(preds)
     cov_loss = torch.zeros_like(gt)
+    error = torch.zeros_like(gt)
+    exp_cov = torch.zeros_like(gt)
+    
+    error = None
     for i in range(n_predictions):
+        exp_cov = cov_preds[i] + eps
+        error = ((preds[i] - gt)**2).detach()
         i_weight = gamma**(n_predictions - i - 1)
-        i_loss = ((preds[i] - gt)**2 / (2 * torch.exp(2 * cov_preds[i])) + cov_preds[i]) * i_weight
+        i_loss = ((error / exp_cov ) + torch.log(exp_cov)) * i_weight
         cov_loss += i_loss
+    assert error is not None
+    
+    return cov_loss.mean(), error
 
-    return cov_loss.mean()
+@OnCallCompiler()
+def final_cov_loss(preds: torch.Tensor, gt: torch.Tensor, cov_preds: list[torch.Tensor], 
+                   flow_mask: torch.Tensor | None = None, max_cov: float = 10., eps: float = 1e-7) -> tuple[torch.Tensor, torch.Tensor]:
+    cov = cov_preds[-1:]
+    pred = preds[-1:]
+    return cov_loss(1.0, pred, gt, cov, flow_mask, max_cov, eps)
 
-
-@torch.compile()
+@OnCallCompiler()
 def depth_loss(gamma: float, preds: torch.Tensor, gt_depth: torch.Tensor, Ks: torch.Tensor, bls: torch.Tensor) -> torch.Tensor:
     n_predictions = len(preds)
     
@@ -41,28 +56,42 @@ def depth_loss(gamma: float, preds: torch.Tensor, gt_depth: torch.Tensor, Ks: to
     
     return depth_loss
 
-
-
 def sequence_loss(cfg, preds: torch.Tensor, gt: torch.Tensor, flow_mask: torch.Tensor | None, cov_preds: list[torch.Tensor] | None):    
-    gt_mag = gt.norm(dim=1)
+    gt_mag = gt.norm(dim=1, keepdim=True)
     mask = gt_mag < cfg.max_flow
-    if flow_mask is not None: mask &= flow_mask >= 0.5
+    if flow_mask is not None: mask &= flow_mask.bool()
+    
+    metrics = dict()
     
     match cfg.training_mode:
         case "flow":
             loss = flow_loss(cfg.gamma, preds, gt, mask)
         
+        case "finalcov":
+            assert cov_preds is not None
+            if cfg.cov_mask:
+                loss, error = final_cov_loss(preds, gt, cov_preds, mask)
+            else:
+                loss, error = final_cov_loss(preds, gt, cov_preds)
+            metrics["error"] = error.mean().item()
+            metrics["cov"] = cov_preds[-1].mean().item()
+            metrics["cov_ratioe"] = (error/cov_preds[-1]).mean().item()
+        
         case "cov":
             assert cov_preds is not None
-            loss = flow_cov_loss(cfg.gamma, preds, cov_preds, gt)
-
-        case "flow+cov":
-            assert cov_preds is not None
-            loss = flow_loss(cfg.gamma, preds, gt, mask) + flow_cov_loss(cfg.gamma, preds, cov_preds, gt)
+            if cfg.cov_mask:
+                loss, error = cov_loss(cfg.gamma, preds, gt, cov_preds, mask)
+            else:
+                loss, error = cov_loss(cfg.gamma, preds, gt, cov_preds)
+            metrics["error"] = error.mean().item()
+            metrics["cov"] = cov_preds[-1].mean().item()
+            cov_mag = cov_preds[-1].sum(dim=-1).sqrt()
+            epe = error.sum(dim=-1).sqrt()
+            metrics["cov_ratioe"] = (cov_mag / epe).mean().item()
             
         case default:
             raise ValueError(f"Unavailable training mode {default}")      
-    return loss
+    return loss, metrics
 
 
 def sequence_metric(cfg, preds: torch.Tensor, cov_preds: list[torch.Tensor] | None, gt: torch.Tensor, flow_mask: torch.Tensor | None):
@@ -70,7 +99,7 @@ def sequence_metric(cfg, preds: torch.Tensor, cov_preds: list[torch.Tensor] | No
     epe = torch.sum(sqe, dim=1).sqrt()
     
     gt_mag = gt.norm(dim=1)
-    mask = (flow_mask >= 0.5) & (gt_mag < cfg.max_flow) if flow_mask is not None else gt_mag < cfg.max_flow
+    mask = flow_mask & (gt_mag < cfg.max_flow) if flow_mask is not None else gt_mag < cfg.max_flow
     masked_epe = epe.view(-1)[mask.view(-1)]
     
     metrics = {
@@ -92,21 +121,9 @@ def sequence_metric(cfg, preds: torch.Tensor, cov_preds: list[torch.Tensor] | No
             
         case "cov":
             assert cov_preds is not None
-            loss = flow_cov_loss(cfg.gamma, preds, cov_preds, gt)
+            loss, _ = cov_loss(cfg.gamma, preds, gt, cov_preds)
             
-            cov = torch.exp(2 * cov_preds[-1])
-            cov_mag = cov.sum(dim=1).sqrt()
-            cov_ratio = (cov_mag / epe)
-            metrics.update({"cov_loss": loss.mean().item()})
-            metrics.update({"cov_mag": cov_mag.mean().item()})
-            metrics.update({"cov_ratio": cov_ratio.nanmean().item()})
-        
-        case "flow+cov":
-            assert cov_preds is not None
-            loss = flow_loss(cfg.gamma, preds, gt, mask) + flow_cov_loss(cfg.gamma, preds, cov_preds, gt)
-            
-            cov = torch.exp(2 * cov_preds[-1])
-            cov_mag = cov.sum(dim=1).sqrt()
+            cov_mag = cov_preds[-1].sum(dim=1).sqrt()
             cov_ratio = (cov_mag / epe)
             metrics.update({"cov_loss": loss.mean().item()})
             metrics.update({"cov_mag": cov_mag.mean().item()})

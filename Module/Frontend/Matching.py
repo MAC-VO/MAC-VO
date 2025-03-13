@@ -2,33 +2,53 @@ from __future__ import annotations
 
 import torch
 from types import SimpleNamespace
-from typing import TypeVar, Generic, TypedDict, overload
+from typing import TypeVar, Generic, TypedDict, overload, Any
 from abc import ABC, abstractmethod
 
-from DataLoader import SourceDataFrame
+from dataclasses import dataclass
+
+from DataLoader import StereoData
 from Utility.Utils import padTo
 from Utility.Extensions import ConfigTestableSubclass
 from Utility.Config import build_dynamic_config
 
-from ..Network.TartanVOStereo.StereoVO_Interface import TartanStereoVOMatch
-
 # Matching interface ###
-# T_Context = The internal state of matcher
 T_Context = TypeVar("T_Context")
 
 
 class IMatcher(ABC, Generic[T_Context], ConfigTestableSubclass):
+    @dataclass
+    class Output:
+        flow: torch.Tensor                 # B x 2 x H x W, float32
+        cov : torch.Tensor | None = None   # B x 3 x H x W, float32 OR None if not applicable
+        mask: torch.Tensor | None = None   # B x 1 x H x W, bool    OR None if not applicable
+    
+        @property
+        def as_full_cov(self) -> "IMatcher.Output":
+            if self.cov is None or self.cov.size(1) == 3: return self
+            B, C, H, W = self.cov.shape
+            assert C == 2, f"number of channel for cov must be either 2 or 3, get {C=}"
+            return IMatcher.Output(
+                flow=self.flow,
+                cov =torch.cat([self.cov, torch.zeros((B, 1, H, W), device=self.cov.device, dtype=self.cov.dtype)], dim=1),
+                mask=self.mask
+            )
+        
     """
     Estimate the optical flow map between two frames. (Use left-frame of stereo pair)
     
-    `IMatcher(frame_t1: SourceDataFrame, frame_t2: SourceDataFrame) -> flow, flow_cov`
+    `IMatcher.estimate(frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output`
 
     Given a frame with imageL, imageR being Bx3xHxW, return `output` where    
 
     * flow      - Bx2xHxW shaped torch.Tensor, estimated optical flow map
                 maybe padded with `nan` if model can't output prediction with same shape as input image.
-    * flow_cov  - Bx2xHxW shaped torch.Tensor or None, estimated covariance of optical flow map map (if provided)
+    * cov       - Bx3xHxW shaped torch.Tensor or None, estimated covariance of optical flow map map (if provided)
                 maybe padded with `nan` if model can't output prediction with same shape as input image.
+                The three channels are uu, vv, and uv respectively, such that the 2x2 covariance matrix will be:
+                    Sigma = [[uu, uv], [uv, vv]]
+    * mask      - Bx1xHxW shaped torch.Tensor or None, the position with `True` value means valid (not occluded) 
+                prediction regions.
     """
     def __init__(self, config: SimpleNamespace):
         self.config : SimpleNamespace = config
@@ -42,10 +62,11 @@ class IMatcher(ABC, Generic[T_Context], ConfigTestableSubclass):
     def init_context(self) -> T_Context: ...
     
     @abstractmethod
-    def estimate(self, frame_t1: SourceDataFrame, frame_t2: SourceDataFrame) -> tuple[torch.Tensor, torch.Tensor | None]: ...
-    
-    def __call__(self, frame_t1: SourceDataFrame, frame_t2: SourceDataFrame) -> tuple[torch.Tensor, torch.Tensor | None]:
-        return self.estimate(frame_t1, frame_t2)
+    def forward(self, frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output: ...
+
+    def estimate(self, frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output:
+        with torch.no_grad(), torch.inference_mode():
+            return self.forward(frame_t1, frame_t2)
 
     @overload
     @staticmethod
@@ -79,9 +100,6 @@ class IMatcher(ABC, Generic[T_Context], ConfigTestableSubclass):
 class ModelContext(TypedDict):
     model: torch.nn.Module
 
-class TartanVOContext(TypedDict):
-    model: TartanStereoVOMatch
-
 # Implementations
 
 class GTMatcher(IMatcher[None]):
@@ -95,11 +113,11 @@ class GTMatcher(IMatcher[None]):
     
     def init_context(self) -> None: return None
     
-    def estimate(self, frame_t1: SourceDataFrame, frame_t2: SourceDataFrame) -> tuple[torch.Tensor, torch.Tensor | None]:
-        assert frame_t1.gtFlow is not None
+    def forward(self, frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output:
+        assert frame_t1.gt_flow is not None
         
-        gt_flow = padTo(frame_t1.gtFlow, (frame_t1.meta.height, frame_t1.meta.width), (-2, -1), float('nan'))
-        return gt_flow, None
+        gt_flow = padTo(frame_t1.gt_flow, (frame_t1.height, frame_t1.width), (-2, -1), float('nan'))
+        return IMatcher.Output(flow=gt_flow)
     
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None: return
@@ -126,10 +144,9 @@ class FlowFormerMatcher(IMatcher[ModelContext]):
         model.eval()
         return ModelContext(model=model)
     
-    @torch.inference_mode()
-    def estimate(self, frame_t1: SourceDataFrame, frame_t2: SourceDataFrame) -> tuple[torch.Tensor, torch.Tensor | None]:
+    def forward(self, frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output:
         flow, _ = self.context["model"].inference(frame_t1.imageL, frame_t2.imageL)
-        return flow.unsqueeze(0), None
+        return IMatcher.Output(flow=flow.unsqueeze(0))
     
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None:
@@ -151,17 +168,16 @@ class FlowFormerCovMatcher(IMatcher[ModelContext]):
         from ..Network.FlowFormerCov import build_flowformer
         
         model = build_flowformer(get_cfg(), self.config.device)
-        ckpt  = torch.load(self.config.weight)
+        ckpt  = torch.load(self.config.weight, weights_only=True)
         model.load_ddp_state_dict(ckpt)
         model.to(self.config.device)
         
         model.eval()
         return ModelContext(model=model)
 
-    @torch.inference_mode()
-    def estimate(self, frame_t1: SourceDataFrame, frame_t2: SourceDataFrame) -> tuple[torch.Tensor, torch.Tensor | None]:
+    def forward(self, frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output:
         flow, flow_cov = self.context["model"].inference(frame_t1.imageL, frame_t2.imageL)
-        return flow, flow_cov
+        return IMatcher.Output(flow=flow, cov=flow_cov).as_full_cov
     
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None:
@@ -171,23 +187,29 @@ class FlowFormerCovMatcher(IMatcher[ModelContext]):
             })
 
 
-class TartanVOMatcher(IMatcher[TartanVOContext]):
+class TartanVOMatcher(IMatcher[ModelContext]):
     """
     Use TartanVO to estimate optical flow between two frames.
     """
     @property
     def provide_cov(self) -> bool: return False
     
-    def init_context(self) -> TartanVOContext:
+    def init_context(self) -> ModelContext:
+        from ..Network.TartanVOStereo.StereoVO_Interface import TartanStereoVOMatch
         model = TartanStereoVOMatch(self.config.weight, True, self.config.device)
-        return TartanVOContext(model=model)
+        return ModelContext(model=model)    #type: ignore
 
-    @torch.inference_mode()
-    def estimate(self, frame_t1: SourceDataFrame, frame_t2: SourceDataFrame) -> tuple[torch.Tensor, torch.Tensor | None]:
-        meta = frame_t1.meta
-        flow = self.context["model"].inference(meta, frame_t1.imageL, frame_t2.imageL).unsqueeze(0)
-        flow = padTo(flow, (meta.height, meta.width), dim=(-2, -1), value=float('nan'))
-        return flow, None
+    def forward(self, frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output:
+        flow = self.context["model"].inference(frame_t1, frame_t1.imageL, frame_t2.imageL).unsqueeze(0)
+        
+        mask = torch.zeros_like(flow[:, :1], dtype=torch.bool)
+        pad_height = (frame_t1.height - flow.size(-2)) // 2
+        pad_width  = (frame_t1.width  - flow.size(-1)) // 2
+        mask[..., pad_height:-pad_height, pad_width:-pad_width] = True
+        
+        flow = padTo(flow, (frame_t1.height, frame_t1.width), dim=(-2, -1), value=float('nan'))
+        
+        return IMatcher.Output(flow=flow, mask=mask)
     
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None:    
@@ -211,7 +233,7 @@ class TartanVOCovMatcher(IMatcher[ModelContext]):
             "decoder": "raft", "dim": 64, "dropout": 0.1,
             "num_heads": 4, "mixtures": 4, "gru_iters": 12, "kernel_size": 3,
         })
-        ckpt = torch.load(self.config.weight, map_location="cpu")
+        ckpt = torch.load(self.config.weight, map_location="cpu", weights_only=True)
         model = RAFTFlowCovNet(cfg, self.config.device)
         model.load_ddp_state_dict(ckpt)
 
@@ -219,13 +241,17 @@ class TartanVOCovMatcher(IMatcher[ModelContext]):
         model = model.to(self.config.device)
         return ModelContext(model=model)
     
-    @torch.inference_mode()
-    def estimate(self, frame_t1: SourceDataFrame, frame_t2: SourceDataFrame) -> tuple[torch.Tensor, torch.Tensor | None]:
-        meta = frame_t1.meta
-        flow_map, flow_cov_map = self.context["model"].inference(frame_t1.imageL, frame_t2.imageL)
-        flow_map     = padTo(flow_map[0]    , (meta.height, meta.width), dim=(-2, -1), value=float('nan'))
-        flow_cov_map = padTo(flow_cov_map[0], (meta.height, meta.width), dim=(-2, -1), value=float('nan'))
-        return flow_map, flow_cov_map
+    def forward(self, frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output:
+        flow, flow_cov = self.context["model"].inference(frame_t1.imageL, frame_t2.imageL)
+        
+        mask = torch.zeros_like(flow[:, :1], dtype=torch.bool)
+        pad_height = (frame_t1.height - flow.size(-2)) // 2
+        pad_width  = (frame_t1.width  - flow.size(-1)) // 2
+        mask[..., pad_height:-pad_height, pad_width:-pad_width] = True
+        
+        flow     = padTo(flow    , (frame_t1.height, frame_t1.width), dim=(-2, -1), value=float('nan'))
+        flow_cov = padTo(flow_cov, (frame_t1.height, frame_t1.width), dim=(-2, -1), value=float('nan'))
+        return IMatcher.Output(flow=flow, cov=flow_cov, mask=mask).as_full_cov
 
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None:    
@@ -233,6 +259,10 @@ class TartanVOCovMatcher(IMatcher[ModelContext]):
                 "weight"    : lambda s: isinstance(s, str),
                 "device"    : lambda s: isinstance(s, str) and (("cuda" in s) or (s == "cpu")),
             })
+
+
+# Modifier
+# Modifier(IMatcher) -> IMatcher'
 
 
 class ApplyGTMatchCov(IMatcher[IMatcher]):
@@ -243,22 +273,28 @@ class ApplyGTMatchCov(IMatcher[IMatcher]):
     error in estimation to 'estimated' covariance.
     
     Will raise AssertionError if frame does not have gtFlow.
+    
+    NOTE: This modifier only creates estimation to Sigma matrix as a diagonal form, since the optimum 
+    covariance matrix (that maximize log-likelihood of ground truth flow) is degenerated for a full
+    2x2 matrix setup.
     """
     @property
     def provide_cov(self) -> bool: return True
     
     def init_context(self) -> IMatcher:
-        internal_module = IMatcher.instantiate(self.config.module.name, self.config.module.args)
+        internal_module = IMatcher.instantiate(self.config.module.type, self.config.module.args)
         return internal_module
     
-    def estimate(self, frame_t1: SourceDataFrame, frame_t2: SourceDataFrame) -> tuple[torch.Tensor, torch.Tensor | None]:
-        assert frame_t1.gtFlow is not None
-        flow, _ = self.context.estimate(frame_t1, frame_t2)
+    def forward(self, frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output:
+        assert frame_t1.gt_flow is not None
+        out = self.context.estimate(frame_t1, frame_t2)
         
-        flow_error = flow - frame_t1.gtFlow
+        flow_error = out.flow - frame_t1.gt_flow.to(out.flow.device)
         flow_cov   = flow_error.square()
-        return flow, flow_cov
+        out.cov = flow_cov
+        return out.as_full_cov
     
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None:
-        IMatcher.is_valid_config(config)
+        assert config is not None
+        IMatcher.is_valid_config(config.module)

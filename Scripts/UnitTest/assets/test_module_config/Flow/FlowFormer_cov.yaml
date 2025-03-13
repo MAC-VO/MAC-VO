@@ -1,0 +1,4 @@
+type: FlowFormerCovMatcher
+args:
+  device: cuda
+  weight: ./Model/MACVO_FrontendCov.pth

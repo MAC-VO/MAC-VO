@@ -1,40 +1,55 @@
-#*IS_DATASET_TYPE*#
-# This file contains the two test environments used by TartanVO Stereo Module
-type: EuRoC
-
-# Controls optional data sources
-gtDepth: false
-gtFlow: false
-gtPose: true
-useIMU: false
-
-begin_idx: 0
-end_idx: -1
-
-dataroot: PATH_FOR_EUROC
-
-# Paths
-roots:
-  - root: /MH_01_easy/mav0
+-   type: EuRoC_NoIMU
     name: MH01
-  - root: /MH_02_easy/mav0
+    args:
+        root: /data2/datasets/yuhengq/Euroc/MH_01_easy/mav0
+        gt_pose: true
+-   type: EuRoC_NoIMU
     name: MH02
-  - root: /MH_03_medium/mav0
+    args:
+        root: /data2/datasets/yuhengq/Euroc/MH_02_easy/mav0
+        gt_pose: true
+-   type: EuRoC_NoIMU
     name: MH03
-  - root: /MH_04_difficult/mav0
+    args:
+        root: /data2/datasets/yuhengq/Euroc/MH_03_medium/mav0
+        gt_pose: true
+-   type: EuRoC_NoIMU
     name: MH04
-  - root: /MH_05_difficult/mav0
+    args:
+        root: /data2/datasets/yuhengq/Euroc/MH_04_difficult/mav0
+        gt_pose: true
+-   type: EuRoC_NoIMU
     name: MH05
-  
-  - root: /V1_01_easy/mav0
+    args:
+        root: /data2/datasets/yuhengq/Euroc/MH_05_difficult/mav0
+        gt_pose: true
+-   type: EuRoC_NoIMU
     name: V101
-  - root: /V1_02_medium/mav0
+    args:
+        root: /data2/datasets/yuhengq/Euroc/V1_01_easy/mav0
+        gt_pose: true
+-   type: EuRoC_NoIMU
     name: V102
-  - root: /V1_03_difficult/mav0
+    args:
+        root: /data2/datasets/yuhengq/Euroc/V1_02_medium/mav0
+        gt_pose: true
+-   type: EuRoC_NoIMU
     name: V103
-  - root: /V2_01_easy/mav0
+    args:
+        root: /data2/datasets/yuhengq/Euroc/V1_03_difficult/mav0
+        gt_pose: true
+-   type: EuRoC_NoIMU
     name: V201
-  - root: /V2_02_medium/mav0
+    args:
+        root: /data2/datasets/yuhengq/Euroc/V2_01_easy/mav0
+        gt_pose: true
+-   type: EuRoC_NoIMU
     name: V202
-  - root: /V2_03_difficult/mav0
+    args:
+        root: /data2/datasets/yuhengq/Euroc/V2_02_medium/mav0
+        gt_pose: true
+-   type: EuRoC_NoIMU
     name: V203
+    args:
+        root: /data2/datasets/yuhengq/Euroc/V2_03_difficult/mav0
+        gt_pose: true

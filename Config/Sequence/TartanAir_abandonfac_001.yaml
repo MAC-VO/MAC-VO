@@ -1,11 +1,23 @@
 type: TartanAir
 name: abf001
-root: "PATH_FOR_TARTANAIR/abandonedfactory/Data/P001"
-ips: 100
-compressed: true
-useIMU: false
+args:
+  root: /project/learningvo/tartanair_v1_5/abandonedfactory/Data/P001
+  imu_freq: 100
+  imu_sim:
+    # Accelerometer Noise
+    acc_bias: [0.02, -0.01, 0.05]
+    acc_init_bias_noise: [0.01, 0.01, 0.01]
+    acc_bias_instability: [1.47e-4, 1.47e-4, 1.47e-4]
+    acc_random_walk: [1.96e-7, 1.96e-7, 1.96e-7]
 
-# Controls optional data sources
-gtDepth: false
-gtFlow: false
-gtPose: true
+    # Gyroscope Noise
+    gyro_bias: [5.e-3, -2.e-3, 5.e-3]
+    gyro_init_bias_noise: [0.01, 0.01, 0.01]
+    gyro_bias_instability: [5.8e-6, 5.8e-6, 5.8e-6]
+    gyro_random_walk: [3.8e-7, 3.8e-7, 3.8e-7]
+  compressed: true
+
+  # Controls optional data sources
+  gtDepth: false
+  gtFlow: true
+  gtPose: true

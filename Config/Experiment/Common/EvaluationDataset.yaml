@@ -1,0 +1,4 @@
+!flatten_seq 
+- !include ../../Sequence/EuRoC.yaml
+- !include ../../Sequence/KITTI.yaml
+- !include ../../Sequence/TartanAir2_Test.yaml

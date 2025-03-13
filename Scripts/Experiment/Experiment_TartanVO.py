@@ -1,8 +1,7 @@
 import argparse
-from itertools import product
 from pathlib import Path
 
-from DataLoader import GenericSequence
+from DataLoader import SequenceBase, StereoFrame, smart_transform
 from Evaluation.EvalSeq import EvaluateSequences
 from Odometry.BaselineTartanVO import TartanVO
 from Utility.Config import build_dynamic_config, load_config
@@ -11,13 +10,14 @@ from Utility.Sandbox import Sandbox
 
 
 def execute_experiment(name, cfg, cfg_dict, root_box: Sandbox) -> str:
-    # Execute an experiment, and return the spaceID
+    # Execute an experiment, and return the directory of result sandbox
     exp_space = root_box.new_child(name)
     exp_space.config = cfg_dict
     
-    sequence = GenericSequence.instantiate(**vars(cfg.Data.args))\
-                .clip(cfg.Data.begin_idx, cfg.Data.end_idx)\
-                .preload()
+    sequence = smart_transform(
+        SequenceBase[StereoFrame].instantiate(cfg.Data.type, cfg.Data.args),
+        cfg.Preprocess
+    ).preload()
     system = TartanVO.from_config(cfg, sequence)
     system.receive_frames(sequence, exp_space)
 
@@ -34,16 +34,17 @@ if __name__ == "__main__":
 
     Logger.write("info", f"Using configuration from: {args.config}")
     cfg, cfg_dict = load_config(Path(args.config))
-    odometry_cfgs = [cfg_dict["Odometry"]]
+    odometry_cfg = cfg_dict["Odometry"]
     data_cfgs = cfg_dict["Datas"]
 
     run_configs = [
         {
-            "Project": odometry_cfg["name"] + "@" + data_cfg["args"]["name"],
+            "Project": odometry_cfg["name"] + "@" + data_cfg["name"],
             "Data": data_cfg,
             "Odometry": odometry_cfg,
+            "Preprocess": cfg_dict["Preprocess"]
         }
-        for data_cfg, odometry_cfg in product(data_cfgs, odometry_cfgs)
+        for data_cfg in data_cfgs
     ]
 
     root_box = Sandbox.create(
@@ -64,7 +65,6 @@ if __name__ == "__main__":
     )
     with root_box.open("runs.txt", "w") as f:
         f.write("\n".join(spaces))
-    root_box.finish()
 
     eval_header, eval_results = EvaluateSequences(spaces, correct_scale=True)
     print_as_table(eval_header, eval_results)

@@ -1,5 +1,17 @@
 # Configuration Description
 
+## Frontend
+```
+type: CUDAGraph_FlowFormerCovFrontend
+args:
+    device: *device
+    eval_mode: true
+    weight: ./Model/120000_Flowformer_bf16.pth
+    enforce_positive_disparity: false
+    dtype: bf16
+    max_flow: -1
+```
+
 ## Depth Estimator
 
 ```
@@ -196,7 +208,7 @@ args:
 ```
 
 ```
-type: DisplacementInterpolate
+type: MotionInterpolate
 args:
 ```
 
@@ -216,7 +228,7 @@ args:
 ## Optimizer
 
 ```
-type: PyPoseTwoFramePGO
+type: TwoFramePoseOptimizer
 args:
     device      : cpu | cuda | cuda:<idx>
     vectorize   : true | false 
@@ -224,4 +236,15 @@ args:
     parallel    : true | false
     # True will spawn a background process to run optimization loop. recommended to use `cpu` when
     # setting parallel=true to avoid resource contention on CUDA cores.
+```
+
+* Reprojection error with BA, this setup does not use depth information
+```
+type: ReprojectBAOptimizer
+args:
+    device: cpu
+    vectorize: true
+    parallel: true
+    use_fancy_cov: false
+    constraint: none
 ```

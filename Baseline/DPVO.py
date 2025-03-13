@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from DataLoader import GenericSequence, SourceDataFrame
+from DataLoader import SequenceBase, StereoFrame
 from Odometry.BaselineDPVO import DeepPatchVO
 from Utility.Config import load_config
 from Utility.Sandbox import Sandbox
@@ -29,11 +29,11 @@ if __name__ == "__main__":
     project_name = odomcfg.name + "@" + datacfg.name
 
     # Initialize data source
-    sequence = GenericSequence[SourceDataFrame].instantiate(**vars(datacfg)).clip(0, args.to).preload()
+    sequence = SequenceBase[StereoFrame].instantiate(datacfg.type, datacfg.args).clip(0, args.to).preload()
     frame0 = sequence[0]
     
     odometry = DeepPatchVO(
-        **vars(odomcfg.args), width=frame0.meta.width, height=frame0.meta.height
+        **vars(odomcfg.args), width=frame0.stereo.width, height=frame0.stereo.height
     )
     exp_space = Sandbox.create(Path(args.resultRoot), project_name)
     exp_space.config = {
@@ -42,4 +42,3 @@ if __name__ == "__main__":
         "Data": {"args": datacfg_dict, "end_idx": args.to},
     }
     odometry.receive_frames(sequence, exp_space)
-    exp_space.finish()

@@ -13,7 +13,7 @@ jobs:
 
       - name: Check Environment Exists
         id: cache-env
-        uses: actions/cache@v4.0.2
+        uses: actions/cache@v4
         with:
           path: ${{ env.pythonLocation }}
           key: venv-cache
@@ -47,20 +47,18 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
-
+          token: ${{ secrets.YUTIAN }}
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Cache
+      - name: Restore Cache
         id: cache-env
-        uses: actions/cache@v4.0.2
+        uses: actions/cache/restore@v3
         with:
-          fail-on-cache-miss: true
           path: ${{ env.pythonLocation }}
           key: venv-cache
-          save-always: true
       
       - name: Report Environment
         run: |

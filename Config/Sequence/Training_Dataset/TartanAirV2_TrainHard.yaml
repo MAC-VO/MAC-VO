@@ -1,0 +1,4554 @@
+# The /scratch directory is on zoidberg node of perceptron.
+# connect / run job on zoidberg to use this dataset.
+-   type: TartanAirv2_NoIMU
+    name: SeasonalForestSpringP003
+    args:
+        root: /scratch/tartanair_v2/SeasonalForestSpring/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasonalForestSpringP000
+    args:
+        root: /scratch/tartanair_v2/SeasonalForestSpring/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasonalForestSpringP002
+    args:
+        root: /scratch/tartanair_v2/SeasonalForestSpring/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasonalForestSpringP001
+    args:
+        root: /scratch/tartanair_v2/SeasonalForestSpring/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RuinsP009
+    args:
+        root: /scratch/tartanair_v2/Ruins/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RuinsP003
+    args:
+        root: /scratch/tartanair_v2/Ruins/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RuinsP004
+    args:
+        root: /scratch/tartanair_v2/Ruins/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RuinsP000
+    args:
+        root: /scratch/tartanair_v2/Ruins/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RuinsP005
+    args:
+        root: /scratch/tartanair_v2/Ruins/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RuinsP002
+    args:
+        root: /scratch/tartanair_v2/Ruins/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RuinsP008
+    args:
+        root: /scratch/tartanair_v2/Ruins/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RuinsP006
+    args:
+        root: /scratch/tartanair_v2/Ruins/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RuinsP001
+    args:
+        root: /scratch/tartanair_v2/Ruins/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldTownFallP000
+    args:
+        root: /scratch/tartanair_v2/OldTownFall/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldTownFallP002
+    args:
+        root: /scratch/tartanair_v2/OldTownFall/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldTownFallP001
+    args:
+        root: /scratch/tartanair_v2/OldTownFall/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ForestEnvP005
+    args:
+        root: /scratch/tartanair_v2/ForestEnv/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ForestEnvP002
+    args:
+        root: /scratch/tartanair_v2/ForestEnv/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ForestEnvP011
+    args:
+        root: /scratch/tartanair_v2/ForestEnv/Data_hard/P011
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ForestEnvP010
+    args:
+        root: /scratch/tartanair_v2/ForestEnv/Data_hard/P010
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ForestEnvP009
+    args:
+        root: /scratch/tartanair_v2/ForestEnv/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ForestEnvP003
+    args:
+        root: /scratch/tartanair_v2/ForestEnv/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ForestEnvP004
+    args:
+        root: /scratch/tartanair_v2/ForestEnv/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ForestEnvP000
+    args:
+        root: /scratch/tartanair_v2/ForestEnv/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ForestEnvP007
+    args:
+        root: /scratch/tartanair_v2/ForestEnv/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: DowntownP001
+    args:
+        root: /scratch/tartanair_v2/Downtown/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: DowntownP006
+    args:
+        root: /scratch/tartanair_v2/Downtown/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: DowntownP002
+    args:
+        root: /scratch/tartanair_v2/Downtown/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: DowntownP008
+    args:
+        root: /scratch/tartanair_v2/Downtown/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: DowntownP005
+    args:
+        root: /scratch/tartanair_v2/Downtown/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: DowntownP007
+    args:
+        root: /scratch/tartanair_v2/Downtown/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: DowntownP000
+    args:
+        root: /scratch/tartanair_v2/Downtown/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: DowntownP004
+    args:
+        root: /scratch/tartanair_v2/Downtown/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: DowntownP003
+    args:
+        root: /scratch/tartanair_v2/Downtown/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: NordicHarborP005
+    args:
+        root: /scratch/tartanair_v2/NordicHarbor/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: NordicHarborP002
+    args:
+        root: /scratch/tartanair_v2/NordicHarbor/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: NordicHarborP006
+    args:
+        root: /scratch/tartanair_v2/NordicHarbor/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: NordicHarborP001
+    args:
+        root: /scratch/tartanair_v2/NordicHarbor/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: NordicHarborP003
+    args:
+        root: /scratch/tartanair_v2/NordicHarbor/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: NordicHarborP004
+    args:
+        root: /scratch/tartanair_v2/NordicHarbor/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: NordicHarborP000
+    args:
+        root: /scratch/tartanair_v2/NordicHarbor/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: NordicHarborP007
+    args:
+        root: /scratch/tartanair_v2/NordicHarbor/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CastleFortressP004
+    args:
+        root: /scratch/tartanair_v2/CastleFortress/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CastleFortressP003
+    args:
+        root: /scratch/tartanair_v2/CastleFortress/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CastleFortressP009
+    args:
+        root: /scratch/tartanair_v2/CastleFortress/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CastleFortressP010
+    args:
+        root: /scratch/tartanair_v2/CastleFortress/Data_hard/P010
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CastleFortressP007
+    args:
+        root: /scratch/tartanair_v2/CastleFortress/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CastleFortressP000
+    args:
+        root: /scratch/tartanair_v2/CastleFortress/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CastleFortressP011
+    args:
+        root: /scratch/tartanair_v2/CastleFortress/Data_hard/P011
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CastleFortressP008
+    args:
+        root: /scratch/tartanair_v2/CastleFortress/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CastleFortressP002
+    args:
+        root: /scratch/tartanair_v2/CastleFortress/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CastleFortressP005
+    args:
+        root: /scratch/tartanair_v2/CastleFortress/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CastleFortressP001
+    args:
+        root: /scratch/tartanair_v2/CastleFortress/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CastleFortressP006
+    args:
+        root: /scratch/tartanair_v2/CastleFortress/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedFactory2P003
+    args:
+        root: /scratch/tartanair_v2/AbandonedFactory2/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedFactory2P004
+    args:
+        root: /scratch/tartanair_v2/AbandonedFactory2/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedFactory2P000
+    args:
+        root: /scratch/tartanair_v2/AbandonedFactory2/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedFactory2P005
+    args:
+        root: /scratch/tartanair_v2/AbandonedFactory2/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedFactory2P002
+    args:
+        root: /scratch/tartanair_v2/AbandonedFactory2/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedFactory2P001
+    args:
+        root: /scratch/tartanair_v2/AbandonedFactory2/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedCableP003
+    args:
+        root: /scratch/tartanair_v2/AbandonedCable/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedCableP004
+    args:
+        root: /scratch/tartanair_v2/AbandonedCable/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedCableP000
+    args:
+        root: /scratch/tartanair_v2/AbandonedCable/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedCableP007
+    args:
+        root: /scratch/tartanair_v2/AbandonedCable/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedCableP005
+    args:
+        root: /scratch/tartanair_v2/AbandonedCable/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedCableP002
+    args:
+        root: /scratch/tartanair_v2/AbandonedCable/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedCableP006
+    args:
+        root: /scratch/tartanair_v2/AbandonedCable/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedCableP001
+    args:
+        root: /scratch/tartanair_v2/AbandonedCable/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModUrbanCityP006
+    args:
+        root: /scratch/tartanair_v2/ModUrbanCity/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModUrbanCityP001
+    args:
+        root: /scratch/tartanair_v2/ModUrbanCity/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModUrbanCityP005
+    args:
+        root: /scratch/tartanair_v2/ModUrbanCity/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModUrbanCityP011
+    args:
+        root: /scratch/tartanair_v2/ModUrbanCity/Data_hard/P011
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModUrbanCityP002
+    args:
+        root: /scratch/tartanair_v2/ModUrbanCity/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModUrbanCityP008
+    args:
+        root: /scratch/tartanair_v2/ModUrbanCity/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModUrbanCityP000
+    args:
+        root: /scratch/tartanair_v2/ModUrbanCity/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModUrbanCityP007
+    args:
+        root: /scratch/tartanair_v2/ModUrbanCity/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModUrbanCityP009
+    args:
+        root: /scratch/tartanair_v2/ModUrbanCity/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModUrbanCityP003
+    args:
+        root: /scratch/tartanair_v2/ModUrbanCity/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModUrbanCityP010
+    args:
+        root: /scratch/tartanair_v2/ModUrbanCity/Data_hard/P010
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModUrbanCityP004
+    args:
+        root: /scratch/tartanair_v2/ModUrbanCity/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RetroOfficeP000
+    args:
+        root: /scratch/tartanair_v2/RetroOffice/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RetroOfficeP003
+    args:
+        root: /scratch/tartanair_v2/RetroOffice/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RetroOfficeP004
+    args:
+        root: /scratch/tartanair_v2/RetroOffice/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RetroOfficeP001
+    args:
+        root: /scratch/tartanair_v2/RetroOffice/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RetroOfficeP005
+    args:
+        root: /scratch/tartanair_v2/RetroOffice/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RetroOfficeP002
+    args:
+        root: /scratch/tartanair_v2/RetroOffice/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PrisonP001
+    args:
+        root: /scratch/tartanair_v2/Prison/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PrisonP006
+    args:
+        root: /scratch/tartanair_v2/Prison/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PrisonP011
+    args:
+        root: /scratch/tartanair_v2/Prison/Data_hard/P011
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PrisonP008
+    args:
+        root: /scratch/tartanair_v2/Prison/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PrisonP002
+    args:
+        root: /scratch/tartanair_v2/Prison/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PrisonP005
+    args:
+        root: /scratch/tartanair_v2/Prison/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PrisonP007
+    args:
+        root: /scratch/tartanair_v2/Prison/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PrisonP000
+    args:
+        root: /scratch/tartanair_v2/Prison/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PrisonP004
+    args:
+        root: /scratch/tartanair_v2/Prison/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PrisonP003
+    args:
+        root: /scratch/tartanair_v2/Prison/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PrisonP009
+    args:
+        root: /scratch/tartanair_v2/Prison/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PrisonP010
+    args:
+        root: /scratch/tartanair_v2/Prison/Data_hard/P010
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AncientTownsP000
+    args:
+        root: /scratch/tartanair_v2/AncientTowns/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AncientTownsP003
+    args:
+        root: /scratch/tartanair_v2/AncientTowns/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AncientTownsP004
+    args:
+        root: /scratch/tartanair_v2/AncientTowns/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AncientTownsP006
+    args:
+        root: /scratch/tartanair_v2/AncientTowns/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AncientTownsP001
+    args:
+        root: /scratch/tartanair_v2/AncientTowns/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AncientTownsP005
+    args:
+        root: /scratch/tartanair_v2/AncientTowns/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AncientTownsP002
+    args:
+        root: /scratch/tartanair_v2/AncientTowns/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModernCityDowntownP002
+    args:
+        root: /scratch/tartanair_v2/ModernCityDowntown/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModernCityDowntownP008
+    args:
+        root: /scratch/tartanair_v2/ModernCityDowntown/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModernCityDowntownP005
+    args:
+        root: /scratch/tartanair_v2/ModernCityDowntown/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModernCityDowntownP001
+    args:
+        root: /scratch/tartanair_v2/ModernCityDowntown/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModernCityDowntownP006
+    args:
+        root: /scratch/tartanair_v2/ModernCityDowntown/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModernCityDowntownP004
+    args:
+        root: /scratch/tartanair_v2/ModernCityDowntown/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModernCityDowntownP003
+    args:
+        root: /scratch/tartanair_v2/ModernCityDowntown/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModernCityDowntownP007
+    args:
+        root: /scratch/tartanair_v2/ModernCityDowntown/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModernCityDowntownP000
+    args:
+        root: /scratch/tartanair_v2/ModernCityDowntown/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldTownWinterP000
+    args:
+        root: /scratch/tartanair_v2/OldTownWinter/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldTownWinterP002
+    args:
+        root: /scratch/tartanair_v2/OldTownWinter/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldTownWinterP001
+    args:
+        root: /scratch/tartanair_v2/OldTownWinter/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: EndofTheWorldP001
+    args:
+        root: /scratch/tartanair_v2/EndofTheWorld/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: EndofTheWorldP002
+    args:
+        root: /scratch/tartanair_v2/EndofTheWorld/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: EndofTheWorldP005
+    args:
+        root: /scratch/tartanair_v2/EndofTheWorld/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: EndofTheWorldP000
+    args:
+        root: /scratch/tartanair_v2/EndofTheWorld/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: EndofTheWorldP004
+    args:
+        root: /scratch/tartanair_v2/EndofTheWorld/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: EndofTheWorldP003
+    args:
+        root: /scratch/tartanair_v2/EndofTheWorld/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasonalForestSummerNightP001
+    args:
+        root: /scratch/tartanair_v2/SeasonalForestSummerNight/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasonalForestSummerNightP000
+    args:
+        root: /scratch/tartanair_v2/SeasonalForestSummerNight/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PolarSciFiP008
+    args:
+        root: /scratch/tartanair_v2/PolarSciFi/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PolarSciFiP002
+    args:
+        root: /scratch/tartanair_v2/PolarSciFi/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PolarSciFiP005
+    args:
+        root: /scratch/tartanair_v2/PolarSciFi/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PolarSciFiP001
+    args:
+        root: /scratch/tartanair_v2/PolarSciFi/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PolarSciFiP006
+    args:
+        root: /scratch/tartanair_v2/PolarSciFi/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PolarSciFiP004
+    args:
+        root: /scratch/tartanair_v2/PolarSciFi/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PolarSciFiP003
+    args:
+        root: /scratch/tartanair_v2/PolarSciFi/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PolarSciFiP007
+    args:
+        root: /scratch/tartanair_v2/PolarSciFi/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: PolarSciFiP000
+    args:
+        root: /scratch/tartanair_v2/PolarSciFi/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedSchoolP002
+    args:
+        root: /scratch/tartanair_v2/AbandonedSchool/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedSchoolP008
+    args:
+        root: /scratch/tartanair_v2/AbandonedSchool/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedSchoolP005
+    args:
+        root: /scratch/tartanair_v2/AbandonedSchool/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedSchoolP001
+    args:
+        root: /scratch/tartanair_v2/AbandonedSchool/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedSchoolP006
+    args:
+        root: /scratch/tartanair_v2/AbandonedSchool/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedSchoolP004
+    args:
+        root: /scratch/tartanair_v2/AbandonedSchool/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedSchoolP009
+    args:
+        root: /scratch/tartanair_v2/AbandonedSchool/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedSchoolP003
+    args:
+        root: /scratch/tartanair_v2/AbandonedSchool/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedSchoolP007
+    args:
+        root: /scratch/tartanair_v2/AbandonedSchool/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedSchoolP000
+    args:
+        root: /scratch/tartanair_v2/AbandonedSchool/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: VictorianStreetP005
+    args:
+        root: /scratch/tartanair_v2/VictorianStreet/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: VictorianStreetP002
+    args:
+        root: /scratch/tartanair_v2/VictorianStreet/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: VictorianStreetP006
+    args:
+        root: /scratch/tartanair_v2/VictorianStreet/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: VictorianStreetP001
+    args:
+        root: /scratch/tartanair_v2/VictorianStreet/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: VictorianStreetP003
+    args:
+        root: /scratch/tartanair_v2/VictorianStreet/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: VictorianStreetP004
+    args:
+        root: /scratch/tartanair_v2/VictorianStreet/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: VictorianStreetP000
+    args:
+        root: /scratch/tartanair_v2/VictorianStreet/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: VictorianStreetP007
+    args:
+        root: /scratch/tartanair_v2/VictorianStreet/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ArchVizTinyHouseDayP000
+    args:
+        root: /scratch/tartanair_v2/ArchVizTinyHouseDay/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ArchVizTinyHouseDayP003
+    args:
+        root: /scratch/tartanair_v2/ArchVizTinyHouseDay/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ArchVizTinyHouseDayP004
+    args:
+        root: /scratch/tartanair_v2/ArchVizTinyHouseDay/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ArchVizTinyHouseDayP006
+    args:
+        root: /scratch/tartanair_v2/ArchVizTinyHouseDay/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ArchVizTinyHouseDayP001
+    args:
+        root: /scratch/tartanair_v2/ArchVizTinyHouseDay/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ArchVizTinyHouseDayP005
+    args:
+        root: /scratch/tartanair_v2/ArchVizTinyHouseDay/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ArchVizTinyHouseDayP002
+    args:
+        root: /scratch/tartanair_v2/ArchVizTinyHouseDay/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ArchVizTinyHouseNightP002
+    args:
+        root: /scratch/tartanair_v2/ArchVizTinyHouseNight/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ArchVizTinyHouseNightP005
+    args:
+        root: /scratch/tartanair_v2/ArchVizTinyHouseNight/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ArchVizTinyHouseNightP001
+    args:
+        root: /scratch/tartanair_v2/ArchVizTinyHouseNight/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ArchVizTinyHouseNightP006
+    args:
+        root: /scratch/tartanair_v2/ArchVizTinyHouseNight/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ArchVizTinyHouseNightP004
+    args:
+        root: /scratch/tartanair_v2/ArchVizTinyHouseNight/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ArchVizTinyHouseNightP003
+    args:
+        root: /scratch/tartanair_v2/ArchVizTinyHouseNight/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ArchVizTinyHouseNightP000
+    args:
+        root: /scratch/tartanair_v2/ArchVizTinyHouseNight/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseCityP004
+    args:
+        root: /scratch/tartanair_v2/JapaneseCity/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseCityP010
+    args:
+        root: /scratch/tartanair_v2/JapaneseCity/Data_hard/P010
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseCityP003
+    args:
+        root: /scratch/tartanair_v2/JapaneseCity/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseCityP009
+    args:
+        root: /scratch/tartanair_v2/JapaneseCity/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseCityP007
+    args:
+        root: /scratch/tartanair_v2/JapaneseCity/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseCityP000
+    args:
+        root: /scratch/tartanair_v2/JapaneseCity/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseCityP008
+    args:
+        root: /scratch/tartanair_v2/JapaneseCity/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseCityP002
+    args:
+        root: /scratch/tartanair_v2/JapaneseCity/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseCityP005
+    args:
+        root: /scratch/tartanair_v2/JapaneseCity/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseCityP001
+    args:
+        root: /scratch/tartanair_v2/JapaneseCity/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseCityP006
+    args:
+        root: /scratch/tartanair_v2/JapaneseCity/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WesternDesertTownP001
+    args:
+        root: /scratch/tartanair_v2/WesternDesertTown/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WesternDesertTownP006
+    args:
+        root: /scratch/tartanair_v2/WesternDesertTown/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WesternDesertTownP011
+    args:
+        root: /scratch/tartanair_v2/WesternDesertTown/Data_hard/P011
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WesternDesertTownP002
+    args:
+        root: /scratch/tartanair_v2/WesternDesertTown/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WesternDesertTownP005
+    args:
+        root: /scratch/tartanair_v2/WesternDesertTown/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WesternDesertTownP014
+    args:
+        root: /scratch/tartanair_v2/WesternDesertTown/Data_hard/P014
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WesternDesertTownP007
+    args:
+        root: /scratch/tartanair_v2/WesternDesertTown/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WesternDesertTownP000
+    args:
+        root: /scratch/tartanair_v2/WesternDesertTown/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WesternDesertTownP013
+    args:
+        root: /scratch/tartanair_v2/WesternDesertTown/Data_hard/P013
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WesternDesertTownP004
+    args:
+        root: /scratch/tartanair_v2/WesternDesertTown/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WesternDesertTownP003
+    args:
+        root: /scratch/tartanair_v2/WesternDesertTown/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WesternDesertTownP009
+    args:
+        root: /scratch/tartanair_v2/WesternDesertTown/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasonalForestWinterP000
+    args:
+        root: /scratch/tartanair_v2/SeasonalForestWinter/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasonalForestWinterP001
+    args:
+        root: /scratch/tartanair_v2/SeasonalForestWinter/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasonalForestWinterP002
+    args:
+        root: /scratch/tartanair_v2/SeasonalForestWinter/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SewerageP004
+    args:
+        root: /scratch/tartanair_v2/Sewerage/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SewerageP009
+    args:
+        root: /scratch/tartanair_v2/Sewerage/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SewerageP003
+    args:
+        root: /scratch/tartanair_v2/Sewerage/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SewerageP010
+    args:
+        root: /scratch/tartanair_v2/Sewerage/Data_hard/P010
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SewerageP007
+    args:
+        root: /scratch/tartanair_v2/Sewerage/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SewerageP000
+    args:
+        root: /scratch/tartanair_v2/Sewerage/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SewerageP011
+    args:
+        root: /scratch/tartanair_v2/Sewerage/Data_hard/P011
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SewerageP002
+    args:
+        root: /scratch/tartanair_v2/Sewerage/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SewerageP008
+    args:
+        root: /scratch/tartanair_v2/Sewerage/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SewerageP005
+    args:
+        root: /scratch/tartanair_v2/Sewerage/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SewerageP001
+    args:
+        root: /scratch/tartanair_v2/Sewerage/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SewerageP006
+    args:
+        root: /scratch/tartanair_v2/Sewerage/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GothicIslandP006
+    args:
+        root: /scratch/tartanair_v2/GothicIsland/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GothicIslandP001
+    args:
+        root: /scratch/tartanair_v2/GothicIsland/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GothicIslandP005
+    args:
+        root: /scratch/tartanair_v2/GothicIsland/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GothicIslandP008
+    args:
+        root: /scratch/tartanair_v2/GothicIsland/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GothicIslandP002
+    args:
+        root: /scratch/tartanair_v2/GothicIsland/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GothicIslandP000
+    args:
+        root: /scratch/tartanair_v2/GothicIsland/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GothicIslandP007
+    args:
+        root: /scratch/tartanair_v2/GothicIsland/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GothicIslandP003
+    args:
+        root: /scratch/tartanair_v2/GothicIsland/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GothicIslandP009
+    args:
+        root: /scratch/tartanair_v2/GothicIsland/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GothicIslandP010
+    args:
+        root: /scratch/tartanair_v2/GothicIsland/Data_hard/P010
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GothicIslandP004
+    args:
+        root: /scratch/tartanair_v2/GothicIsland/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SupermarketP001
+    args:
+        root: /scratch/tartanair_v2/Supermarket/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SupermarketP006
+    args:
+        root: /scratch/tartanair_v2/Supermarket/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SupermarketP002
+    args:
+        root: /scratch/tartanair_v2/Supermarket/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SupermarketP005
+    args:
+        root: /scratch/tartanair_v2/Supermarket/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SupermarketP007
+    args:
+        root: /scratch/tartanair_v2/Supermarket/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SupermarketP000
+    args:
+        root: /scratch/tartanair_v2/Supermarket/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SupermarketP004
+    args:
+        root: /scratch/tartanair_v2/Supermarket/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SupermarketP003
+    args:
+        root: /scratch/tartanair_v2/Supermarket/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ApocalypticP001
+    args:
+        root: /scratch/tartanair_v2/Apocalyptic/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ApocalypticP002
+    args:
+        root: /scratch/tartanair_v2/Apocalyptic/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ApocalypticP000
+    args:
+        root: /scratch/tartanair_v2/Apocalyptic/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ApocalypticP003
+    args:
+        root: /scratch/tartanair_v2/Apocalyptic/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ApocalypticP004
+    args:
+        root: /scratch/tartanair_v2/Apocalyptic/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WaterMillDayP002
+    args:
+        root: /scratch/tartanair_v2/WaterMillDay/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WaterMillDayP001
+    args:
+        root: /scratch/tartanair_v2/WaterMillDay/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WaterMillDayP006
+    args:
+        root: /scratch/tartanair_v2/WaterMillDay/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WaterMillDayP004
+    args:
+        root: /scratch/tartanair_v2/WaterMillDay/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WaterMillDayP003
+    args:
+        root: /scratch/tartanair_v2/WaterMillDay/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WaterMillDayP000
+    args:
+        root: /scratch/tartanair_v2/WaterMillDay/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CarWeldingP007
+    args:
+        root: /scratch/tartanair_v2/CarWelding/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CarWeldingP000
+    args:
+        root: /scratch/tartanair_v2/CarWelding/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CarWeldingP004
+    args:
+        root: /scratch/tartanair_v2/CarWelding/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CarWeldingP003
+    args:
+        root: /scratch/tartanair_v2/CarWelding/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CarWeldingP001
+    args:
+        root: /scratch/tartanair_v2/CarWelding/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CarWeldingP006
+    args:
+        root: /scratch/tartanair_v2/CarWelding/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CarWeldingP002
+    args:
+        root: /scratch/tartanair_v2/CarWelding/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CarWeldingP008
+    args:
+        root: /scratch/tartanair_v2/CarWelding/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CarWeldingP005
+    args:
+        root: /scratch/tartanair_v2/CarWelding/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CountryHouseP001
+    args:
+        root: /scratch/tartanair_v2/CountryHouse/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CountryHouseP005
+    args:
+        root: /scratch/tartanair_v2/CountryHouse/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CountryHouseP002
+    args:
+        root: /scratch/tartanair_v2/CountryHouse/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CountryHouseP000
+    args:
+        root: /scratch/tartanair_v2/CountryHouse/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CountryHouseP003
+    args:
+        root: /scratch/tartanair_v2/CountryHouse/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CountryHouseP004
+    args:
+        root: /scratch/tartanair_v2/CountryHouse/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseAlleyP001
+    args:
+        root: /scratch/tartanair_v2/JapaneseAlley/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseAlleyP006
+    args:
+        root: /scratch/tartanair_v2/JapaneseAlley/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseAlleyP002
+    args:
+        root: /scratch/tartanair_v2/JapaneseAlley/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseAlleyP005
+    args:
+        root: /scratch/tartanair_v2/JapaneseAlley/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseAlleyP000
+    args:
+        root: /scratch/tartanair_v2/JapaneseAlley/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseAlleyP004
+    args:
+        root: /scratch/tartanair_v2/JapaneseAlley/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: JapaneseAlleyP003
+    args:
+        root: /scratch/tartanair_v2/JapaneseAlley/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldBrickHouseNightP001
+    args:
+        root: /scratch/tartanair_v2/OldBrickHouseNight/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldBrickHouseNightP006
+    args:
+        root: /scratch/tartanair_v2/OldBrickHouseNight/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldBrickHouseNightP002
+    args:
+        root: /scratch/tartanair_v2/OldBrickHouseNight/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldBrickHouseNightP005
+    args:
+        root: /scratch/tartanair_v2/OldBrickHouseNight/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldBrickHouseNightP007
+    args:
+        root: /scratch/tartanair_v2/OldBrickHouseNight/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldBrickHouseNightP004
+    args:
+        root: /scratch/tartanair_v2/OldBrickHouseNight/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: Antiquity3DP006
+    args:
+        root: /scratch/tartanair_v2/Antiquity3D/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: Antiquity3DP001
+    args:
+        root: /scratch/tartanair_v2/Antiquity3D/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: Antiquity3DP005
+    args:
+        root: /scratch/tartanair_v2/Antiquity3D/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: Antiquity3DP008
+    args:
+        root: /scratch/tartanair_v2/Antiquity3D/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: Antiquity3DP002
+    args:
+        root: /scratch/tartanair_v2/Antiquity3D/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: Antiquity3DP000
+    args:
+        root: /scratch/tartanair_v2/Antiquity3D/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: Antiquity3DP007
+    args:
+        root: /scratch/tartanair_v2/Antiquity3D/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: Antiquity3DP003
+    args:
+        root: /scratch/tartanair_v2/Antiquity3D/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: Antiquity3DP009
+    args:
+        root: /scratch/tartanair_v2/Antiquity3D/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: Antiquity3DP004
+    args:
+        root: /scratch/tartanair_v2/Antiquity3D/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldIndustrialCityP000
+    args:
+        root: /scratch/tartanair_v2/OldIndustrialCity/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldIndustrialCityP007
+    args:
+        root: /scratch/tartanair_v2/OldIndustrialCity/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldIndustrialCityP003
+    args:
+        root: /scratch/tartanair_v2/OldIndustrialCity/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldIndustrialCityP009
+    args:
+        root: /scratch/tartanair_v2/OldIndustrialCity/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldIndustrialCityP004
+    args:
+        root: /scratch/tartanair_v2/OldIndustrialCity/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldIndustrialCityP006
+    args:
+        root: /scratch/tartanair_v2/OldIndustrialCity/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldIndustrialCityP001
+    args:
+        root: /scratch/tartanair_v2/OldIndustrialCity/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldIndustrialCityP005
+    args:
+        root: /scratch/tartanair_v2/OldIndustrialCity/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldIndustrialCityP008
+    args:
+        root: /scratch/tartanair_v2/OldIndustrialCity/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldIndustrialCityP002
+    args:
+        root: /scratch/tartanair_v2/OldIndustrialCity/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AmericanDinerP004
+    args:
+        root: /scratch/tartanair_v2/AmericanDiner/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AmericanDinerP003
+    args:
+        root: /scratch/tartanair_v2/AmericanDiner/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AmericanDinerP000
+    args:
+        root: /scratch/tartanair_v2/AmericanDiner/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AmericanDinerP002
+    args:
+        root: /scratch/tartanair_v2/AmericanDiner/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AmericanDinerP005
+    args:
+        root: /scratch/tartanair_v2/AmericanDiner/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HQWesternSaloonP002
+    args:
+        root: /scratch/tartanair_v2/HQWesternSaloon/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HQWesternSaloonP005
+    args:
+        root: /scratch/tartanair_v2/HQWesternSaloon/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HQWesternSaloonP001
+    args:
+        root: /scratch/tartanair_v2/HQWesternSaloon/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HQWesternSaloonP006
+    args:
+        root: /scratch/tartanair_v2/HQWesternSaloon/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HQWesternSaloonP004
+    args:
+        root: /scratch/tartanair_v2/HQWesternSaloon/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HQWesternSaloonP003
+    args:
+        root: /scratch/tartanair_v2/HQWesternSaloon/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HQWesternSaloonP007
+    args:
+        root: /scratch/tartanair_v2/HQWesternSaloon/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HQWesternSaloonP000
+    args:
+        root: /scratch/tartanair_v2/HQWesternSaloon/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AmusementParkP006
+    args:
+        root: /scratch/tartanair_v2/AmusementPark/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AmusementParkP001
+    args:
+        root: /scratch/tartanair_v2/AmusementPark/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AmusementParkP005
+    args:
+        root: /scratch/tartanair_v2/AmusementPark/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AmusementParkP002
+    args:
+        root: /scratch/tartanair_v2/AmusementPark/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AmusementParkP000
+    args:
+        root: /scratch/tartanair_v2/AmusementPark/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AmusementParkP007
+    args:
+        root: /scratch/tartanair_v2/AmusementPark/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AmusementParkP003
+    args:
+        root: /scratch/tartanair_v2/AmusementPark/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AmusementParkP004
+    args:
+        root: /scratch/tartanair_v2/AmusementPark/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldTownSummerP000
+    args:
+        root: /scratch/tartanair_v2/OldTownSummer/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldTownSummerP001
+    args:
+        root: /scratch/tartanair_v2/OldTownSummer/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldTownSummerP002
+    args:
+        root: /scratch/tartanair_v2/OldTownSummer/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodIntExtP004
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhoodIntExt/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodIntExtP003
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhoodIntExt/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodIntExtP007
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhoodIntExt/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodIntExtP000
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhoodIntExt/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodIntExtP002
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhoodIntExt/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodIntExtP008
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhoodIntExt/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodIntExtP005
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhoodIntExt/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodIntExtP001
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhoodIntExt/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: DesertGasStationP002
+    args:
+        root: /scratch/tartanair_v2/DesertGasStation/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: DesertGasStationP001
+    args:
+        root: /scratch/tartanair_v2/DesertGasStation/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: DesertGasStationP004
+    args:
+        root: /scratch/tartanair_v2/DesertGasStation/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: DesertGasStationP003
+    args:
+        root: /scratch/tartanair_v2/DesertGasStation/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: DesertGasStationP000
+    args:
+        root: /scratch/tartanair_v2/DesertGasStation/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FactoryWeatherP013
+    args:
+        root: /scratch/tartanair_v2/FactoryWeather/Data_hard/P013
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FactoryWeatherP000
+    args:
+        root: /scratch/tartanair_v2/FactoryWeather/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FactoryWeatherP007
+    args:
+        root: /scratch/tartanair_v2/FactoryWeather/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FactoryWeatherP010
+    args:
+        root: /scratch/tartanair_v2/FactoryWeather/Data_hard/P010
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FactoryWeatherP003
+    args:
+        root: /scratch/tartanair_v2/FactoryWeather/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FactoryWeatherP009
+    args:
+        root: /scratch/tartanair_v2/FactoryWeather/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FactoryWeatherP004
+    args:
+        root: /scratch/tartanair_v2/FactoryWeather/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FactoryWeatherP006
+    args:
+        root: /scratch/tartanair_v2/FactoryWeather/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FactoryWeatherP001
+    args:
+        root: /scratch/tartanair_v2/FactoryWeather/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FactoryWeatherP012
+    args:
+        root: /scratch/tartanair_v2/FactoryWeather/Data_hard/P012
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FactoryWeatherP005
+    args:
+        root: /scratch/tartanair_v2/FactoryWeather/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FactoryWeatherP008
+    args:
+        root: /scratch/tartanair_v2/FactoryWeather/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FactoryWeatherP002
+    args:
+        root: /scratch/tartanair_v2/FactoryWeather/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FactoryWeatherP011
+    args:
+        root: /scratch/tartanair_v2/FactoryWeather/Data_hard/P011
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasonalForestAutumnP001
+    args:
+        root: /scratch/tartanair_v2/SeasonalForestAutumn/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasonalForestAutumnP002
+    args:
+        root: /scratch/tartanair_v2/SeasonalForestAutumn/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasonalForestAutumnP000
+    args:
+        root: /scratch/tartanair_v2/SeasonalForestAutumn/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: IndustrialHangarP001
+    args:
+        root: /scratch/tartanair_v2/IndustrialHangar/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: IndustrialHangarP006
+    args:
+        root: /scratch/tartanair_v2/IndustrialHangar/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: IndustrialHangarP002
+    args:
+        root: /scratch/tartanair_v2/IndustrialHangar/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: IndustrialHangarP005
+    args:
+        root: /scratch/tartanair_v2/IndustrialHangar/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: IndustrialHangarP000
+    args:
+        root: /scratch/tartanair_v2/IndustrialHangar/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: IndustrialHangarP004
+    args:
+        root: /scratch/tartanair_v2/IndustrialHangar/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: IndustrialHangarP003
+    args:
+        root: /scratch/tartanair_v2/IndustrialHangar/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GreatMarshP009
+    args:
+        root: /scratch/tartanair_v2/GreatMarsh/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GreatMarshP003
+    args:
+        root: /scratch/tartanair_v2/GreatMarsh/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GreatMarshP004
+    args:
+        root: /scratch/tartanair_v2/GreatMarsh/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GreatMarshP000
+    args:
+        root: /scratch/tartanair_v2/GreatMarsh/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GreatMarshP007
+    args:
+        root: /scratch/tartanair_v2/GreatMarsh/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GreatMarshP005
+    args:
+        root: /scratch/tartanair_v2/GreatMarsh/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GreatMarshP002
+    args:
+        root: /scratch/tartanair_v2/GreatMarsh/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GreatMarshP008
+    args:
+        root: /scratch/tartanair_v2/GreatMarsh/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GreatMarshP006
+    args:
+        root: /scratch/tartanair_v2/GreatMarsh/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GreatMarshP001
+    args:
+        root: /scratch/tartanair_v2/GreatMarsh/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: UrbanConstructionP000
+    args:
+        root: /scratch/tartanair_v2/UrbanConstruction/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: UrbanConstructionP004
+    args:
+        root: /scratch/tartanair_v2/UrbanConstruction/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: UrbanConstructionP003
+    args:
+        root: /scratch/tartanair_v2/UrbanConstruction/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: UrbanConstructionP001
+    args:
+        root: /scratch/tartanair_v2/UrbanConstruction/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: UrbanConstructionP002
+    args:
+        root: /scratch/tartanair_v2/UrbanConstruction/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ConstructionSiteP006
+    args:
+        root: /scratch/tartanair_v2/ConstructionSite/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ConstructionSiteP001
+    args:
+        root: /scratch/tartanair_v2/ConstructionSite/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ConstructionSiteP005
+    args:
+        root: /scratch/tartanair_v2/ConstructionSite/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ConstructionSiteP011
+    args:
+        root: /scratch/tartanair_v2/ConstructionSite/Data_hard/P011
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ConstructionSiteP008
+    args:
+        root: /scratch/tartanair_v2/ConstructionSite/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ConstructionSiteP000
+    args:
+        root: /scratch/tartanair_v2/ConstructionSite/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ConstructionSiteP007
+    args:
+        root: /scratch/tartanair_v2/ConstructionSite/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ConstructionSiteP003
+    args:
+        root: /scratch/tartanair_v2/ConstructionSite/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ConstructionSiteP009
+    args:
+        root: /scratch/tartanair_v2/ConstructionSite/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ConstructionSiteP010
+    args:
+        root: /scratch/tartanair_v2/ConstructionSite/Data_hard/P010
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HongKongP001
+    args:
+        root: /scratch/tartanair_v2/HongKong/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HongKongP002
+    args:
+        root: /scratch/tartanair_v2/HongKong/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HongKongP000
+    args:
+        root: /scratch/tartanair_v2/HongKong/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HongKongP003
+    args:
+        root: /scratch/tartanair_v2/HongKong/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HongKongP004
+    args:
+        root: /scratch/tartanair_v2/HongKong/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RestaurantP006
+    args:
+        root: /scratch/tartanair_v2/Restaurant/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RestaurantP001
+    args:
+        root: /scratch/tartanair_v2/Restaurant/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RestaurantP005
+    args:
+        root: /scratch/tartanair_v2/Restaurant/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RestaurantP008
+    args:
+        root: /scratch/tartanair_v2/Restaurant/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RestaurantP002
+    args:
+        root: /scratch/tartanair_v2/Restaurant/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RestaurantP000
+    args:
+        root: /scratch/tartanair_v2/Restaurant/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RestaurantP007
+    args:
+        root: /scratch/tartanair_v2/Restaurant/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RestaurantP003
+    args:
+        root: /scratch/tartanair_v2/Restaurant/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RestaurantP004
+    args:
+        root: /scratch/tartanair_v2/Restaurant/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: MiddleEastP002
+    args:
+        root: /scratch/tartanair_v2/MiddleEast/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: MiddleEastP008
+    args:
+        root: /scratch/tartanair_v2/MiddleEast/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: MiddleEastP011
+    args:
+        root: /scratch/tartanair_v2/MiddleEast/Data_hard/P011
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: MiddleEastP005
+    args:
+        root: /scratch/tartanair_v2/MiddleEast/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: MiddleEastP001
+    args:
+        root: /scratch/tartanair_v2/MiddleEast/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: MiddleEastP006
+    args:
+        root: /scratch/tartanair_v2/MiddleEast/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: MiddleEastP004
+    args:
+        root: /scratch/tartanair_v2/MiddleEast/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: MiddleEastP010
+    args:
+        root: /scratch/tartanair_v2/MiddleEast/Data_hard/P010
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: MiddleEastP009
+    args:
+        root: /scratch/tartanair_v2/MiddleEast/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: MiddleEastP003
+    args:
+        root: /scratch/tartanair_v2/MiddleEast/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: MiddleEastP007
+    args:
+        root: /scratch/tartanair_v2/MiddleEast/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: MiddleEastP000
+    args:
+        root: /scratch/tartanair_v2/MiddleEast/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasideTownP005
+    args:
+        root: /scratch/tartanair_v2/SeasideTown/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasideTownP002
+    args:
+        root: /scratch/tartanair_v2/SeasideTown/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasideTownP006
+    args:
+        root: /scratch/tartanair_v2/SeasideTown/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasideTownP001
+    args:
+        root: /scratch/tartanair_v2/SeasideTown/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasideTownP003
+    args:
+        root: /scratch/tartanair_v2/SeasideTown/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasideTownP004
+    args:
+        root: /scratch/tartanair_v2/SeasideTown/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasideTownP000
+    args:
+        root: /scratch/tartanair_v2/SeasideTown/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasideTownP007
+    args:
+        root: /scratch/tartanair_v2/SeasideTown/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CyberPunkDowntownP006
+    args:
+        root: /scratch/tartanair_v2/CyberPunkDowntown/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CyberPunkDowntownP001
+    args:
+        root: /scratch/tartanair_v2/CyberPunkDowntown/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CyberPunkDowntownP005
+    args:
+        root: /scratch/tartanair_v2/CyberPunkDowntown/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CyberPunkDowntownP002
+    args:
+        root: /scratch/tartanair_v2/CyberPunkDowntown/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CyberPunkDowntownP000
+    args:
+        root: /scratch/tartanair_v2/CyberPunkDowntown/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CyberPunkDowntownP003
+    args:
+        root: /scratch/tartanair_v2/CyberPunkDowntown/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CyberPunkDowntownP004
+    args:
+        root: /scratch/tartanair_v2/CyberPunkDowntown/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OceanP005
+    args:
+        root: /scratch/tartanair_v2/Ocean/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OceanP002
+    args:
+        root: /scratch/tartanair_v2/Ocean/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OceanP008
+    args:
+        root: /scratch/tartanair_v2/Ocean/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OceanP006
+    args:
+        root: /scratch/tartanair_v2/Ocean/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OceanP001
+    args:
+        root: /scratch/tartanair_v2/Ocean/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OceanP003
+    args:
+        root: /scratch/tartanair_v2/Ocean/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OceanP004
+    args:
+        root: /scratch/tartanair_v2/Ocean/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OceanP000
+    args:
+        root: /scratch/tartanair_v2/Ocean/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OceanP007
+    args:
+        root: /scratch/tartanair_v2/Ocean/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CyberpunkP004
+    args:
+        root: /scratch/tartanair_v2/Cyberpunk/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CyberpunkP003
+    args:
+        root: /scratch/tartanair_v2/Cyberpunk/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CyberpunkP007
+    args:
+        root: /scratch/tartanair_v2/Cyberpunk/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CyberpunkP000
+    args:
+        root: /scratch/tartanair_v2/Cyberpunk/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CyberpunkP002
+    args:
+        root: /scratch/tartanair_v2/Cyberpunk/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CyberpunkP005
+    args:
+        root: /scratch/tartanair_v2/Cyberpunk/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CyberpunkP001
+    args:
+        root: /scratch/tartanair_v2/Cyberpunk/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CyberpunkP006
+    args:
+        root: /scratch/tartanair_v2/Cyberpunk/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldTownNightP000
+    args:
+        root: /scratch/tartanair_v2/OldTownNight/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldTownNightP001
+    args:
+        root: /scratch/tartanair_v2/OldTownNight/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldTownNightP002
+    args:
+        root: /scratch/tartanair_v2/OldTownNight/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OfficeP001
+    args:
+        root: /scratch/tartanair_v2/Office/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OfficeP006
+    args:
+        root: /scratch/tartanair_v2/Office/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OfficeP002
+    args:
+        root: /scratch/tartanair_v2/Office/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OfficeP005
+    args:
+        root: /scratch/tartanair_v2/Office/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OfficeP000
+    args:
+        root: /scratch/tartanair_v2/Office/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OfficeP004
+    args:
+        root: /scratch/tartanair_v2/Office/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OfficeP003
+    args:
+        root: /scratch/tartanair_v2/Office/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GascolaP002
+    args:
+        root: /scratch/tartanair_v2/Gascola/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GascolaP008
+    args:
+        root: /scratch/tartanair_v2/Gascola/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GascolaP005
+    args:
+        root: /scratch/tartanair_v2/Gascola/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GascolaP001
+    args:
+        root: /scratch/tartanair_v2/Gascola/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GascolaP006
+    args:
+        root: /scratch/tartanair_v2/Gascola/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GascolaP004
+    args:
+        root: /scratch/tartanair_v2/Gascola/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GascolaP009
+    args:
+        root: /scratch/tartanair_v2/Gascola/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GascolaP003
+    args:
+        root: /scratch/tartanair_v2/Gascola/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GascolaP007
+    args:
+        root: /scratch/tartanair_v2/Gascola/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: GascolaP000
+    args:
+        root: /scratch/tartanair_v2/Gascola/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: TerrainBlendingP001
+    args:
+        root: /scratch/tartanair_v2/TerrainBlending/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: TerrainBlendingP000
+    args:
+        root: /scratch/tartanair_v2/TerrainBlending/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: TerrainBlendingP004
+    args:
+        root: /scratch/tartanair_v2/TerrainBlending/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: TerrainBlendingP003
+    args:
+        root: /scratch/tartanair_v2/TerrainBlending/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedFactoryP005
+    args:
+        root: /scratch/tartanair_v2/AbandonedFactory/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedFactoryP002
+    args:
+        root: /scratch/tartanair_v2/AbandonedFactory/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedFactoryP008
+    args:
+        root: /scratch/tartanair_v2/AbandonedFactory/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedFactoryP006
+    args:
+        root: /scratch/tartanair_v2/AbandonedFactory/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedFactoryP001
+    args:
+        root: /scratch/tartanair_v2/AbandonedFactory/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedFactoryP009
+    args:
+        root: /scratch/tartanair_v2/AbandonedFactory/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedFactoryP003
+    args:
+        root: /scratch/tartanair_v2/AbandonedFactory/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedFactoryP004
+    args:
+        root: /scratch/tartanair_v2/AbandonedFactory/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: AbandonedFactoryP000
+    args:
+        root: /scratch/tartanair_v2/AbandonedFactory/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SoulCityP000
+    args:
+        root: /scratch/tartanair_v2/SoulCity/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SoulCityP007
+    args:
+        root: /scratch/tartanair_v2/SoulCity/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SoulCityP003
+    args:
+        root: /scratch/tartanair_v2/SoulCity/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SoulCityP004
+    args:
+        root: /scratch/tartanair_v2/SoulCity/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SoulCityP006
+    args:
+        root: /scratch/tartanair_v2/SoulCity/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SoulCityP001
+    args:
+        root: /scratch/tartanair_v2/SoulCity/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SoulCityP005
+    args:
+        root: /scratch/tartanair_v2/SoulCity/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SoulCityP002
+    args:
+        root: /scratch/tartanair_v2/SoulCity/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SoulCityP008
+    args:
+        root: /scratch/tartanair_v2/SoulCity/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RomeP003
+    args:
+        root: /scratch/tartanair_v2/Rome/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RomeP004
+    args:
+        root: /scratch/tartanair_v2/Rome/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RomeP000
+    args:
+        root: /scratch/tartanair_v2/Rome/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RomeP005
+    args:
+        root: /scratch/tartanair_v2/Rome/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RomeP002
+    args:
+        root: /scratch/tartanair_v2/Rome/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RomeP006
+    args:
+        root: /scratch/tartanair_v2/Rome/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: RomeP001
+    args:
+        root: /scratch/tartanair_v2/Rome/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldBrickHouseDayP004
+    args:
+        root: /scratch/tartanair_v2/OldBrickHouseDay/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldBrickHouseDayP003
+    args:
+        root: /scratch/tartanair_v2/OldBrickHouseDay/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldBrickHouseDayP007
+    args:
+        root: /scratch/tartanair_v2/OldBrickHouseDay/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldBrickHouseDayP002
+    args:
+        root: /scratch/tartanair_v2/OldBrickHouseDay/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldBrickHouseDayP005
+    args:
+        root: /scratch/tartanair_v2/OldBrickHouseDay/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldBrickHouseDayP001
+    args:
+        root: /scratch/tartanair_v2/OldBrickHouseDay/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldBrickHouseDayP006
+    args:
+        root: /scratch/tartanair_v2/OldBrickHouseDay/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: BrushifyMoonP003
+    args:
+        root: /scratch/tartanair_v2/BrushifyMoon/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: BrushifyMoonP004
+    args:
+        root: /scratch/tartanair_v2/BrushifyMoon/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: BrushifyMoonP000
+    args:
+        root: /scratch/tartanair_v2/BrushifyMoon/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: BrushifyMoonP005
+    args:
+        root: /scratch/tartanair_v2/BrushifyMoon/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: BrushifyMoonP002
+    args:
+        root: /scratch/tartanair_v2/BrushifyMoon/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: BrushifyMoonP001
+    args:
+        root: /scratch/tartanair_v2/BrushifyMoon/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FantasyP000
+    args:
+        root: /scratch/tartanair_v2/Fantasy/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FantasyP004
+    args:
+        root: /scratch/tartanair_v2/Fantasy/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FantasyP003
+    args:
+        root: /scratch/tartanair_v2/Fantasy/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FantasyP001
+    args:
+        root: /scratch/tartanair_v2/Fantasy/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FantasyP006
+    args:
+        root: /scratch/tartanair_v2/Fantasy/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FantasyP002
+    args:
+        root: /scratch/tartanair_v2/Fantasy/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: FantasyP005
+    args:
+        root: /scratch/tartanair_v2/Fantasy/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ShoreCavesP008
+    args:
+        root: /scratch/tartanair_v2/ShoreCaves/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ShoreCavesP002
+    args:
+        root: /scratch/tartanair_v2/ShoreCaves/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ShoreCavesP005
+    args:
+        root: /scratch/tartanair_v2/ShoreCaves/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ShoreCavesP001
+    args:
+        root: /scratch/tartanair_v2/ShoreCaves/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ShoreCavesP006
+    args:
+        root: /scratch/tartanair_v2/ShoreCaves/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ShoreCavesP004
+    args:
+        root: /scratch/tartanair_v2/ShoreCaves/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ShoreCavesP003
+    args:
+        root: /scratch/tartanair_v2/ShoreCaves/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ShoreCavesP007
+    args:
+        root: /scratch/tartanair_v2/ShoreCaves/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HouseP001
+    args:
+        root: /scratch/tartanair_v2/House/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HouseP006
+    args:
+        root: /scratch/tartanair_v2/House/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HouseP002
+    args:
+        root: /scratch/tartanair_v2/House/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HouseP005
+    args:
+        root: /scratch/tartanair_v2/House/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HouseP007
+    args:
+        root: /scratch/tartanair_v2/House/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HouseP000
+    args:
+        root: /scratch/tartanair_v2/House/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HouseP004
+    args:
+        root: /scratch/tartanair_v2/House/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HouseP003
+    args:
+        root: /scratch/tartanair_v2/House/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldScandinaviaP006
+    args:
+        root: /scratch/tartanair_v2/OldScandinavia/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldScandinaviaP001
+    args:
+        root: /scratch/tartanair_v2/OldScandinavia/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldScandinaviaP005
+    args:
+        root: /scratch/tartanair_v2/OldScandinavia/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldScandinaviaP002
+    args:
+        root: /scratch/tartanair_v2/OldScandinavia/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldScandinaviaP000
+    args:
+        root: /scratch/tartanair_v2/OldScandinavia/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldScandinaviaP007
+    args:
+        root: /scratch/tartanair_v2/OldScandinavia/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldScandinaviaP003
+    args:
+        root: /scratch/tartanair_v2/OldScandinavia/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: OldScandinaviaP004
+    args:
+        root: /scratch/tartanair_v2/OldScandinavia/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WaterMillNightP004
+    args:
+        root: /scratch/tartanair_v2/WaterMillNight/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WaterMillNightP003
+    args:
+        root: /scratch/tartanair_v2/WaterMillNight/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WaterMillNightP000
+    args:
+        root: /scratch/tartanair_v2/WaterMillNight/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WaterMillNightP002
+    args:
+        root: /scratch/tartanair_v2/WaterMillNight/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WaterMillNightP005
+    args:
+        root: /scratch/tartanair_v2/WaterMillNight/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WaterMillNightP001
+    args:
+        root: /scratch/tartanair_v2/WaterMillNight/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: WaterMillNightP006
+    args:
+        root: /scratch/tartanair_v2/WaterMillNight/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CoalMineP003
+    args:
+        root: /scratch/tartanair_v2/CoalMine/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CoalMineP004
+    args:
+        root: /scratch/tartanair_v2/CoalMine/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CoalMineP000
+    args:
+        root: /scratch/tartanair_v2/CoalMine/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CoalMineP005
+    args:
+        root: /scratch/tartanair_v2/CoalMine/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CoalMineP002
+    args:
+        root: /scratch/tartanair_v2/CoalMine/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: CoalMineP001
+    args:
+        root: /scratch/tartanair_v2/CoalMine/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodP000
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhood/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodP007
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhood/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodP010
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhood/Data_hard/P010
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodP009
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhood/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodP003
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhood/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodP004
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhood/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodP006
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhood/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodP001
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhood/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodP005
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhood/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodP002
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhood/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: ModularNeighborhoodP008
+    args:
+        root: /scratch/tartanair_v2/ModularNeighborhood/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasonalForestWinterNightP002
+    args:
+        root: /scratch/tartanair_v2/SeasonalForestWinterNight/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasonalForestWinterNightP001
+    args:
+        root: /scratch/tartanair_v2/SeasonalForestWinterNight/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SeasonalForestWinterNightP000
+    args:
+        root: /scratch/tartanair_v2/SeasonalForestWinterNight/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SlaughterP004
+    args:
+        root: /scratch/tartanair_v2/Slaughter/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SlaughterP009
+    args:
+        root: /scratch/tartanair_v2/Slaughter/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SlaughterP003
+    args:
+        root: /scratch/tartanair_v2/Slaughter/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SlaughterP010
+    args:
+        root: /scratch/tartanair_v2/Slaughter/Data_hard/P010
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SlaughterP007
+    args:
+        root: /scratch/tartanair_v2/Slaughter/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SlaughterP000
+    args:
+        root: /scratch/tartanair_v2/Slaughter/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SlaughterP011
+    args:
+        root: /scratch/tartanair_v2/Slaughter/Data_hard/P011
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SlaughterP002
+    args:
+        root: /scratch/tartanair_v2/Slaughter/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SlaughterP008
+    args:
+        root: /scratch/tartanair_v2/Slaughter/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SlaughterP005
+    args:
+        root: /scratch/tartanair_v2/Slaughter/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SlaughterP001
+    args:
+        root: /scratch/tartanair_v2/Slaughter/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: SlaughterP006
+    args:
+        root: /scratch/tartanair_v2/Slaughter/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HospitalP000
+    args:
+        root: /scratch/tartanair_v2/Hospital/Data_hard/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HospitalP007
+    args:
+        root: /scratch/tartanair_v2/Hospital/Data_hard/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HospitalP003
+    args:
+        root: /scratch/tartanair_v2/Hospital/Data_hard/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HospitalP009
+    args:
+        root: /scratch/tartanair_v2/Hospital/Data_hard/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HospitalP010
+    args:
+        root: /scratch/tartanair_v2/Hospital/Data_hard/P010
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HospitalP004
+    args:
+        root: /scratch/tartanair_v2/Hospital/Data_hard/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HospitalP006
+    args:
+        root: /scratch/tartanair_v2/Hospital/Data_hard/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HospitalP001
+    args:
+        root: /scratch/tartanair_v2/Hospital/Data_hard/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HospitalP005
+    args:
+        root: /scratch/tartanair_v2/Hospital/Data_hard/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HospitalP008
+    args:
+        root: /scratch/tartanair_v2/Hospital/Data_hard/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAirv2_NoIMU
+    name: HospitalP002
+    args:
+        root: /scratch/tartanair_v2/Hospital/Data_hard/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true

@@ -8,7 +8,9 @@ Model:
   sum_freq: 100
   val_freq: 5000000
   image_size: [480, 640]
+  image_scale: 1
   add_noise: True
+  cov_mask: False
 
   critical_params: []
   transformer: "latentcostformer"
@@ -91,9 +93,9 @@ Model:
 
 Train:
   data: !flatten_seq 
-    - !include_dataset ../Sequence/Training_Dataset/TartanAir_Demo.yaml
+    - !include ../Sequence/Training_Dataset/TartanAir_Demo.yaml
 
 
 Evaluate:
   data: !flatten_seq 
-    - !include_dataset ../Sequence/Training_Dataset/TartanAir_Demo.yaml
+    - !include ../Sequence/Training_Dataset/TartanAir_Demo.yaml

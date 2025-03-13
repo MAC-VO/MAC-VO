@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from DataLoader import GenericSequence
+from DataLoader import SequenceBase, StereoFrame
 from Module import IMatcher
 from Utility.Config import build_dynamic_config, load_config
 
@@ -27,7 +27,7 @@ old_flow_cfg, _ = build_dynamic_config({   # For simplicity of editing config
 }})
 
 
-sequence = GenericSequence.instantiate(**vars(datacfg)).clip(0, 10)
+sequence = SequenceBase[StereoFrame].instantiate(datacfg.type, datacfg.args).clip(0, 10)
 module = IMatcher.instantiate(flow_cfg.type, flow_cfg.args)
 
 prev_frame = None
@@ -36,11 +36,11 @@ for frame in sequence:
         prev_frame = frame
         continue
     
-    assert frame.gtFlow is not None
-    flow, flow_cov = module(prev_frame, frame)
-    flow2, flow_cov2 = module(frame, prev_frame)
+    assert frame.stereo.gt_flow is not None
+    output_1 = module.estimate(prev_frame.stereo, frame.stereo)
+    output_2 = module.estimate(frame.stereo, prev_frame.stereo)
     
-    diff_flow = (flow.cpu() - frame.gtFlow).abs().median()
-    diff_fwd_rev = (flow - (-1 * flow2)).abs().median()
+    diff_flow = (output_1.flow.cpu() - frame.stereo.gt_flow).abs().median()
+    diff_fwd_rev = (output_1.flow - (-1 * output_2.flow)).abs().median()
     prev_frame = frame
     print(diff_flow, "|| fwd<->rev", diff_fwd_rev)

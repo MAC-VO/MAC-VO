@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from DataLoader import GenericSequence
+from DataLoader import SequenceBase, StereoFrame
 from Odometry.BaselineTartanVO import TartanVO
 from Evaluation.EvalSeq import EvaluateSequences
 from Utility.Config import load_config, asNamespace
@@ -43,12 +43,11 @@ if __name__ == "__main__":
     exp_space.set_autoremove()
 
     # Initialize data source
-    sequence = GenericSequence.instantiate(**vars(datacfg)).clip(0, args.to)
+    sequence = SequenceBase[StereoFrame].instantiate(**vars(datacfg)).clip(0, args.to)
     # Initialize modules for VO
     system = TartanVO.from_config(asNamespace(exp_space.config).Odometry, sequence)
     
     system.receive_frames(sequence, exp_space)
-    exp_space.finish()
     
     header, result = EvaluateSequences([str(exp_space.folder)], correct_scale=False)
     print_as_table(header, result)

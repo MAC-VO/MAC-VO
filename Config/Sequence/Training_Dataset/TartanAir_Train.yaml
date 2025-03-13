@@ -1,375 +1,1352 @@
-#*IS_DATASET_TYPE*#
-# This file contains the two test environments used by TartanVO Stereo Module
-type: TartanAir
-ips: 100
-compressed: true
-
-# Controls optional data sources
-gtDepth: false
-gtFlow: true
-gtPose: true
-useIMU: false
-
-begin_idx: 0
-end_idx: -1
-
-dataroot: PATH_FOR_TARTANAIR
-
-# Paths
-roots:
-  # Seaside Town
-  - root: /house/Data/P001
+-   type: TartanAir_NoIMU
     name: house001
-  - root: /house/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/house/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: house006
-  - root: /house/Data/P008
+    args:
+        root: /project/learningvo/tartanair_v1_5/house/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: house008
-  - root: /house/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/house/Data/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: house002
-  - root: /house/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/house/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: house005
-  - root: /house/Data/P007
+    args:
+        root: /project/learningvo/tartanair_v1_5/house/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: house007
-  - root: /house/Data/P000
+    args:
+        root: /project/learningvo/tartanair_v1_5/house/Data/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: house000
-  - root: /house/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/house/Data/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: house004
-  - root: /house/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/house/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: house003
-  - root: /house_dist0/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/house/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: house_dist0006
-  - root: /house_dist0/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/house_dist0/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: house_dist0001
-  - root: /house_dist0/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/house_dist0/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: house_dist0005
-  - root: /house_dist0/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/house_dist0/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: house_dist0002
-  - root: /house_dist0/Data/P000
+    args:
+        root: /project/learningvo/tartanair_v1_5/house_dist0/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: house_dist0000
-  - root: /house_dist0/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/house_dist0/Data/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: house_dist0003
-  - root: /house_dist0/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/house_dist0/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: house_dist0004
-  - root: /slaughter/Data/P000
+    args:
+        root: /project/learningvo/tartanair_v1_5/house_dist0/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: slaughter000
-  - root: /slaughter/Data/P007
+    args:
+        root: /project/learningvo/tartanair_v1_5/slaughter/Data/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: slaughter007
-  - root: /slaughter/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/slaughter/Data/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: slaughter003
-  - root: /slaughter/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/slaughter/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: slaughter004
-  - root: /slaughter/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/slaughter/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: slaughter006
-  - root: /slaughter/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/slaughter/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: slaughter001
-  - root: /slaughter/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/slaughter/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: slaughter005
-  - root: /slaughter/Data/P008
+    args:
+        root: /project/learningvo/tartanair_v1_5/slaughter/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: slaughter008
-  - root: /slaughter/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/slaughter/Data/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: slaughter002
-  - root: /abandonedfactory/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/slaughter/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory004
-  - root: /abandonedfactory/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory003
-  - root: /abandonedfactory/Data/P007
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory007
-  - root: /abandonedfactory/Data/P000
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory/Data/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory000
-  # - root: /abandonedfactory/Data/P002 # Testing set
-  #   name: abandonedfactory002
-  - root: /abandonedfactory/Data/P008
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory/Data/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory008
-  - root: /abandonedfactory/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory/Data/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory005
-  - root: /abandonedfactory/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory001
-  - root: /abandonedfactory/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory006
-  - root: /abandonedfactory_night/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory_night002
-  - root: /abandonedfactory_night/Data/P008
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory_night/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory_night008
-  - root: /abandonedfactory_night/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory_night/Data/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory_night005
-  - root: /abandonedfactory_night/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory_night/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory_night001
-  - root: /abandonedfactory_night/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory_night/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory_night006
-  - root: /abandonedfactory_night/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory_night/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory_night004
-  - root: /abandonedfactory_night/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory_night/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory_night003
-  - root: /abandonedfactory_night/Data/P007
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory_night/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory_night007
-  - root: /abandonedfactory_night/Data/P000
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory_night/Data/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: abandonedfactory_night000
-  - root: /westerndesert/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/abandonedfactory_night/Data/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: westerndesert005
-  - root: /westerndesert/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/westerndesert/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: westerndesert002
-  - root: /westerndesert/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/westerndesert/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: westerndesert006
-  - root: /westerndesert/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/westerndesert/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: westerndesert001
-  - root: /westerndesert/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/westerndesert/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: westerndesert003
-  - root: /westerndesert/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/westerndesert/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: westerndesert004
-  # - root: /westerndesert/Data/P000
-  #   name: westerndesert000
-  - root: /westerndesert/Data/P007
+    args:
+        root: /project/learningvo/tartanair_v1_5/westerndesert/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: westerndesert007
-  - root: /ocean/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/westerndesert/Data/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: ocean005
-  - root: /ocean/Data/P008
+    args:
+        root: /project/learningvo/tartanair_v1_5/ocean/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: ocean008
-  # - root: /ocean/Data/P002
-  #   name: ocean002
-  - root: /ocean/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/ocean/Data/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: ocean006
-  - root: /ocean/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/ocean/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: ocean001
-  - root: /ocean/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/ocean/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: ocean003
-  - root: /ocean/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/ocean/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: ocean004
-  - root: /ocean/Data/P000
+    args:
+        root: /project/learningvo/tartanair_v1_5/ocean/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: ocean000
-  - root: /ocean/Data/P007
+    args:
+        root: /project/learningvo/tartanair_v1_5/ocean/Data/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: ocean007
-  - root: /soulcity/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/ocean/Data/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: soulcity004
-  - root: /soulcity/Data/P009
+    args:
+        root: /project/learningvo/tartanair_v1_5/soulcity/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: soulcity009
-  - root: /soulcity/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/soulcity/Data/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: soulcity003
-  - root: /soulcity/Data/P010
+    args:
+        root: /project/learningvo/tartanair_v1_5/soulcity/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: soulcity010
-  - root: /soulcity/Data/P007
+    args:
+        root: /project/learningvo/tartanair_v1_5/soulcity/Data/P010
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: soulcity007
-  - root: /soulcity/Data/P000
+    args:
+        root: /project/learningvo/tartanair_v1_5/soulcity/Data/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: soulcity000
-  - root: /soulcity/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/soulcity/Data/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: soulcity002
-  - root: /soulcity/Data/P008
+    args:
+        root: /project/learningvo/tartanair_v1_5/soulcity/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: soulcity008
-  - root: /soulcity/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/soulcity/Data/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: soulcity005
-  - root: /soulcity/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/soulcity/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: soulcity001
-  - root: /soulcity/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/soulcity/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: soulcity006
-  # - root: /oldtown/Data/P003
-  #   name: oldtown003
-  - root: /oldtown/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/soulcity/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: oldtown004
-  - root: /oldtown/Data/P000
+    args:
+        root: /project/learningvo/tartanair_v1_5/oldtown/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: oldtown000
-  - root: /oldtown/Data/P007
+    args:
+        root: /project/learningvo/tartanair_v1_5/oldtown/Data/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: oldtown007
-  - root: /oldtown/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/oldtown/Data/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: oldtown005
-  - root: /oldtown/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/oldtown/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: oldtown002
-  - root: /oldtown/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/oldtown/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: oldtown006
-  - root: /oldtown/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/oldtown/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: oldtown001
-  - root: /office2/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/oldtown/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: office2001
-  - root: /office2/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/office2/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: office2006
-  - root: /office2/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/office2/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: office2002
-  - root: /office2/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/office2/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: office2005
-  - root: /office2/Data/P000
+    args:
+        root: /project/learningvo/tartanair_v1_5/office2/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: office2000
-  - root: /office2/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/office2/Data/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: office2004
-  - root: /office2/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/office2/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: office2003
-  - root: /office/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/office2/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: office001
-  - root: /office/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/office/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: office005
-  - root: /office/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/office/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: office002
-  - root: /office/Data/P000
+    args:
+        root: /project/learningvo/tartanair_v1_5/office/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: office000
-  - root: /office/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/office/Data/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: office003
-  - root: /office/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/office/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: office004
-  - root: /amusement/Data/P007
+    args:
+        root: /project/learningvo/tartanair_v1_5/office/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: amusement007
-  # - root: /amusement/Data/P000
-  #   name: amusement000
-  - root: /amusement/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/amusement/Data/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: amusement004
-  - root: /amusement/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/amusement/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: amusement003
-  - root: /amusement/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/amusement/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: amusement001
-  - root: /amusement/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/amusement/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: amusement006
-  - root: /amusement/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/amusement/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: amusement002
-  - root: /amusement/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/amusement/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: amusement005
-  # - root: /japanesealley/Data/P000
-  #   name: japanesealley000
-  - root: /japanesealley/Data/P007
+    args:
+        root: /project/learningvo/tartanair_v1_5/amusement/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: japanesealley007
-  - root: /japanesealley/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/japanesealley/Data/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: japanesealley003
-  - root: /japanesealley/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/japanesealley/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: japanesealley004
-  - root: /japanesealley/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/japanesealley/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: japanesealley006
-  - root: /japanesealley/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/japanesealley/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: japanesealley001
-  - root: /japanesealley/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/japanesealley/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: japanesealley005
-  - root: /japanesealley/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/japanesealley/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: japanesealley002
-  - root: /seasonsforest/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/japanesealley/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: seasonsforest003
-  - root: /seasonsforest/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/seasonsforest/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: seasonsforest004
-  # - root: /seasonsforest/Data/P000
-  #   name: seasonsforest000
-  - root: /seasonsforest/Data/P007
+    args:
+        root: /project/learningvo/tartanair_v1_5/seasonsforest/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: seasonsforest007
-  - root: /seasonsforest/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/seasonsforest/Data/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: seasonsforest005
-  - root: /seasonsforest/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/seasonsforest/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: seasonsforest002
-  - root: /seasonsforest/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/seasonsforest/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: seasonsforest006
-  - root: /seasonsforest/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/seasonsforest/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: seasonsforest001
-  - root: /endofworld/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/seasonsforest/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: endofworld006
-  - root: /endofworld/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/endofworld/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: endofworld001
-  - root: /endofworld/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/endofworld/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: endofworld005
-  - root: /endofworld/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/endofworld/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: endofworld002
-  - root: /endofworld/Data/P000
+    args:
+        root: /project/learningvo/tartanair_v1_5/endofworld/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: endofworld000
-  - root: /endofworld/Data/P007
+    args:
+        root: /project/learningvo/tartanair_v1_5/endofworld/Data/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: endofworld007
-  - root: /endofworld/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/endofworld/Data/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: endofworld003
-  - root: /endofworld/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/endofworld/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: endofworld004
-  - root: /seasonsforest_winter/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/endofworld/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: seasonsforest_winter002
-  - root: /seasonsforest_winter/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/seasonsforest_winter/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: seasonsforest_winter005
-  - root: /seasonsforest_winter/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/seasonsforest_winter/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: seasonsforest_winter001
-  - root: /seasonsforest_winter/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/seasonsforest_winter/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: seasonsforest_winter006
-  - root: /seasonsforest_winter/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/seasonsforest_winter/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: seasonsforest_winter004
-  - root: /seasonsforest_winter/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/seasonsforest_winter/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: seasonsforest_winter003
-  - root: /hospital/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/seasonsforest_winter/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital002
-  - root: /hospital/Data/P008
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital008
-  - root: /hospital/Data/P011
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital011
-  - root: /hospital/Data/P016
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P011
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital016
-  - root: /hospital/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P016
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital005
-  - root: /hospital/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital001
-  - root: /hospital/Data/P012
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital012
-  - root: /hospital/Data/P015
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P012
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital015
-  - root: /hospital/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P015
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital006
-  - root: /hospital/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital004
-  - root: /hospital/Data/P017
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital017
-  - root: /hospital/Data/P010
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P017
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital010
-  - root: /hospital/Data/P009
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P010
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital009
-  - root: /hospital/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital003
-  - root: /hospital/Data/P007
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital007
-  - root: /hospital/Data/P014
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital014
-  - root: /hospital/Data/P013
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P014
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital013
-  - root: /hospital/Data/P000
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P013
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: hospital000
-  - root: /carwelding/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/hospital/Data/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: carwelding003
-  - root: /carwelding/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/carwelding/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: carwelding004
-  - root: /carwelding/Data/P000
+    args:
+        root: /project/learningvo/tartanair_v1_5/carwelding/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: carwelding000
-  - root: /carwelding/Data/P007
+    args:
+        root: /project/learningvo/tartanair_v1_5/carwelding/Data/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: carwelding007
-  - root: /carwelding/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/carwelding/Data/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: carwelding005
-  - root: /carwelding/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/carwelding/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: carwelding002
-  - root: /carwelding/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/carwelding/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: carwelding006
-  - root: /carwelding/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/carwelding/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: carwelding001
-  - root: /gascola/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/carwelding/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: gascola006
-  - root: /gascola/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/gascola/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: gascola001
-  - root: /gascola/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/gascola/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: gascola005
-  - root: /gascola/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/gascola/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: gascola002
-  # - root: /gascola/Data/P000
-  #   name: gascola000
-  - root: /gascola/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/gascola/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: gascola003
-  - root: /gascola/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/gascola/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: gascola004
-  - root: /neighborhood/Data/P007
+    args:
+        root: /project/learningvo/tartanair_v1_5/gascola/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: neighborhood007
-  - root: /neighborhood/Data/P000
+    args:
+        root: /project/learningvo/tartanair_v1_5/neighborhood/Data/P007
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: neighborhood000
-  - root: /neighborhood/Data/P013
+    args:
+        root: /project/learningvo/tartanair_v1_5/neighborhood/Data/P000
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: neighborhood013
-  - root: /neighborhood/Data/P004
+    args:
+        root: /project/learningvo/tartanair_v1_5/neighborhood/Data/P013
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: neighborhood004
-  - root: /neighborhood/Data/P009
+    args:
+        root: /project/learningvo/tartanair_v1_5/neighborhood/Data/P004
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: neighborhood009
-  - root: /neighborhood/Data/P003
+    args:
+        root: /project/learningvo/tartanair_v1_5/neighborhood/Data/P009
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: neighborhood003
-  - root: /neighborhood/Data/P010
+    args:
+        root: /project/learningvo/tartanair_v1_5/neighborhood/Data/P003
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: neighborhood010
-  - root: /neighborhood/Data/P012
+    args:
+        root: /project/learningvo/tartanair_v1_5/neighborhood/Data/P010
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: neighborhood012
-  - root: /neighborhood/Data/P001
+    args:
+        root: /project/learningvo/tartanair_v1_5/neighborhood/Data/P012
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: neighborhood001
-  - root: /neighborhood/Data/P006
+    args:
+        root: /project/learningvo/tartanair_v1_5/neighborhood/Data/P001
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: neighborhood006
-  - root: /neighborhood/Data/P011
+    args:
+        root: /project/learningvo/tartanair_v1_5/neighborhood/Data/P006
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: neighborhood011
-  - root: /neighborhood/Data/P002
+    args:
+        root: /project/learningvo/tartanair_v1_5/neighborhood/Data/P011
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: neighborhood002
-  - root: /neighborhood/Data/P008
+    args:
+        root: /project/learningvo/tartanair_v1_5/neighborhood/Data/P002
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: neighborhood008
-  - root: /neighborhood/Data/P005
+    args:
+        root: /project/learningvo/tartanair_v1_5/neighborhood/Data/P008
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true
+-   type: TartanAir_NoIMU
     name: neighborhood005
-
+    args:
+        root: /project/learningvo/tartanair_v1_5/neighborhood/Data/P005
+        compressed: true
+        gtDepth: false
+        gtPose: true
+        gtFlow: true

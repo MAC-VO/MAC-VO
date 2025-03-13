@@ -1,13 +1,13 @@
-import torch
 import argparse
 import rerun as rr
+import numpy as np
 import pypose as pp
 from pathlib import Path
 
+from Module.Map import VisualMap
 from Utility.Sandbox import Sandbox
-from Module.Map import TensorMap
-from Utility.Visualizer import RerunVisualizer
 from Utility.Trajectory import Trajectory, Plotable
+from Utility.Visualize import rr_plt
 
 
 COLOR_MAP = {
@@ -20,7 +20,7 @@ COLOR_MAP = {
 
 def VisualizeComparison(macvo_space: Path, others: dict[str, Path]):
     macvo_box = Sandbox.load(macvo_space)
-    macvo_map: TensorMap  = torch.load(macvo_box.path("tensor_map.pth"))
+    macvo_map = VisualMap.deserialize(np.load(macvo_box.path("tensor_map.pth")))
     
     gt_traj, macvo_traj = Trajectory.from_sandbox(macvo_box)
     macvo_traj = macvo_traj.apply(lambda x: x.align_origin(gt_traj.data))
@@ -46,20 +46,24 @@ def VisualizeComparison(macvo_space: Path, others: dict[str, Path]):
         if frame_idx < 2: continue
         rr.set_time_sequence("frame_idx", frame_idx)
         
-        map_points = macvo_map.get_frame_points(macvo_map.frames[frame_idx])
-        RerunVisualizer.visualizePoints("Map", map_points.position.numpy(), map_points.color.numpy(), radii=0.04)
-        
+        map_points = macvo_map.get_match2point(
+            macvo_map.get_frame2match(macvo_map.frames[[frame_idx]])
+        )
         
         gt_path: pp.LieTensor = gt_traj.data.poses[:frame_idx]          #type: ignore
         macvo_path: pp.LieTensor = macvo_traj.data.poses[:frame_idx]    #type: ignore
-        RerunVisualizer.visualizePath("GroundTruth", gt_path, colors=(150, 150, 150), radii=0.05)
-        RerunVisualizer.visualizePath("MAC-VO", macvo_path, colors=(149, 17, 32), radii=0.05)
-        rr.log("/CinemaCam", rr.Transform3D(translation=macvo_traj.data.poses[frame_idx].translation()))    #type: ignore
-        RerunVisualizer.visualizeFrameAt(macvo_map, frame_idx)
+        
+        rr_plt.log_trajectory("/world/ground_truth", gt_path, colors=(150, 150, 150), radii=0.05)
+        rr_plt.log_trajectory("/world/macvo", macvo_path, colors=(149, 17, 32)  , radii=0.05)
+        rr_plt.log_points    ("/point_cloud", 
+                              map_points.data["pos_Tw"], map_points.data["color"], map_points.data["cov_Tw"], 
+                              "sphere")
+        rr_plt.log_camera    ("/world/macvo/cam", macvo_map.frames.data["pose"][frame_idx], macvo_map.frames.data["K"][frame_idx])
+        rr.log("/cinema_cam", rr.Transform3D(translation=macvo_traj.data.poses[frame_idx].translation()))    #type: ignore
         
         for key, est_traj in other_trajs.items():
             if est_traj is None: continue
-            RerunVisualizer.visualizePath(key, est_traj.data.poses[:frame_idx], colors=COLOR_MAP[key], radii=0.05)      #type: ignore
+            rr_plt.log_trajectory(f"/world/{key}", est_traj.data.poses[:frame_idx], colors=COLOR_MAP[key], radii=0.05)
 
 
 def get_args():
@@ -76,17 +80,16 @@ def get_args():
 
 if __name__ == "__main__":
     args = get_args()
-    
-    RerunVisualizer.setup("ComparisonDemo", True, useRR=True)
+    rr_plt.default_mode = "rerun"
+    rr_plt.init_connect("Comparison Demo")
     VisualizeComparison(
         Path(args.macvo_space),
         {k: Path(v) for k, v in zip(args.other_types, args.other_spaces)}
     )
-    RerunVisualizer.close()
+    rr.rerun_shutdown()
 
 # Exmple Usage
 #   python -m Scripts.AdHoc.DemoCompare \
 #       --macvo_space /data2/datasets/yutianch/Archive/MACVO_Results/MACVO_TartanAirv2/05_31_183121/TartanAir_MKP_interp\@v2_H000/05_31_183122/ \
 #       --other_spaces /data2/datasets/yutianch/Archive/MACVO_Results/DPVO_TartanAirv2/05_15_135508/dpvo\@v2_H000/05_15_135508/ \
 #       --other_types DPVO
-#

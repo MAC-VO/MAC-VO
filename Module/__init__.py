@@ -1,4 +1,4 @@
-from .Covariance import IObservationCov
+from .Covariance import ICovariance2to3
 from .KeypointSelector import IKeypointSelector
 from .MotionModel import IMotionModel
 from .OutlierFilter import IObservationFilter

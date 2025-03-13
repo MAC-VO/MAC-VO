@@ -58,7 +58,7 @@ class MemoryCovDecoder(MemoryDecoder):
         """
         cost_maps = data["cost_maps"]
         coords0, coords1 = initialize_flow(context)
-        cov0, cov1 = initialize_flow(context)
+        cov0, cov1       = initialize_flow(context)
         if flow_init is not None:
             coords1 = coords1 + flow_init
 
@@ -72,14 +72,13 @@ class MemoryCovDecoder(MemoryDecoder):
         inp = torch.relu(inp)
         attention = None
         if self.cfg.gma:
-            attention = self.att(inp)            
+            attention = self.att(inp)
 
         size = net.shape
         key, value = None, None
 
-        for _idx in range(self.depth):
+        for _ in range(self.depth):
             coords1 = coords1.detach()
-
             cost_forward = self.encode_flow_token(cost_maps, coords1)
 
             query = self.flow_token_encoder(cost_forward)

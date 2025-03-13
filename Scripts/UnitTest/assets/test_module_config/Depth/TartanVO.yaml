@@ -1,0 +1,5 @@
+type: TartanVODepth
+args:
+  weight: ./Model/TartanVO_depth_cov.pth
+  cov_mode: None
+  device: cuda

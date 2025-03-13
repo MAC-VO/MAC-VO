@@ -1,4 +1,4 @@
-pypose >= 0.6.8
+pypose == 0.6.8
 opencv-python-headless
 evo
 matplotlib==3.8.4
@@ -7,10 +7,10 @@ tqdm
 rich
 einops
 timm==0.9.12
-rerun-sdk
+rerun-sdk==0.21.0
 yacs
-torch
-numpy
+torch==2.4.0
+numpy<2.0.0
 pyyaml
 wandb
 torchvision

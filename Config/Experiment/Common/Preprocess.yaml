@@ -1,0 +1,18 @@
+KITTI: 
+  - type: SmartResizeFrame
+    args: 
+      height: 376
+      width : 780
+      interp: nearest
+Zed:
+  - type: SmartResizeFrame
+    args: 
+      height: 640
+      width : 640
+      interp: nearest
+VBR_Stereo:
+  - type: SmartResizeFrame
+    args: 
+      height: 640
+      width : 640
+      interp: nearest

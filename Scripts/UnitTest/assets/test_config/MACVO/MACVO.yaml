@@ -1,0 +1,99 @@
+Common:
+  # Some configurations are shared across multiple modules in Odometry, so I write them here.
+  device: &device cuda
+  max_depth: &max_depth auto
+
+Odometry:
+  name: MACVO
+  args:
+    # Device directive to the VO system
+    # NOTE: the system may not follow this device config strictly since some module
+    # e.g. those rely on PWC-Net, only support running on cuda device.
+    device: *device
+    edgewidth: 32
+    num_point: 200 # Upper bound of KPs in each frame
+
+    # Match covariance for keypoint on first observation (sub-pixel uncertainty
+    # caused by the quantized pixel)
+    match_cov_default: 0.25
+
+    # Profiling the system using torch, generate chrome json trace file.
+    profile: false
+
+    # Mapping mode provides the dense mapping
+    mapping: false
+
+  cov:
+    obs:
+      type: MatchCovariance
+      args:
+        device: *device
+        kernel_size: 31
+        match_cov_default: 0.25
+        min_depth_cov: 0.05
+        min_flow_cov: 0.25
+
+  keypoint:
+    type: CovAwareSelector
+    args:
+      device: *device
+      kernel_size: 7
+      mask_width: 32
+      max_depth: *max_depth
+      max_depth_cov: 250.0
+      max_match_cov: 100.0
+
+  mappoint:
+    # Mapping feature can be conveniently turn off by using 
+    # "type: NoKeypointSelector" instead of the config below.
+    type: MappingPointSelector
+    args:
+      device: *device
+      max_depth: 5.0
+      max_depth_cov: 0.005
+      mask_width: 32
+
+  frontend:
+    type: CUDAGraph_FlowFormerCovFrontend
+    args:
+      device: *device
+      weight: ./Model/MACVO_FrontendCov.pth
+      dtype : fp32
+      enforce_positive_disparity: false
+      max_flow: -1
+
+  motion:
+    type: TartanMotionNet
+    args:
+      weight: ./Model/MACVO_posenet.pkl
+      device: *device
+
+  outlier:
+    type: FilterCompose
+    args:
+      filter_args:
+        - type: CovarianceSanityFilter
+          args:
+        - type: SimpleDepthFilter
+          args:
+            min_depth: 0.05
+            max_depth: *max_depth
+        - type: LikelyFrontOfCamFilter
+          args:
+  
+  postprocess:
+    type: MotionInterpolate
+    args:
+  
+  keyframe:
+    type: AllKeyframe
+    args:
+  
+  optimizer:
+    type: TwoFramePoseOptimizer
+    args:
+      device: cpu
+      vectorize: true
+      parallel: false
+
+Preprocess: []

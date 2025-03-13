@@ -1,5 +1,5 @@
 import argparse
-from statistics import mean
+from typing import Literal, Iterable
 
 from Evaluation.MetricsSeq import evaluateATE, evaluateROE, evaluateRTE, evaluateRPE
 from Utility.Plot import getColor
@@ -8,8 +8,20 @@ from Utility.Sandbox import Sandbox
 from Utility.Trajectory import Trajectory
 
 
-NEED_ALIGN_SCALE = {"dpvo", "droid", "tartanvo_mono"}
+def mean(data: Iterable[float]) -> float:
+    data = list(data)  # Convert iterable to list to allow multiple passes
+    if not data:
+        raise ValueError("mean() arg is an empty sequence")  # Handle empty input
+    
+    return sum(data) / len(data)  # Compute mean
 
+
+NEED_ALIGN_SCALE: dict[str, Literal["Dynamic"] | float] = {
+    "dpvo"         : "Dynamic",
+    "droid"        : "Dynamic",
+    "tartanvo_mono": "Dynamic",
+    "mast3r"       : "Dynamic",
+}
 
 def EvaluateSequences(spaces: list[str], correct_scale=False):
     eval_results = []
@@ -19,40 +31,42 @@ def EvaluateSequences(spaces: list[str], correct_scale=False):
     for spaceid in pb:
         exp_space = Sandbox.load(spaceid)
         config = exp_space.config
-        
-        if not exp_space.is_finished:
-            Logger.write(
-                "error",
-                f"Experiment space {spaceid} (project: {config.Project}) did not finish. Is this run crashed?",
+
+        try:
+            gt_traj, est_traj = Trajectory.from_sandbox(exp_space, align_time="est->gt")
+            
+            if est_traj is None:
+                Logger.write("error", f"Unable to retrieve estimated trajectory from {config.Project}")
+                eval_results.append([config.Project] + ([None] * 12))
+                continue
+            
+            est_traj.plot_kwargs |= dict(color=getColor("-", 4, 0))
+
+            for key, scale in NEED_ALIGN_SCALE.items():
+                if key not in est_traj.name.lower(): continue
+                
+                Logger.write("info", f"{est_traj} --[align_scale={scale}]-> {gt_traj}")
+                if scale == "Dynamic": est_traj.data = est_traj.data.align_scale(gt_traj.data)
+                else: est_traj.data = est_traj.data.scale(scale)
+                break
+
+            ate_res = evaluateATE(gt_traj.data.as_evo, est_traj.data.as_evo, correct_scale=correct_scale)
+            rte_res = evaluateRTE(gt_traj.data.as_evo, est_traj.data.as_evo, correct_scale=correct_scale)
+            roe_res = evaluateROE(gt_traj.data.as_evo, est_traj.data.as_evo, correct_scale=correct_scale)
+            rpe_res = evaluateRPE(gt_traj.data.as_evo, est_traj.data.as_evo, correct_scale=correct_scale)
+            eval_results.append(
+                [
+                    est_traj.name,
+                    ate_res.stats["mean"], ate_res.stats["std"], ate_res.stats["rmse"],
+                    rte_res.stats["mean"], rte_res.stats["std"], rte_res.stats["rmse"],
+                    roe_res.stats["mean"], roe_res.stats["std"], roe_res.stats["rmse"],
+                    rpe_res.stats["mean"], rpe_res.stats["std"], rpe_res.stats["rmse"],
+                ]
             )
-            eval_results.append([config.Project] + ([None] * 12))
-            continue
-
-        gt_traj, est_traj = Trajectory.from_sandbox(exp_space)
-        
-        if est_traj is None:
-            Logger.write("error", f"Unable to retrieve estimated trajectory from {config.Project}")
-            eval_results.append([config.Project] + ([None] * 12))
-            continue
-        
-        est_traj.plot_kwargs |= dict(color=getColor("-", 4, 0))
-
-        if any([ kw in est_traj.name.lower() for kw in NEED_ALIGN_SCALE]):
-            est_traj = est_traj.apply(lambda traj : traj.align_scale(gt_traj.data))
-
-        ate_res = evaluateATE(gt_traj.data.as_evo, est_traj.data.as_evo, correct_scale=correct_scale)
-        rte_res = evaluateRTE(gt_traj.data.as_evo, est_traj.data.as_evo, correct_scale=correct_scale)
-        roe_res = evaluateROE(gt_traj.data.as_evo, est_traj.data.as_evo, correct_scale=correct_scale)
-        rpe_res = evaluateRPE(gt_traj.data.as_evo, est_traj.data.as_evo, correct_scale=correct_scale)
-        eval_results.append(
-            [
-                est_traj.name,
-                ate_res.stats["mean"], ate_res.stats["std"], ate_res.stats["rmse"],
-                rte_res.stats["mean"], rte_res.stats["std"], rte_res.stats["rmse"],
-                roe_res.stats["mean"], roe_res.stats["std"], roe_res.stats["rmse"],
-                rpe_res.stats["mean"], rpe_res.stats["std"], rpe_res.stats["rmse"],
-            ]
-        )
+        except Exception as e:
+            Logger.show_exception()
+            eval_results.append([config.Project if hasattr(config, "Project") else "--"] + ([None] * 12))
+            
     pb.close()
     
     eval_results.append(

@@ -2,10 +2,12 @@ from abc import ABC, abstractmethod
 
 import torch
 from types import SimpleNamespace
+from typing_extensions import LiteralString
 
-from Module.Map import BatchObservation
-from DataLoader import MetaInfo
+from Module.Map import TensorBundle
+from DataLoader import StereoData
 from Utility.Extensions import ConfigTestableSubclass
+from Utility.PrettyPrint import Logger
 
 
 class IObservationFilter(ABC, ConfigTestableSubclass):
@@ -16,7 +18,13 @@ class IObservationFilter(ABC, ConfigTestableSubclass):
     def __init__(self, config: SimpleNamespace):
         self.config = config
     
-    def set_meta(self, meta: MetaInfo):
+    @property
+    @abstractmethod
+    def required_keys(self) -> set[LiteralString]: ...
+    
+    def verify_shape(self, value: TensorBundle): return all([k in value.data.keys() for k in self.required_keys])
+    
+    def set_meta(self, meta: StereoData):
         """
         This method is used to receive meta info (e.g. camera intrinsic, image shape, etc.) on the first frame received by MAC-VO.
         The filter can then initialize some behavior dyanmically based on these information.
@@ -24,9 +32,9 @@ class IObservationFilter(ABC, ConfigTestableSubclass):
         pass
 
     @abstractmethod
-    def filter(self, observations: BatchObservation) -> torch.Tensor:
+    def filter(self, values: TensorBundle, device: torch.device) -> torch.Tensor:
         """
-        Given a batch of N observation (`BatchObservation`), the filter returns a boolean tensor of shape (N,) that 
+        Given a batch of N observation (`TensorBundle`), the filter returns a boolean tensor of shape (N,) that 
             * sets True for "good" observation 
             * sets False for observations to filter away.
         """
@@ -40,15 +48,24 @@ class FilterCompose(IObservationFilter):
             IObservationFilter.instantiate(filter_arg.type, filter_arg.args)
             for filter_arg in self.config.filter_args
         ]
+        if not hasattr(self.config, "verbose"): self.config.verbose = False
 
-    def set_meta(self, meta: MetaInfo):
+    @property
+    def required_keys(self) -> set[LiteralString]: return {
+        k for f in self.filters 
+          for k in f.required_keys
+    }
+
+    def set_meta(self, meta: StereoData):
         for f in self.filters:
             f.set_meta(meta)
 
-    def filter(self, observations: BatchObservation) -> torch.Tensor:
-        mask = torch.ones((len(observations),), dtype=torch.bool, device=observations.device)
+    def filter(self, values: TensorBundle, device: torch.device) -> torch.Tensor:
+        mask = torch.ones((len(values),), dtype=torch.bool, device=device)
         for f in self.filters:
-            mask = torch.logical_and(mask, f.filter(observations))
+            mask = torch.logical_and(mask, f.filter(values, device))
+            if self.config.verbose:
+                Logger.write("info", f"\t{f.__class__.__name__} | => {mask.sum().item()}")
         
         return mask
     
@@ -61,62 +78,45 @@ class FilterCompose(IObservationFilter):
 
 
 class IdentityFilter(IObservationFilter):
-    def filter(self, observations: BatchObservation) -> torch.Tensor:
-        return torch.ones((len(observations),), dtype=torch.bool, device=observations.device)
+    @property
+    def required_keys(self) -> set[LiteralString]: return set()
+    
+    def filter(self, values: TensorBundle, device: torch.device) -> torch.Tensor:
+        return torch.ones((len(values),), dtype=torch.bool, device=device)
     
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None: return
 
 
 class CovarianceSanityFilter(IObservationFilter):
-    def filter(self, observations: BatchObservation) -> torch.Tensor:
-        cov_has_nan = observations.cov_Tc.isnan().any(dim=[-1, -2])
-        cov_has_inf = observations.cov_Tc.isinf().any(dim=[-1, -2])
-        return ~torch.logical_or(cov_has_nan, cov_has_inf)
+    @property
+    def required_keys(self) -> set[LiteralString]: return {"obs1_covTc", "obs2_covTc"}
+    
+    def filter(self, values: TensorBundle, device: torch.device) -> torch.Tensor:
+        cov1_has_nan = values.data["obs1_covTc"].isnan().any(dim=[-1, -2])
+        cov1_has_inf = values.data["obs1_covTc"].isinf().any(dim=[-1, -2])
+        cov2_has_nan = values.data["obs2_covTc"].isnan().any(dim=[-1, -2])
+        cov2_has_inf = values.data["obs2_covTc"].isinf().any(dim=[-1, -2])
+        return ~(cov1_has_nan | cov1_has_inf | cov2_has_nan | cov2_has_inf)
     
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None: return
 
 
 class SimpleDepthFilter(IObservationFilter):
-    def set_meta(self, meta: MetaInfo):
+    def set_meta(self, meta: StereoData):
         if self.config.max_depth == "auto":
-            self.config.max_depth = meta.fx * meta.baseline
-
-    def filter(self, observations: BatchObservation) -> torch.Tensor:
-        return ~torch.logical_or(observations.pixel_d < self.config.min_depth, 
-                                 observations.pixel_d  > self.config.max_depth)
+            self.config.max_depth = meta.fx * meta.frame_baseline
     
-    @classmethod
-    def is_valid_config(cls, config: SimpleNamespace | None) -> None:
-        assert config is not None
-        if isinstance(config.max_depth, (float, int)): assert config.max_depth > config.min_depth
-        cls._enforce_config_spec(config, {
-            "min_depth": lambda dist: isinstance(dist, (int, float)) and dist > 0.,
-            "max_depth": lambda dist: (dist == "auto") or (isinstance(dist, (int, float)) and dist > 0.)
-        })
+    @property
+    def required_keys(self) -> set[LiteralString]: return {"pixel1_d", "pixel2_d"}
 
-
-class DepthFilter(IObservationFilter):
-    def set_meta(self, meta: MetaInfo):
-        if self.config.max_depth == "auto": self.config.max_depth = meta.baseline * meta.fx
+    def filter(self, values: TensorBundle, device: torch.device) -> torch.Tensor:
+        return ~(  (values.data["pixel1_d"] < self.config.min_depth) 
+                 | (values.data["pixel1_d"] > self.config.max_depth)
+                 | (values.data["pixel2_d"] < self.config.min_depth) 
+                 | (values.data["pixel2_d"] > self.config.max_depth)).squeeze(-1)
     
-    def filter(self, observations: BatchObservation) -> torch.Tensor:
-        current_max: float = self.config.max_depth
-        current_mask = torch.ones((len(observations),), dtype=torch.bool, device=observations.device)
-        
-        while current_max < self.config.final_depth:
-            current_mask = torch.logical_and(
-                observations.pixel_d < current_max,
-                observations.pixel_d > self.config.min_depth
-            )
-            if (current_mask).sum().item() >= self.config.expect_num:
-                break
-            else:
-                current_max *= 1.5
-        
-        return current_mask
-
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None:
         assert config is not None
@@ -128,12 +128,17 @@ class DepthFilter(IObservationFilter):
 
 
 class LikelyFrontOfCamFilter(IObservationFilter):
-    def filter(self, observations: BatchObservation) -> torch.Tensor:
-        if (observations.cov_pixel_d == -1).any():
-            return torch.tensor([True] * len(observations), dtype=torch.bool)
-        return (observations.pixel_d.square() - (observations.cov_pixel_d * 4)) > 0.
+    @property
+    def required_keys(self) -> set[LiteralString]: return {"pixel1_d", "pixel1_d_cov", "pixel2_d", "pixel2_d_cov"}
+    
+    def filter(self, values: TensorBundle, device: torch.device) -> torch.Tensor:
+        if (values.data["pixel1_d_cov"] == -1).any(): 
+            # This means we don't have covariance estimation, 
+            # it's just a placeholder.
+            return torch.ones((len(values),), dtype=torch.bool)
+        
+        return (  ((values.data["pixel1_d"] - (values.data["pixel1_d_cov"].sqrt() * 2)) > 0.)
+                & ((values.data["pixel2_d"] - (values.data["pixel2_d_cov"].sqrt() * 2)) > 0.)).squeeze(-1)
     
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None: return
-
-

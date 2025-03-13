@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import torch
 from types import SimpleNamespace
-from typing import TypeVar, Generic, TypedDict, overload
+from typing import TypeVar, Generic, TypedDict, overload, Any
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 
-from DataLoader import SourceDataFrame
+from DataLoader import StereoData
 from Utility.Utils import padTo
-from Utility.Extensions import ConfigTestableSubclass
+from Utility.Extensions import ConfigTestableSubclass, OnCallCompiler
 
 # Stereo Depth interface ###
 # T_Context = The internal state of stereo depth estimator
@@ -18,15 +19,25 @@ class IStereoDepth(ABC, Generic[T_Context], ConfigTestableSubclass):
     """
     Estimate dense depth map of current stereo image.
     
-    `IStereoDepth(frame: SourceDataFrame) -> depth, depth_cov`
+    `IStereoDepth.estimate(frame: StereoData) -> IStereoDepth.Output`
 
     Given a frame with imageL, imageR being Bx3xHxW, return `output` where    
 
     * depth         - Bx1xHxW shaped torch.Tensor, estimated depth map
                     maybe padded with `nan` if model can't output prediction with same shape as input image.
-    * depth_cov     - Bx1xHxW shaped torch.Tensor or None, estimated covariance of depth map (if provided)
+    * cov           - Bx1xHxW shaped torch.Tensor or None, estimated covariance of depth map (if provided)
                     maybe padded with `nan` if model can't output prediction with same shape as input image.
+    * mask          - Bx1xHxW shaped torch.Tensor or None, the position with `True` value means valid (not occluded) 
+                    prediction regions.
     """
+    @dataclass
+    class Output:
+        depth: torch.Tensor                    # torch.Tensor of shape B x 1 x H x W
+        disparity: torch.Tensor | None = None  # torch.Tensor of shape B x 1 x H x W OR None if not applicable  
+        disparity_uncertainty: torch.Tensor | None = None
+        cov  : torch.Tensor | None = None      # torch.Tensor of shape B x 1 x H x W OR None if not applicable
+        mask : torch.Tensor | None = None      # torch.Tensor of shape B x 1 x H x W OR None if not applicable
+    
     def __init__(self, config: SimpleNamespace):
         self.config : SimpleNamespace = config
         self.context: T_Context       = self.init_context()
@@ -39,10 +50,7 @@ class IStereoDepth(ABC, Generic[T_Context], ConfigTestableSubclass):
     def init_context(self) -> T_Context: ...
     
     @abstractmethod
-    def estimate(self, frame: SourceDataFrame) -> tuple[torch.Tensor, torch.Tensor | None]: ...
-    
-    def __call__(self, frame: SourceDataFrame) -> tuple[torch.Tensor, torch.Tensor | None]:
-        return self.estimate(frame)
+    def estimate(self, frame: StereoData) -> Output: ...
 
     @overload
     @staticmethod
@@ -88,11 +96,11 @@ class GTDepth(IStereoDepth[None]):
     
     def init_context(self) -> None: return None
     
-    def estimate(self, frame: SourceDataFrame) -> tuple[torch.Tensor, torch.Tensor | None]:
-        assert frame.gtDepth is not None
-        gt_depthmap = padTo(frame.gtDepth, (frame.meta.height, frame.meta.width), dim=(-2, -1), value=float('nan'))
+    def estimate(self, frame: StereoData) -> IStereoDepth.Output:
+        assert frame.gt_depth is not None
+        gt_depthmap = padTo(frame.gt_depth, (frame.height, frame.width), dim=(-2, -1), value=float('nan'))
         
-        return gt_depthmap, None
+        return IStereoDepth.Output(depth=gt_depthmap)
 
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None: return
@@ -119,12 +127,11 @@ class FlowFormerDepth(IStereoDepth[ModelContext]):
         return ModelContext(model=model)
         
     @torch.inference_mode()
-    def estimate(self, frame: SourceDataFrame) -> tuple[torch.Tensor, torch.Tensor | None]:
+    def estimate(self, frame: StereoData) -> IStereoDepth.Output:
         est_flow, _ = self.context["model"].inference(frame.imageL, frame.imageR)
         disparity = est_flow[:1].abs().unsqueeze(0)
-        depth_map = ((frame.meta.baseline * frame.meta.fx) / disparity)
-        
-        return depth_map, None
+        depth_map = disparity_to_depth(disparity, frame.frame_baseline, frame.fx)
+        return IStereoDepth.Output(depth=depth_map, disparity=disparity)
     
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None:
@@ -145,7 +152,7 @@ class FlowFormerCovDepth(IStereoDepth[ModelContext]):
         from ..Network.FlowFormer.configs.submission import get_cfg
         from ..Network.FlowFormerCov import build_flowformer
         model = build_flowformer(get_cfg(), self.config.device)
-        ckpt  = torch.load(self.config.weight)
+        ckpt  = torch.load(self.config.weight, weights_only=True)
         model.load_ddp_state_dict(ckpt)
         model.to(self.config.device)
         
@@ -153,18 +160,15 @@ class FlowFormerCovDepth(IStereoDepth[ModelContext]):
         return ModelContext(model=model)
         
     @torch.inference_mode()
-    def estimate(self, frame: SourceDataFrame) -> tuple[torch.Tensor, torch.Tensor | None]:        
+    def estimate(self, frame: StereoData) -> IStereoDepth.Output:
         est_flow, est_cov = self.context["model"].inference(frame.imageL, frame.imageR)
         disparity, disparity_cov = est_flow[:, :1].abs(), est_cov[:, :1]
         
-        # Propagate disparity covariance to depth covariance
-        # See Appendix A.1 of paper
-        disparity_2 = disparity.square()
-        error_rate_2 = disparity_cov / disparity_2
-        depth_map = ((frame.meta.baseline * frame.meta.fx) / disparity)
-        depth_cov = (((frame.meta.baseline * frame.meta.fx) ** 2) * (error_rate_2 / disparity_2))
+        depth_map = disparity_to_depth(disparity, frame.frame_baseline, frame.fx)
+        depth_cov = disparity_to_depth_cov(disparity, disparity_cov, frame.frame_baseline, frame.fx)
         
-        return depth_map, depth_cov
+        return IStereoDepth.Output(depth=depth_map, cov=depth_cov, 
+                                   disparity=disparity, disparity_uncertainty=disparity_cov)
 
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None:
@@ -198,17 +202,16 @@ class TartanVODepth(IStereoDepth[ModelContext]):
         return ModelContext(model=model)
         
     @torch.inference_mode()
-    def estimate(self, frame: SourceDataFrame) -> tuple[torch.Tensor, torch.Tensor | None]:        
-        imgL_cu, imgR_cu = frame.imageL.to(self.config.device), frame.imageR.to(self.config.device)
-        depth, depth_cov = self.context["model"].inference(frame.meta, imgL_cu, imgR_cu)
+    def estimate(self, frame: StereoData) -> IStereoDepth.Output:
+        depth, depth_cov = self.context["model"].inference(frame)
         
-        depth_map = padTo(depth, (frame.meta.height, frame.meta.width), dim=(-2, -1), value=float('nan'))
+        depth_map = padTo(depth, (frame.height, frame.width), dim=(-2, -1), value=float('nan'))
         
         if self.config.cov_mode == "Est":
-            depth_cov = padTo(depth_cov, (frame.meta.height, frame.meta.width), dim=(-2, -1), value=float('nan'))
-            return depth_map, depth_cov
+            depth_cov = padTo(depth_cov, (frame.height, frame.width), dim=(-2, -1), value=float('nan'))
+            return IStereoDepth.Output(depth=depth_map, cov=depth_cov)
         else:
-            return depth_map, None
+            return IStereoDepth.Output(depth=depth_map)
         
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None:
@@ -217,6 +220,10 @@ class TartanVODepth(IStereoDepth[ModelContext]):
                 "device"    : lambda s: isinstance(s, str) and (("cuda" in s) or (s == "cpu")),
                 "cov_mode"  : lambda s: s in {"Est", "None"}
             })
+
+
+# Modifier - modifies the input/output of another estimator
+# Modifier(IStereoDepth) -> IStereoDepth'
 
 
 class ApplyGTDepthCov(IStereoDepth[IStereoDepth]):
@@ -232,20 +239,37 @@ class ApplyGTDepthCov(IStereoDepth[IStereoDepth]):
     def provide_cov(self) -> bool: return True
     
     def init_context(self) -> IStereoDepth:
-        internal_module = IStereoDepth.instantiate(self.config.module.name, self.config.module.args)
+        internal_module = IStereoDepth.instantiate(self.config.module.type, self.config.module.args)
         return internal_module
     
     @torch.inference_mode()
-    def estimate(self, frame: SourceDataFrame) -> tuple[torch.Tensor, torch.Tensor | None]:
-        assert frame.gtDepth is not None
+    def estimate(self, frame: StereoData) -> IStereoDepth.Output:
+        assert frame.gt_depth is not None
         
-        est_depth, _ = self.context(frame)
-        error = (frame.gtDepth - est_depth).abs()
+        output = self.context.estimate(frame)
+        error = frame.gt_depth.to(output.depth.device) - output.depth
         gt_cov = error.square()
         
-        return est_depth, gt_cov
+        output.cov = gt_cov
+        return output
 
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None:
         assert config is not None
         IStereoDepth.is_valid_config(config.module)
+
+# Common Routeins
+
+@OnCallCompiler()
+def disparity_to_depth(disp: torch.Tensor, bl: float, fx: float) -> torch.Tensor:
+    return (bl * fx) * disp.reciprocal()
+
+
+@OnCallCompiler()
+def disparity_to_depth_cov(disp: torch.Tensor, disp_cov: torch.Tensor, bl: float, fx: float) -> torch.Tensor:
+    # Propagate disparity covariance to depth covariance
+    # See Appendix A.1 of the MAC-VO paper
+    disparity_2 = disp.square()
+    error_rate_2 = disp_cov * disparity_2.reciprocal()
+    depth_cov  = (((bl * fx) ** 2) * (error_rate_2 / disparity_2))
+    return depth_cov

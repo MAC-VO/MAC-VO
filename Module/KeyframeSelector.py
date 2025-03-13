@@ -1,11 +1,12 @@
+import typing as T
 from abc import ABC, abstractmethod
 from types import SimpleNamespace
 
 from Utility.Extensions import ConfigTestableSubclass
-from DataLoader import SourceDataFrame
+from DataLoader import StereoFrame, T_Data
 
 
-class IKeyframeSelector(ABC, ConfigTestableSubclass):
+class IKeyframeSelector(ABC, T.Generic[T_Data], ConfigTestableSubclass):
     """
     Keyframe selector - decide whether a frame is considered as "keyframe" for backend optimization.
     
@@ -15,11 +16,11 @@ class IKeyframeSelector(ABC, ConfigTestableSubclass):
         self.config = config
     
     @abstractmethod
-    def isKeyframe(self, frame: SourceDataFrame) -> bool: ...
+    def isKeyframe(self, frame: T_Data) -> bool: ...
 
 
-class AllKeyframe(IKeyframeSelector):
-    def isKeyframe(self, frame: SourceDataFrame) -> bool:
+class AllKeyframe(IKeyframeSelector[StereoFrame]):
+    def isKeyframe(self, frame: StereoFrame) -> bool:
         return True
 
     @classmethod
@@ -27,9 +28,9 @@ class AllKeyframe(IKeyframeSelector):
         cls._enforce_config_spec(config, {})
 
 
-class UniformKeyframe(IKeyframeSelector):    
-    def isKeyframe(self, frame: SourceDataFrame) -> bool:
-        return (frame.meta.idx % self.config.keyframe_freq) == 0
+class UniformKeyframe(IKeyframeSelector[StereoFrame]):    
+    def isKeyframe(self, frame: StereoFrame) -> bool:
+        return (frame.frame_idx % self.config.keyframe_freq) == 0
 
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None:

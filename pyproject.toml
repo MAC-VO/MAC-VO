@@ -6,26 +6,29 @@ pythonpath = [
     "."
 ]
 markers = [
-    "local: marks tests that should only run locally (deselect with '-m \"not local\"')"
+    "local: marks tests that should only run locally (deselect with '-m \"not local\"')",
+    "trt: marks tests that requires TensorRT to run (deselect with '-m \"not trt\"')",
+    "vio: marks tests that is realted with vio (deselect with '-m \"not vio\"')"
 ]
 
 [tool.pyright]
 include = [
     "DataLoader", "Evaluation", "Module", "Odometry",
-    "Scripts", "Train", "Utility", "*.py"
+    "Scripts", "Train", "Utility", "*.py", "Baseline"
 ]
 exclude = [
     "./Module/Network/PWCNet",              # Third-party lib
     "./Module/Network/FlowFormer",          # Third-party lib
+    "./Module/Network/GMFlow",              # Third-party lib
     "./Module/Network/UniMatch",            # Third-party lib
     "./Module/Network/UniCeption",          # Third-party lib
-    "./Module/Network/GMFlow",              # Third-party lib
-    "./Odometry/BaselineDPVO.py",           # Need install DPVO and compile cuda kernel
+    "./Module/Network/match_anything",      # Third-party lib
+    "./Baseline/DPVO",                      # Need install DPVO and compile cuda kernel
     "./Scripts/AdHoc/FLOPS_analyzer.py",    # Need additional package fvcore
 ]
 typeCheckingMode = "standard"
-reportImportCycles = "error"
+reportImportCycles = "information"
 reportDuplicateImport = "error"
-reportAbstractUsage = "warning"
+reportAbstractUsage = "error"
 reportPrivateImportUsage = "information"
 stubPath = "./stubs"

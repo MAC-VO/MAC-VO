@@ -1,10 +1,13 @@
 import numpy as np
 import torch
-from typing import TypeVar, Sequence, Callable, Literal
+from typing import TypeVar, Sequence, Callable, Literal, Optional, ParamSpec
+from functools import wraps
 from .PrettyPrint import Logger
 
 
 I = TypeVar("I")
+T_In = ParamSpec('T_In')
+T_Out = TypeVar('T_Out')
 
 def reflect_torch_dtype(type_string: Literal["fp32", "bf16"]) -> torch.dtype:
     match type_string:
@@ -54,9 +57,7 @@ def cropToMultiple(x: torch.Tensor, factor: int | list[int], dim: int | list[int
         return result
 
     else:
-        raise ValueError(
-            "Unexpected combination for cropToMultiple - only accept [list, list], [int, list] and [int, int]"
-        )
+        raise ValueError("Unexpected combination for cropToMultiple - only accept [list, list], [int, list] and [int, int]")
 
 
 def centerCropTo(x: torch.Tensor, shape: int | list[int], dim: int | list[int]):
@@ -140,3 +141,17 @@ def getConsecutiveRange(values: Sequence[I], pred: Callable[[I], bool]) -> list[
             start = -1
     return ranges
 
+
+def IgnoreException(func: Callable[T_In, T_Out]) -> Callable[T_In, Optional[T_Out]]:
+    @wraps(func)
+    def wrapped(*args, **kwargs) -> Optional[T_Out]:
+        try:
+            result = func(*args, **kwargs)
+        except KeyboardInterrupt as e:
+            raise e from None
+        except Exception as e:
+            Logger.show_exception()
+            Logger.write("warn", f"Failed to execute function {func.__name__} due to exception:\n{e}")
+            result = None
+        return result
+    return wrapped

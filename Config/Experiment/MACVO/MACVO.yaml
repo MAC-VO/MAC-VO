@@ -1,7 +1,11 @@
+#
+# This configuration is **not** used to report numbers in the paper.
+# To reproduce result in the paper, please use MACVO_evaluate.yaml
+#
+
 Common:
   # Some configurations are shared across multiple modules in Odometry, so I write them here.
   device: &device cuda
-  max_depth: &max_depth auto
 
 Odometry:
   name: MACVO
@@ -20,6 +24,9 @@ Odometry:
     # Profiling the system using torch, generate chrome json trace file.
     profile: false
 
+    # Mapping mode provides the dense mapping
+    mapping: false
+
   cov:
     obs:
       type: MatchCovariance
@@ -31,45 +38,42 @@ Odometry:
         min_flow_cov: 0.25
 
   keypoint:
-    type: CovAwareSelector
+    type: CovAwareSelector_NoDepth
     args:
       device: *device
       kernel_size: 7
       mask_width: 32
-      max_depth: *max_depth
-      max_depth_cov: 250.0
       max_match_cov: 100.0
 
+  mappoint:
+    # Mapping feature can be conveniently turn off by using 
+    # "type: NoKeypointSelector" instead of the config below.
+    type: MappingPointSelector
+    args:
+      device: *device
+      max_depth: 5.0
+      max_depth_cov: 0.005
+      mask_width: 32
+
   frontend:
-    type: FlowFormerCovFrontend
+    type: CUDAGraph_FlowFormerCovFrontend
     args:
       device: *device
       weight: ./Model/MACVO_FrontendCov.pth
-      use_jit: true
-      enforce_positive_disparity: false
       dtype: fp32
+      max_flow: -1
+      enforce_positive_disparity: false
 
   motion:
-    type: TartanMotionNet
+    type: StaticMotionModel
     args:
-      weight: ./Model/MACVO_posenet.pkl
-      device: *device
 
   outlier:
-    type: FilterCompose
+    type: CovarianceSanityFilter
     args:
-      filter_args:
-        - type: CovarianceSanityFilter
-          args:
-        - type: SimpleDepthFilter
-          args:
-            min_depth: 0.05
-            max_depth: *max_depth
-        - type: LikelyFrontOfCamFilter
-          args:
   
   postprocess:
-    type: DisplacementInterpolate
+    type: MotionInterpolate
     args:
   
   keyframe:
@@ -77,13 +81,13 @@ Odometry:
     args:
   
   optimizer:
-    type: PyPoseTwoFramePGO
+    type: ReprojectOptimizer
     args:
       device: cpu
       vectorize: true
       parallel: true
+      use_fancy_cov: false
+      constraint: disparity
 
-Datas: !flatten_seq
-  - !include_dataset  ../../Sequence/EuRoC.yaml
-  - !include ../../Sequence/KITTI.yaml
-  - !include_dataset  ../../Sequence/TartanAir2_Test.yaml
+Data: !include ../Common/EvaluationDataset.yaml
+Preprocess: !include ../Common/Preprocess.yaml

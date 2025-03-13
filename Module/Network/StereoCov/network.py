@@ -7,7 +7,7 @@ from collections import OrderedDict
 from .decoder import HourglassDecoder
 from .StereoNet import StereoNet7
 
-from DataLoader import MetaInfo
+from DataLoader import StereoData
 
 torchvision.disable_beta_transforms_warning()
 
@@ -62,13 +62,13 @@ class StereoCovNet(nn.Module):
 
     @torch.no_grad()
     @torch.inference_mode()
-    def inference(self, meta: MetaInfo, imageL: torch.Tensor, imageR: torch.Tensor):
-        disparity, disparity_cov = self(imageL, imageR)
-        depth = ((meta.baseline * meta.fx) / disparity)
+    def inference(self, stereo: StereoData):
+        disparity, disparity_cov = self(stereo.imageL, stereo.imageR)
+        depth = ((stereo.frame_baseline * stereo.fx) / disparity)
 
         disparity_2 = disparity.square()
         error_rate_2 = disparity_cov / disparity_2
-        depth_var = ((meta.baseline * meta.fx) ** 2) * (error_rate_2 / disparity_2)
+        depth_var = ((stereo.frame_baseline * stereo.fx) ** 2) * (error_rate_2 / disparity_2)
 
         return depth, depth_var
 

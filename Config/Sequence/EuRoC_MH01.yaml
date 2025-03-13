@@ -1,0 +1,5 @@
+type: EuRoC
+name: MH01
+args:
+    root: /data2/datasets/yuhengq/Euroc/MH_01_easy/mav0
+    gt_pose: true

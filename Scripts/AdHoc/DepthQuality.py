@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from DataLoader import GenericSequence
+from DataLoader import SequenceBase
 from Module.Frontend.StereoDepth import IStereoDepth
 from Utility.Config import build_dynamic_config, load_config
 
@@ -19,11 +19,11 @@ depth_cfg, _ = build_dynamic_config({   # For simplicity of editing config
         "cov_mode": "Est"
 }})
 
-sequence = GenericSequence.instantiate(**vars(datacfg))
+sequence = SequenceBase.instantiate(**vars(datacfg))
 module = IStereoDepth.instantiate(depth_cfg.type, depth_cfg.args)
 
 for frame in sequence:
     assert frame.gtDepth is not None
-    depth, depth_cov = module(frame)
-    diff_depth = (depth - frame.gtDepth).abs().median()
+    est_output = module.estimate(frame)
+    diff_depth = (est_output.depth - frame.gtDepth).abs().median()
     print(diff_depth)
