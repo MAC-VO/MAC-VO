@@ -1,3 +1,4 @@
+import math
 import torch
 import time
 from pathlib import Path
@@ -116,7 +117,10 @@ class Timer:
         report_str += "GPU Timers:\n"
         for stream in cls.GPU_STREAMS: stream.synchronize()
         for name, (starts, ends) in cls.GPU_TIME_STREAM.items():
-            elapsed = list(map(lambda pair: pair[0].elapsed_time(pair[1]), zip(starts, ends)))
+            elapsed = list(filter(
+                lambda elapse: not math.isnan(elapse),
+                map(lambda pair: cls.cuda_event_elapsed(*pair), zip(starts, ends))
+            ))
             if len(starts) == 0:
                 report_str += f"\t{name}".ljust(20) +  \
                     f" | #Call= 0".ljust(20) + \
@@ -129,7 +133,8 @@ class Timer:
                     f" | AvgTime={(sum(elapsed) / len(starts)) : 3f} ms".ljust(20) + \
                     f" | MedianTime={median_elapsed : 3f} ms\n"
         
-        Logger.write("info", report_str)
+        # Logger.write("info", report_str)
+        print(report_str)
 
     @classmethod
     def save_elapsed(cls, json_file: str | Path):
@@ -148,3 +153,11 @@ class Timer:
                 }
             }, f)
             Logger.write("info", f"Elapsed time information write to {json_file}")
+
+    @staticmethod
+    def cuda_event_elapsed(from_event: T_CUDAEvent, to_event: T_CUDAEvent) -> float:
+        try:
+            result = from_event.elapsed_time(to_event)
+        except RuntimeError:
+            result = float('nan')
+        return result
