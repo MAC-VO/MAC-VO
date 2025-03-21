@@ -21,7 +21,7 @@ except OSError:
     pass
 
 GlobalConsole = Console(width=TERMINAL_WIDTH)
-install(console=GlobalConsole)
+# install(console=GlobalConsole)
 
 
 #
