@@ -10,7 +10,7 @@ https://github.com/user-attachments/assets/f7f33f28-5de7-412b-8f60-b0fcab91d48e
 > [!NOTE]  
 > Clone the repository using the following command to include all submodules automatically.
 > 
-> `git clone git@github.com:MAC-VO/MAC-VO.git --recursive`
+> `git clone -b dev/fixgit https://github.com/MAC-VO/MAC-VO.git --recursive`
 > 
 
 > [!NOTE]
@@ -32,6 +32,18 @@ https://github.com/user-attachments/assets/f7f33f28-5de7-412b-8f60-b0fcab91d48e
 
     See `/Docker/DockerfileRoot` to build the container.
 
+    ```bash
+    $ docker build --network=host -t macvo:latest -f Dockerfile .
+    $ docker run --gpus all -it --rm  -v [DATA_Path]:/data -v [CODE_Path]:/home/yuhengq/workspace macvo:latest
+    ```
+
+    Inside docker, install the denpendencies by: 
+    ```bash
+    $ cd workspace
+    $ pip install -r requirements.txt
+    ```
+
+
 2. **Virtual Environment**
 
     The MAC-VO codebase can only run on Python 3.10+. See `requirements.txt` for environment requirements.
@@ -48,6 +60,13 @@ https://github.com/user-attachments/assets/f7f33f28-5de7-412b-8f60-b0fcab91d48e
 
 All pretrained models for MAC-VO, stereo TartanVO and DPVO are in our [release page](https://github.com/MAC-VO/MAC-VO/releases/tag/model). Please create a new folder `Model` in the root directory and put the pretrained models in the folder.
 
+    ```bash
+    $ mkdir Model
+    $ wget -o Model/MACVO_FrontendCov.pth https://github.com/MAC-VO/MAC-VO/releases/download/model/MACVO_FrontendCov.pth
+    $ wget -o Model MACVO_posenet.pkl https://github.com/MAC-VO/MAC-VO/releases/download/model/MACVO_posenet.pkl
+    ```
+
+
 ## 🚀 Quick Start: Run MAC-VO on Demo Sequence
 
 Test MAC-VO immediately using the provided demo sequence. The demo sequence is a selected from the TartanAir v2 dataset.
@@ -55,17 +74,17 @@ Test MAC-VO immediately using the provided demo sequence. The demo sequence is a
 ### 1/3 Data and Model Preparation
 
 1. Download a demo sequence through [Google Drive](https://drive.google.com/file/d/1kCTNMW2EnV42eH8g2STJHcVWEbVKbh_r/view?usp=sharing).
-2. Download pre-trained model for [frontend model](https://github.com/MAC-VO/MAC-VO/releases/download/Weight-Release/MACVO_FrontendCov.pth) and [posenet](https://github.com/MAC-VO/MAC-VO/releases/download/model/MACVO_posenet.pkl).
+2. Download pre-trained model for [frontend model](https://github.com/MAC-VO/MAC-VO/releases/download/Weight-Release/MACVO_FrontendCov.pth) and [posenet](https://github.com/MAC-VO/MAC-VO/releases/download/model/MACVO_posenet.pkl). Put the downloaded files under `Model` folder. 
 
 ### 2/3 Run MAC-VO
 
-We will use `Config/Experiment/MACVO/MACVO.yaml` as the configuration file for MAC-VO. And the `Config/Sequence/*.yaml` as the data configuration file.
+We will use `Config/Experiment/MACVO/MACVO_example.yaml` as the configuration file for MAC-VO.
 
-1. Change the `DATAPATH` in the data config file to reflect actual path to the demo sequence downloaded.
+1. Change the `DATAPATH` in the data config file 'Config/Sequence/TartanAir_example.yaml' to reflect actual path to the demo sequence downloaded.
 2. Run with the following command
 
     ```bash
-    $ python MACVO.py --odom Config/Experiment/MACVO/MACVO.yaml --data [PATH_TO_DATA_CONFIG]
+    $ python MACVO.py --odom Config/Experiment/MACVO/MACVO_example.yaml
     ```
 
 > [!NOTE]
