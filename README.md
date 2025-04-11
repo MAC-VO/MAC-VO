@@ -55,7 +55,7 @@ Test MAC-VO immediately using the provided demo sequence. The demo sequence is a
 ### 1/3 Data and Model Preparation
 
 1. Download a demo sequence through [Google Drive](https://drive.google.com/file/d/1kCTNMW2EnV42eH8g2STJHcVWEbVKbh_r/view?usp=sharing).
-2. Download pre-trained model for [frontend model](https://github.com/MAC-VO/MAC-VO/releases/download/Weight-Release/MACVO_FrontendCov.pth) and [posenet](https://github.com/MAC-VO/MAC-VO/releases/download/model/MACVO_posenet.pkl).
+2. Download pre-trained model for [frontend model](https://github.com/MAC-VO/MAC-VO/releases/download/model/MACVO_FrontendCov.pth) and [posenet](https://github.com/MAC-VO/MAC-VO/releases/download/model/MACVO_posenet.pkl).
 
 ### 2/3 Run MAC-VO
 
