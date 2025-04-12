@@ -51,11 +51,9 @@ Clone the repository using the following command to include all submodules autom
 
 All pretrained models for MAC-VO, stereo TartanVO and DPVO are in our [release page](https://github.com/MAC-VO/MAC-VO/releases/tag/model). Please create a new folder `Model` in the root directory and put the pretrained models in the folder.
 
-    ```
     $ mkdir Model
     $ wget -O Model/MACVO_FrontendCov.pth https://github.com/MAC-VO/MAC-VO/releases/download/model/MACVO_FrontendCov.pth
     $ wget -O Model/MACVO_posenet.pkl https://github.com/MAC-VO/MAC-VO/releases/download/model/MACVO_posenet.pkl
-    ```
 
 ## 🚀 Quick Start: Run MAC-VO on Demo Sequence
 
@@ -68,15 +66,11 @@ Download a demo sequence through [Google Drive](https://drive.google.com/file/d/
 ### 2/4 Start the 
 To run the docker: 
 
-    ```
     $ docker run --gpus all -it --rm  -v [DATA_PATH]:/data -v [CODE_PATH]:/home/macvo/workspace macvo:latest
-    ```
 
 To run the docker with visualization: 
 
-    ```
     $ xhost +local:docker; docker run --gpus all -it --rm  -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix  -v [DATA_PATH]:/data -v [CODE_PATH]:/home/macvo/workspace macvo:latest
-    ```
 
 
 ### 3/4 Run MAC-VO
