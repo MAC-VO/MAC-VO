@@ -59,16 +59,16 @@ All pretrained models for MAC-VO, stereo TartanVO and DPVO are in our [release p
 
 Test MAC-VO immediately using the provided demo sequence. The demo sequence is a selected from the TartanAir v2 dataset.
 
-### 1/4 Download Data
+### 1/4 Download the Data
 
 Download a demo sequence through [Google Drive](https://drive.google.com/file/d/1kCTNMW2EnV42eH8g2STJHcVWEbVKbh_r/view?usp=sharing).
 
-### 2/4 Start the 
-To run the docker: 
+### 2/4 Start the Docker
+To run the Docker: 
 
     $ docker run --gpus all -it --rm  -v [DATA_PATH]:/data -v [CODE_PATH]:/home/macvo/workspace macvo:latest
 
-To run the docker with visualization: 
+To run the Docker with visualization: 
 
     $ xhost +local:docker; docker run --gpus all -it --rm  -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix  -v [DATA_PATH]:/data -v [CODE_PATH]:/home/macvo/workspace macvo:latest
 
@@ -77,7 +77,7 @@ To run the docker with visualization:
 
 We will use `Config/Experiment/MACVO/MACVO_example.yaml` as the configuration file for MAC-VO.
 
-1. Change the `root` in the data config file 'Config/Sequence/TartanAir_example.yaml' to reflect actual path to the demo sequence downloaded.
+1. Change the `root` in the data config file 'Config/Sequence/TartanAir_example.yaml' to reflect the actual path to the demo sequence downloaded.
 2. Run with the following command
 
     ```bash
