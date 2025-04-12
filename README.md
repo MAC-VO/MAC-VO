@@ -53,8 +53,8 @@ All pretrained models for MAC-VO, stereo TartanVO and DPVO are in our [release p
 
     ```
     $ mkdir Model
-    $ wget -o Model/MACVO_FrontendCov.pth https://github.com/MAC-VO/MAC-VO/releases/download/model/MACVO_FrontendCov.pth
-    $ wget -o Model MACVO_posenet.pkl https://github.com/MAC-VO/MAC-VO/releases/download/model/MACVO_posenet.pkl
+    $ wget -O Model/MACVO_FrontendCov.pth https://github.com/MAC-VO/MAC-VO/releases/download/model/MACVO_FrontendCov.pth
+    $ wget -O Model/MACVO_posenet.pkl https://github.com/MAC-VO/MAC-VO/releases/download/model/MACVO_posenet.pkl
     ```
 
 ## 🚀 Quick Start: Run MAC-VO on Demo Sequence
@@ -87,6 +87,7 @@ We will use `Config/Experiment/MACVO/MACVO_example.yaml` as the configuration fi
 2. Run with the following command
 
     ```bash
+    $ cd workspace
     $ python3 MACVO.py --odom Config/Experiment/MACVO/MACVO_example.yaml --data Config/Sequence/TartanAir_example.yaml
     ```
 
