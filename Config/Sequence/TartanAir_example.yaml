@@ -1,0 +1,10 @@
+type: TartanAir_NoIMU
+name: abf001
+args:
+  root: /data/abf001_select/P001_select
+  # Controls optional data sources
+  gtDepth: false
+  gtFlow: false
+  gtPose: true
+
+  compressed: true
