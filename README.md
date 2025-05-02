@@ -1,4 +1,13 @@
-# <div align="center">MAC-VO: Metrics-aware Covariance for Learning-based Stereo Visual Odometry<br/>[![Homepage](https://img.shields.io/badge/Homepage-4385f4?style=flat&logo=googlehome&logoColor=white)](https://mac-vo.github.io) [![arXiv](https://img.shields.io/badge/arXiv-b31b1b?style=flat&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2409.09479v1) [![YouTube](https://img.shields.io/badge/YouTube-b31b1b?style=flat&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=O_HowJk-GDw) [![License: BSD 3-Clause](https://img.shields.io/badge/License-BSD%203--Clause-yellow.svg)](./LICENSE)</div>
+# <div align="center">MAC-VO: Metrics-aware Covariance for Learning-based Stereo Visual Odometry</div>
+
+### <div align="center"><em>ICRA 2025 🥇 Best Paper Award Finalist</em></div>
+
+<p align="center">
+  <a href="https://mac-vo.github.io"><img src="https://img.shields.io/badge/Homepage-4385f4?style=flat&logo=googlehome&logoColor=white"></a>
+  <a href="https://arxiv.org/abs/2409.09479v2"><img src="https://img.shields.io/badge/arXiv-b31b1b?style=flat&logo=arxiv&logoColor=white"></a>
+  <a href="https://www.youtube.com/watch?v=O_HowJk-GDw"><img src="https://img.shields.io/badge/YouTube-b31b1b?style=flat&logo=youtube&logoColor=white"></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/License-BSD%203--Clause-yellow.svg"></a>
+</p>
 
 
 https://github.com/user-attachments/assets/f7f33f28-5de7-412b-8f60-b0fcab91d48e
@@ -14,6 +23,7 @@ https://github.com/user-attachments/assets/f7f33f28-5de7-412b-8f60-b0fcab91d48e
 
 ## 🔥 Updates
 
+* [Apr 2025] Our work is nominated as the **ICRA 2025 Best Paper Award Finalist** (top 1%)! Keep an eye on our presentation on **May 20, 16:35-16:40 Room 302**. We also plan to provide a real-world demo at the conference.
 * [Mar 2025] We boost the performance of MAC-VO with a new backend optimizer, the MAC-VO now also supports *dense mapping* without any additional computation.
 * [Jan 2025] Our work is accepted by the IEEE International Conference on Robotics and Automation (ICRA) 2025. We will present our work at ICRA 2025 in Atlanta, Georgia, USA.
 * [Nov 2024] We released the ROS-2 integration at https://github.com/MAC-VO/MAC-VO-ROS2 along with the documentation at https://mac-vo.github.io/wiki/ROS/
