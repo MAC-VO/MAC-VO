@@ -6,3 +6,5 @@ args:
   gtDepth: false
   gtFlow: false
   gtPose: true
+
+  compressed: true
