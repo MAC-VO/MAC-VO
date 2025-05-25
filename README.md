@@ -1,6 +1,6 @@
 # <div align="center">MAC-VO: Metrics-aware Covariance for Learning-based Stereo Visual Odometry</div>
 
-### <div align="center"><em>ICRA 2025 🥇 Best Paper Award Finalist</em></div>
+### <div align="center">🥇 ICRA 2025 Best Conference Paper Award<br/>🥇 ICRA 2025 Best Paper Award on Robot Perception</div>
 
 <p align="center">
   <a href="https://mac-vo.github.io"><img src="https://img.shields.io/badge/Homepage-4385f4?style=flat&logo=googlehome&logoColor=white"></a>
