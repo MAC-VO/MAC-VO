@@ -34,7 +34,7 @@
 
 Clone the repository using the following command to include all submodules automatically.
 
-`git clone -b dev/fixgit https://github.com/MAC-VO/MAC-VO.git --recursive`
+`git clone https://github.com/MAC-VO/MAC-VO.git --recursive`
 
 
 ## 📦 Installation & Environment
