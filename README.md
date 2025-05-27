@@ -10,7 +10,9 @@
 </p>
 
 
-https://github.com/user-attachments/assets/f7f33f28-5de7-412b-8f60-b0fcab91d48e
+<p align="center">
+  <img src="asset/ICRAvideo.gif" alt="ICRA floor 3" width="600" />
+</p>
 
 
 > [!NOTE]  
