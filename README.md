@@ -131,7 +131,7 @@ Every run will produce a `Sandbox` (or `Space`). A `Sandbox` is a storage unit t
 
 * **Run MAC-VO for Ablation Studies**
     ```bash
-    $ python MACVO.py --odom ./Config/Experiment/MACVO/Ablation_Study/[CHOOSE_ONE_CFG].yaml --data ./Config/Sequence/TartanAir_abandonfac_001.yaml --useRR
+    $ python MACVO.py --odom ./Config/Experiment/MACVO/Ablation_Study/[CHOOSE_ONE_CFG].yaml --data ./Config/Sequence/TartanAir_abandonfac_001.yaml
     ```
 
 * **Run MAC-VO on Test Dataset**
@@ -142,9 +142,6 @@ Every run will produce a `Sandbox` (or `Space`). A `Sandbox` is a storage unit t
 
 * **Run MAC-VO Mapping Mode**
 
-  Mapping mode only reprojects pixels to 3D space and does *not* optimize the pose. To run the mapping mode, you need to first run a trajectory through the original mode (MAC-VO), 
-  and pass the resulting pose file to MAC-VO mapping mode by modifying the config. (Specifically, `motion > args > pose_file` in config file)
-
   ```bash
   $ python MACVO.py --odom ./Config/Experiment/MACVO/MACVO_MappingMode.yaml --data ./Config/Sequence/TartanAir_abandonfac_001.yaml
   ```
@@ -153,25 +150,27 @@ Every run will produce a `Sandbox` (or `Space`). A `Sandbox` is a storage unit t
 
 We used [the Rerun](https://rerun.io) visualizer to visualize 3D space including camera pose, point cloud and trajectory.
 
-* **Create Rerun Recording for Runs**
+* **On Machine with GUI**
 
-  ```bash
-  $ python -m Scripts.AdHoc.DemoCompare --macvo_space [MACVO_RESULT_PATH] --other_spaces [RESULT_PATH, ...] --other_types [{DROID-SLAM, DPVO, TartanVO}, ...]
-  ```
+  1. Run `MACVO.py` with the following command line
+    
+        ```bash
+        $ python MACVO.py --useRR --odom [ODOM_CONFIG] --data [DATA_CONFIG]
+        ```
+     
+        A rerun visualizer should pop up with the trajectory and *per-frame* point cloud & tracking features visualized.
+  2. To accumulate the point cloud for dense mapping visualization, please follow the instruction here: https://github.com/MAC-VO/MAC-VO/issues/4#issuecomment-2495620352
 
-* **Create Rerun Visualization for Map**
+* **On Headless Machine**
 
-  Create a `tensor_map_vis.rrd` file in each sandbox that stores the visualization of 3D point cloud map.
-
-  ```bash
-  $ python -m Scripts.AdHoc.DemoCompare --spaces [RESULT_PATH, ...] --recursive?
-  ```
-
-* **Create Rerun Visualization for a Single Run** (Eye-catcher figure for our paper)
-
-  ```bash
-  $ python -m Scripts.AdHoc.DemoSequence --space [RESULT_PATH] --data [DATA_CONFIG_PATH]
-  ```
+  1. Install the `rerun_sdk` python package on both your machine (with GUI) and remote headless environment.
+  2. Start a rerun server by rerun --serve & on the headless machine
+  3. On your machine (with GUI), run rerun ws://localhost:9877 to connect to the remote visualization server. You should see "2 sources connected" on the top right corner of visualizer if everything works smoothly.
+  4. On the headless machine, run
+      ```bash
+      $ python MACVO.py --useRR --odom [ODOM_CONFIG] --data [DATA_CONFIG]
+      ```
+  5. To accumulate the point cloud for dense mapping visualization, please follow the instruction here: https://github.com/MAC-VO/MAC-VO/issues/4#issuecomment-2495620352
 
 ### 📈 Baseline Methods
 
