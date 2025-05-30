@@ -163,7 +163,7 @@ We used [the Rerun](https://rerun.io) visualizer to visualize 3D space including
 
 * **On Headless Machine**
 
-  1. Install the `rerun_sdk` python package on both your machine (with GUI) and remote headless environment.
+  1. Install the `rerun_sdk` python package on both your machine (with GUI) and remote headless environment. Also setup a port forwarding from remote port `9877` to your local machine port `9877`.
   2. Start a rerun server by rerun --serve & on the headless machine
   3. On your machine (with GUI), run rerun ws://localhost:9877 to connect to the remote visualization server. You should see "2 sources connected" on the top right corner of visualizer if everything works smoothly.
   4. On the headless machine, run
