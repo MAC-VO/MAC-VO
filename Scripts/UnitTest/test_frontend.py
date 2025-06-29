@@ -23,7 +23,7 @@ def test_frontend(config: str):
     
     frameA, frameB = seq[0], seq[1]
     frontend       = IFrontend.instantiate(cfg.type, cfg.args)
-    depth_output, flow_output    = frontend.estimate(frameA.stereo, frameB.stereo)
+    depth_output, flow_output    = frontend.estimate_pair(frameA.stereo, frameB.stereo)
     B, C, H, W = seq[0].stereo.imageL.shape
 
     # Depth shape validity

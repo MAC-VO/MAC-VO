@@ -2,6 +2,12 @@
 # This configuration is **not** used to report numbers in the paper.
 # To reproduce result in the paper, please use MACVO_evaluate.yaml
 #
+#
+# MAC-VO Fast Mode (Jun 2025 Update)
+# The only difference between fast mode and normal mode are:
+# 1. Use analytical jacobian (Odometry.optimizer.args.autodiff = False)
+# 2. Use mixed precision inference (Odometry.frontend.args.enc_dtype=fp16 and *.dec_dtype=bf16).
+#
 
 Common:
   # Some configurations are shared across multiple modules in Odometry, so I write them here.
@@ -60,8 +66,9 @@ Odometry:
     args:
       device: *device
       weight: ./Model/MACVO_FrontendCov.pth
-      dtype: fp32
-      max_flow: -1
+      enc_dtype: fp16
+      dec_dtype: bf16
+      decoder_depth: 12
       enforce_positive_disparity: false
 
   motion:
@@ -81,13 +88,13 @@ Odometry:
     args:
   
   optimizer:
-    type: ReprojectOptimizer
+    type: TwoFrame_PGO
     args:
       device: cpu
       vectorize: true
       parallel: true
-      use_fancy_cov: false
-      constraint: disparity
+      graph_type: disp
+      autodiff: false
 
 Data: !include ../../Sequence/TartanAir_example.yaml
 Preprocess: !include ../Common/Preprocess.yaml

@@ -65,8 +65,9 @@ Odometry:
     args:
       device: *device
       weight: ./Model/MACVO_FrontendCov.pth
-      dtype: fp32
-      max_flow: -1
+      enc_dtype: fp32
+      dec_dtype: fp32
+      decoder_depth: 12
       enforce_positive_disparity: false
 
   motion:
@@ -97,11 +98,13 @@ Odometry:
     args:
   
   optimizer:
-    type: TwoFramePoseOptimizer
+    type: TwoFrame_PGO
     args:
       device: cpu
       vectorize: true
       parallel: true
+      graph_type: icp
+      autodiff: true
 
 Data: !include ../Common/EvaluationDataset.yaml
 Preprocess: !include ../Common/Preprocess.yaml

@@ -1,7 +1,6 @@
 import torch
 import signal
 import typing as T
-from dataclasses import asdict, dataclass
 from types import SimpleNamespace
 from abc import ABC, abstractmethod
 
@@ -9,9 +8,10 @@ import torch.multiprocessing as mp
 from multiprocessing.context import SpawnProcess
 from multiprocessing.connection import _ConnectionBase as Conn_Type
 
-from Module.Map import VisualMap, TensorBundle
+from Module.Map import TensorBundle, VisualMap
 from Utility.PrettyPrint import Logger
-from Utility.Extensions import SubclassRegistry
+from Utility.Extensions import ConfigTestableSubclass
+from Utility.Utils      import tensor_safe_asdict
 
 if T.TYPE_CHECKING:
     from _typeshed import DataclassInstance
@@ -25,7 +25,7 @@ T_GraphOutput = T.TypeVar("T_GraphOutput", bound=DataclassInstance)
 
 
 def move_dataclass_to_local(obj: T_GraphInput) -> T_GraphInput:
-    data_dict = asdict(obj)
+    data_dict: dict = tensor_safe_asdict(obj)   # pyright: ignore
     for key, value in data_dict.items():
         if isinstance(value, torch.Tensor):
             data_dict[key] = value.clone()
@@ -37,7 +37,7 @@ def move_dataclass_to_local(obj: T_GraphInput) -> T_GraphInput:
     return type(obj)(**data_dict)
 
 
-class IOptimizer(ABC, T.Generic[T_GraphInput, T_Context, T_GraphOutput], SubclassRegistry):
+class IOptimizer(ABC, T.Generic[T_GraphInput, T_Context, T_GraphOutput], ConfigTestableSubclass):
     """
     Interface for optimization module. When config.parallel set to `true`, will spawn a child process
     to run optimization loop in "background".
@@ -75,7 +75,7 @@ class IOptimizer(ABC, T.Generic[T_GraphInput, T_Context, T_GraphOutput], Subclas
         
         # Keep track if there is a job on child to avoid deadlock (wait forever for child to finish
         # a non-exist job)
-        self.has_job_on_child: bool = False
+        self.has_opt_job: bool = False
         
         if self.is_parallel_mode:
             ctx = mp.get_context("spawn")
@@ -87,24 +87,15 @@ class IOptimizer(ABC, T.Generic[T_GraphInput, T_Context, T_GraphOutput], Subclas
             self.child_proc = ctx.Process(
                 target=IOptimizerParallelWorker,
                 args=(config, self.init_context, self._optimize, self.child_conn),
-                
             )
             assert self.child_proc is not None
             self.child_proc.start()
             
             torch.set_num_threads(4)
-        else:
-            self.context = self.init_context(config)
+        
+        self.context = self.init_context(config)
     
     ### Internal Interface to be implemented by the user
-    @abstractmethod
-    def _get_graph_data(self, global_map: VisualMap, frame_idx: torch.Tensor) -> T_GraphInput:
-        """
-        Given current global map and frames of interest (actual meaning depends on the implementation),
-        return T_GraphArgs that will be used by optimizer to construct optimization problem.
-        """
-        ...
-
     @staticmethod
     @abstractmethod
     def init_context(config) -> T_Context:
@@ -124,14 +115,52 @@ class IOptimizer(ABC, T.Generic[T_GraphInput, T_Context, T_GraphOutput], Subclas
         """
         ...
     
-    @staticmethod
-    @abstractmethod
-    def _write_map(result: T_GraphOutput | None, global_map: VisualMap) -> None:
-        """
-        Given the result, write back the result to global_map.
-        """
-        ...
+    def get_graph_data(self, global_map: VisualMap, frame_idx: torch.Tensor, 
+                       observations: torch.Tensor | None = None, edges: torch.Tensor | None = None) -> T_GraphInput:
+        raise NotImplementedError("The used optimizer did not provide default factory method."
+                                  " Use optimizer.InputType(...) to construct it yourself.")
     
+    def write_graph_data(self, result: T_GraphOutput | None, global_map: VisualMap) -> None:
+        raise NotImplementedError("The used optimizer did not provide default write method."
+                                  " Decompose the output and write it to map yourself.")
+    
+    ### Implementation detail
+    
+    ## Sequential Version   #############################################################
+    def __launch_optim_sequential(self, graph_data: T_GraphInput) -> None:
+        assert self.context is not None
+        self.has_opt_job = True
+        self.context, self.optimize_res = self._optimize(self.context, graph_data)
+
+    def __get_output_sequential(self) -> T_GraphOutput | None:
+        return self.optimize_res
+
+    ## Parallel Version
+    def __launch_optim_parallel(self, graph_data: T_GraphInput) -> None:
+        assert self.main_conn is not None
+        assert self.child_proc and self.child_proc.is_alive()
+        self.main_conn.send(graph_data)
+        self.has_opt_job = True
+
+    def __get_output_parallel(self) -> T_GraphOutput | None:
+        assert self.main_conn is not None
+        assert self.child_proc and self.child_proc.is_alive()
+        if self.has_opt_job:
+            while not self.main_conn.poll(timeout=0.1):
+                if not self.child_proc.is_alive():
+                    raise RuntimeError("Optimizer child process exited unexpectedly!")
+                pass
+            
+            graph_res: T_GraphOutput = self.main_conn.recv()
+            graph_res_local = move_dataclass_to_local(graph_res)
+            del graph_res
+            self.has_opt_job = False
+            return graph_res_local
+        else:
+            return None
+
+    ### External Interface used by Users    #############################################
+    @T.final
     @property
     def is_running(self) -> bool:
         """
@@ -143,57 +172,69 @@ class IOptimizer(ABC, T.Generic[T_GraphInput, T_Context, T_GraphOutput], Subclas
             3. The child process have not received optimization job yet.
         """
         if self.main_conn is None: return False         # Not in Parallel Mode
-        if not self.has_job_on_child: return False      # No Job on Child
+        if not self.has_opt_job: return False      # No Job on Child
         return (not self.main_conn.poll(timeout=0))     # Job on Child but not finished
-
-    ### Implementation detail
     
-    ## Sequential Version
-    def __optimize_sequential(self, global_map: VisualMap, frame_idx: torch.Tensor) -> None:
-        graph_args = self._get_graph_data(global_map, frame_idx)
-        self.context, self.optimize_res = self._optimize(self.context, graph_args)  #type: ignore
+    @T.final
+    @property
+    def InputType(self) -> type[T_GraphInput]:
+        """
+        Returns the concrete type used for T_GraphInput. Raises TypeError if not explicitly provided.
+        """
+        orig_bases = getattr(self.__class__, "__orig_bases__", [])
+        for base in orig_bases:
+            if hasattr(base, "__args__") and len(base.__args__) >= 1:
+                input_type = base.__args__[0]
+                if input_type is not T.TypeVar and not isinstance(input_type, T.TypeVar):
+                    return input_type
+        raise TypeError("T_GraphInput not explicitly specified in IOptimizer subclass.")
     
-    def __writemap_sequential(self, global_map: VisualMap) -> None:
-        self._write_map(self.optimize_res, global_map)
-        self.optimize_res = None
-
-    ## Parallel Version
+    @T.final
+    @property
+    def OutputType(self) -> type[T_GraphOutput]:
+        """
+        Returns the concrete type used for T_GraphOutput. Raises TypeError if not explicitly provided.
+        """
+        orig_bases = getattr(self.__class__, "__orig_bases__", [])
+        for base in orig_bases:
+            if hasattr(base, "__args__") and len(base.__args__) >= 1:
+                input_type = base.__args__[0]
+                if input_type is not T.TypeVar and not isinstance(input_type, T.TypeVar):
+                    return input_type
+        raise TypeError("T_GraphOutput not explicitly specified in IOptimizer subclass.")
     
-    def __optimize_parallel(self, global_map: VisualMap, frame_idx: torch.Tensor) -> None:
-        assert self.main_conn is not None
-        assert self.child_proc and self.child_proc.is_alive()
-        
-        graph_args: T_GraphInput = self._get_graph_data(global_map, frame_idx)
-        self.main_conn.send(graph_args)
-        self.has_job_on_child = True
-
-    def __writemap_parallel(self, global_map: VisualMap) -> None:
-        assert self.main_conn is not None
-        assert self.child_proc and self.child_proc.is_alive()
-        
-        if not self.has_job_on_child: return
-        
-        graph_res: T_GraphOutput = self.main_conn.recv()
-        graph_res_local = move_dataclass_to_local(graph_res)
-        del graph_res
-        
-        self.has_job_on_child = False
-        self._write_map(graph_res_local, global_map)
-
-    ### External Interface used by Users
-    def optimize(self, global_map: VisualMap, frame_idx: torch.Tensor) -> None:
+    def get_optimal(self) -> T_GraphOutput | None:
+        if self.is_parallel_mode:
+            return self.__get_output_parallel()
+        else:
+            return self.__get_output_sequential()
+    
+    def start_optimize(self, graph_data: T_GraphInput) -> None:
         if self.is_parallel_mode:
             # Send T_GraphArg to child process using Pipe
-            self.__optimize_parallel(global_map, frame_idx)
+            self.__launch_optim_parallel(graph_data)
         else:
-            self.__optimize_sequential(global_map, frame_idx)
+            self.__launch_optim_sequential(graph_data)
+        
+    def sequential_optimize(self, graph_data: T_GraphInput) -> T_GraphOutput:
+        assert self.context is not None
+        _, optim_res = self._optimize(self.context, graph_data)
+        return optim_res
     
     def write_map(self, global_map: VisualMap):
         if self.is_parallel_mode:
             # Recv T_GraphArg from child process using Pipe
-            self.__writemap_parallel(global_map)
+            graph_res_local = self.__get_output_parallel()
         else:
-            self.__writemap_sequential(global_map)
+            graph_res_local = self.__get_output_sequential()
+
+        self.write_graph_data(graph_res_local, global_map)
+
+    def get_result(self) -> T_GraphOutput | None:
+        if self.is_parallel_mode:
+            return self.__get_output_parallel()
+        else:
+            return self.__get_output_sequential()
 
     def terminate(self):
         if self.child_proc and self.child_proc.is_alive():
@@ -213,46 +254,11 @@ def IOptimizerParallelWorker(
     torch.set_num_threads(8)
     context = init_context(config)
     while True:
-        try:
-            graph_args: T_GraphInput = child_conn.recv()
-        except EOFError:
-            continue
+        if not child_conn.poll(timeout=0.1): continue
         
+        graph_args: T_GraphInput = child_conn.recv()
         graph_args_local = move_dataclass_to_local(graph_args)
         del graph_args
         
         context, graph_res = optimize(context, graph_args_local)
         child_conn.send(graph_res)
-
-
-# Empty Optimizer
-#   A specific implementation of the IOptimizer interface that does nothing
-#   Helpful in debugging process.
-
-
-@dataclass
-class EmptyMessageType:
-    pass
-
-
-class EmptyOptimizer(IOptimizer[EmptyMessageType, None, EmptyMessageType]):
-    """
-    This is a trivial optimizer that do no operations at all. It does not modify the map.
-    
-    This is used only for debugging and mapping mode VO.
-    """
-    
-    def _get_graph_data(self, global_map: VisualMap, frame_idx: torch.Tensor) -> EmptyMessageType:
-        return EmptyMessageType()
-    
-    @staticmethod
-    def init_context(config) -> None:
-        return None
-    
-    @staticmethod
-    def _optimize(context: None, graph_data: EmptyMessageType) -> tuple[None, EmptyMessageType]:
-        return None, EmptyMessageType()
-    
-    @staticmethod
-    def _write_map(result: EmptyMessageType | None, global_map: VisualMap) -> None:
-        return None

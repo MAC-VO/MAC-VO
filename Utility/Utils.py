@@ -2,6 +2,7 @@ import numpy as np
 import torch
 from typing import TypeVar, Sequence, Callable, Literal, Optional, ParamSpec
 from functools import wraps
+from dataclasses import is_dataclass, fields
 from .PrettyPrint import Logger
 
 
@@ -9,10 +10,11 @@ I = TypeVar("I")
 T_In = ParamSpec('T_In')
 T_Out = TypeVar('T_Out')
 
-def reflect_torch_dtype(type_string: Literal["fp32", "bf16"]) -> torch.dtype:
+def reflect_torch_dtype(type_string: Literal["fp32", "bf16", "fp16"]) -> torch.dtype:
     match type_string:
         case "fp32": return torch.float32
         case "bf16": return torch.bfloat16
+        case "fp16": return torch.float16
         case default: raise ValueError(f"Expect to be one of fp32/bf16, but get `{default}`")
 
 
@@ -155,3 +157,18 @@ def IgnoreException(func: Callable[T_In, T_Out]) -> Callable[T_In, Optional[T_Ou
             result = None
         return result
     return wrapped
+
+def tensor_safe_asdict(obj):
+    if is_dataclass(obj):
+        return {
+            f.name: tensor_safe_asdict(getattr(obj, f.name))
+            for f in fields(obj)
+        }
+    elif isinstance(obj, dict):
+        return {k: tensor_safe_asdict(v) for k, v in obj.items()}
+    elif isinstance(obj, (list, tuple)):
+        return type(obj)(tensor_safe_asdict(v) for v in obj)
+    elif isinstance(obj, torch.Tensor):
+        return obj  # just return tensor as-is without conversion
+    else:
+        return obj

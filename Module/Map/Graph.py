@@ -15,6 +15,7 @@ from Utility.Extensions import AutoScalingTensor
 T_Fields = T.TypeVar("T_Fields", bound=LiteralString, covariant=True)
 
 
+@T.no_type_check    # Jaxtyping and typeguard does not support StringLiteral well.
 class TensorBundle(T.Generic[T_Fields]):
     """
     Support indexing and slicing through a dictionary with torch.tensor.
@@ -75,6 +76,7 @@ class TensorBundle(T.Generic[T_Fields]):
         return cls.init(data)
   
 
+@T.no_type_check    # Jaxtyping and typeguard does not support StringLiteral well.
 class AutoScalingBundle(TensorBundle[T_Fields]):
     def __init__(self, index: AutoScalingTensor, data: dict[T_Fields, AutoScalingTensor]):
         self.index = index

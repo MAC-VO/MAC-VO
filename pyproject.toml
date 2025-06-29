@@ -10,6 +10,12 @@ markers = [
     "trt: marks tests that requires TensorRT to run (deselect with '-m \"not trt\"')",
     "vio: marks tests that is realted with vio (deselect with '-m \"not vio\"')"
 ]
+addopts = """--jaxtyping-packages=DataLoader,\
+    Module.Covariance,Module.Frontend,Module.Map,Module.Optimization,Module.MotionModel,Module.MapProcessor,\
+    Odometry,typeguard.typechecked \
+    -p no:launch_testing -p no:ament_flake8 -p no:ament_xmllint -p no:launch_ros -p no:ament_copyright \
+    -p no:ament_lint -p no:ament_pep257
+"""
 
 [tool.pyright]
 include = [

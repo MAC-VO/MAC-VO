@@ -25,7 +25,13 @@
 
 ## 🔥 Updates
 
-* [Apr 2025] Our work is nominated as the **ICRA 2025 Best Paper Award Finalist** (top 1%)! Keep an eye on our presentation on **May 20, 16:35-16:40 Room 302**. We also plan to provide a real-world demo at the conference.
+* [Jun 2025] We release the **MAC-VO Fast Mode** - with analytical Jacobian and Mixed-precision Inference, we achieve 2x speedup compare to previous version and reach speed of 12.5fps on 480x640 images. 
+
+  See `Config/Experiment/MACVO/MACVO_example.yaml` for detail. 
+  
+  Original example is also boosted from 5fps to 7fps and the config file is moved to `MACVO_example_fp32.yaml`.
+
+* [Apr 2025] Our work was nominated as the **ICRA 2025 Best Paper Award Finalist** (top 1%)! Keep an eye on our presentation on May 20, 16:35-16:40 Room 302. We also plan to provide a real-world demo at the conference.
 * [Mar 2025] We boost the performance of MAC-VO with a new backend optimizer, the MAC-VO now also supports *dense mapping* without any additional computation.
 * [Jan 2025] Our work is accepted by the IEEE International Conference on Robotics and Automation (ICRA) 2025. We will present our work at ICRA 2025 in Atlanta, Georgia, USA.
 * [Nov 2024] We released the ROS-2 integration at https://github.com/MAC-VO/MAC-VO-ROS2 along with the documentation at https://mac-vo.github.io/wiki/ROS/

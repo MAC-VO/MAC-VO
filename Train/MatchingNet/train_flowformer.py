@@ -49,7 +49,7 @@ def train(modelcfg, cfg, loader: DataLoader[DataFramePair[StereoFrame]], eval_lo
     train_mode: T_TrainType = modelcfg.training_mode
     AssertLiteralType(train_mode, T_TrainType)
     
-    model = build_flowformer(modlecfg, "cuda")
+    model = build_flowformer(modlecfg, torch.float32, torch.float32)
     if modlecfg.restore_ckpt:
         model.load_ddp_state_dict(torch.load(modlecfg.restore_ckpt, weights_only=True))
 
