@@ -1,17 +1,19 @@
 #
-# This configuration is used to report numbers in the paper 
-#   https://arxiv.org/abs/2409.09479
+# This configuration is **not** used to report numbers in the paper.
+# To reproduce result in the paper, please use Paper_Reproduce.yaml
 #
-# For better performance, especially on out-door scenes, consider using the MACVO.yaml configuration
+# MACVO-Performant generally performs better than Paper_Reproduce.yaml on outdoor scenes.
+#
+# MACVO-Performant can run at 6.5fps on RTX Ada 6000 GPU with image resolution of 480x640.
+# For 12.5fps speed with minute (~5%) increase in RTE & ROE, use MACVO_Fast.yaml
 #
 
 Common:
   # Some configurations are shared across multiple modules in Odometry, so I write them here.
   device: &device cuda
-  max_depth: &max_depth auto
 
 Odometry:
-  name: MACVO_evaluate
+  name: MACVO-Performant
   args:
     # Device directive to the VO system
     # NOTE: the system may not follow this device config strictly since some module
@@ -28,7 +30,7 @@ Odometry:
     profile: false
 
     # Mapping mode provides the dense mapping
-    mapping: false
+    mapping: true
 
   cov:
     obs:
@@ -41,15 +43,13 @@ Odometry:
         min_flow_cov: 0.25
 
   keypoint:
-    type: CovAwareSelector
+    type: CovAwareSelector_NoDepth
     args:
       device: *device
       kernel_size: 7
       mask_width: 32
-      max_depth: *max_depth
-      max_depth_cov: 250.0
       max_match_cov: 100.0
-  
+
   mappoint:
     # Mapping feature can be conveniently turn off by using 
     # "type: NoKeypointSelector" instead of the config below.
@@ -71,23 +71,12 @@ Odometry:
       enforce_positive_disparity: false
 
   motion:
-    type: TartanMotionNet
+    type: StaticMotionModel
     args:
-      weight: ./Model/MACVO_posenet.pkl
-      device: *device
 
   outlier:
-    type: FilterCompose
+    type: CovarianceSanityFilter
     args:
-      filter_args:
-        - type: CovarianceSanityFilter
-          args:
-        - type: SimpleDepthFilter
-          args:
-            min_depth: 0.05
-            max_depth: *max_depth
-        - type: LikelyFrontOfCamFilter
-          args:
   
   postprocess:
     type: MotionInterpolate
@@ -103,8 +92,8 @@ Odometry:
       device: cpu
       vectorize: true
       parallel: true
-      graph_type: icp
-      autodiff: true
+      graph_type: disp
+      autodiff: false
 
-Data: !include ../Common/EvaluationDataset.yaml
+Data: !include ../../Sequence/TartanAir_example.yaml
 Preprocess: !include ../Common/Preprocess.yaml

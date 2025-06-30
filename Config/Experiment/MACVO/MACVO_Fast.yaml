@@ -1,14 +1,24 @@
 #
 # This configuration is **not** used to report numbers in the paper.
-# To reproduce result in the paper, please use MACVO_evaluate.yaml
+# To reproduce result in the paper, please use Paper_Reproduce.yaml
 #
+#
+# MAC-VO Fast Mode (Jun 2025 Update)
+#   Comparing to the Performant mode (MACVO_Performant), the Fast Mode uses 
+#   mixed-precision inference of fp32, fp16 and bf16. The fast mode can run
+#   at 12.5fps on 480x640 images on RTX Ada 6000 GPU, almost twice the speed
+#   as Performant Mode.
+#   
+#   If minor degrade in accuracy (~5% increase in RTE and ROE) is acceptable,
+#   then you should use Fast Mode for most of the time.
+# 
 
 Common:
   # Some configurations are shared across multiple modules in Odometry, so I write them here.
   device: &device cuda
 
 Odometry:
-  name: MACVO_Mapping
+  name: MACVO-Fast
   args:
     # Device directive to the VO system
     # NOTE: the system may not follow this device config strictly since some module
@@ -60,8 +70,8 @@ Odometry:
     args:
       device: *device
       weight: ./Model/MACVO_FrontendCov.pth
-      enc_dtype: fp32
-      dec_dtype: fp32
+      enc_dtype: fp16
+      dec_dtype: bf16
       decoder_depth: 12
       enforce_positive_disparity: false
 
@@ -90,5 +100,5 @@ Odometry:
       graph_type: disp
       autodiff: false
 
-Data: !include ../Common/EvaluationDataset.yaml
+Data: !include ../../Sequence/TartanAir_example.yaml
 Preprocess: !include ../Common/Preprocess.yaml
