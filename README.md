@@ -25,7 +25,7 @@
 
 ## 🔥 Updates
 
-* [Jun 2025] We release the **MAC-VO Fast Mode** - with faster pose graph and mixed-precision inference, we achieve 2x speedup compare to previous version and reach speed of 12.5fps on 480x640 images. 
+* [Jun 2025] We release the **MAC-VO Fast Mode** - with faster pose graph optimization and mixed-precision inference, we achieve 2x speedup compare to previous version and reach speed of 12.5fps on 480x640 images. 
 
   See `Config/Experiment/MACVO/MACVO_Fast.yaml` for detail. 
   
