@@ -3,67 +3,22 @@ name: StaticAnalysis
 on: [push]
 
 jobs:
-  SetupPyEnv:
-    runs-on: ubuntu-latest
-    steps:        
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Check Environment Exists
-        id: cache-env
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.pythonLocation }}
-          key: venv-cache
-          save-always: true
-          lookup-only: true
-      
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@v1.3.1
-        if: steps.cache-env.outputs.cache-hit != 'true'
-
-      - name: Fetch Codebase
-        uses: actions/checkout@v4
-        if: steps.cache-env.outputs.cache-hit != 'true'
-
-      - name: Install Packages
-        run: |
-          pip install -r static_analysis_requirements.txt
-        if: steps.cache-env.outputs.cache-hit != 'true'
-
-      - name: Save Cache
-        uses: actions/cache/save@v3
-        if: steps.cache-env.outputs.cache-hit != 'true'
-        with:
-          path: ${{ env.pythonLocation }}
-          key: venv-cache
-  
   AutomatedTesting:
-    needs: SetupPyEnv
+    container:
+        image: yutianchen/macslam:github-action
+        env:
+          PYTHONUNBUFFERED: 1
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Restore Cache
-        id: cache-env
-        uses: actions/cache/restore@v3
-        with:
-          path: ${{ env.pythonLocation }}
-          key: venv-cache
       
       - name: Report Environment
         run: |
           python -m pip list
       
-      - name: Staic Analysis by PyRight
+      - name: Static Analysis by PyRight
         uses: jakebailey/pyright-action@v2
         with:
           project: ./pyproject.toml

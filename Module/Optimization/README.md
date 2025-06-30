@@ -14,9 +14,10 @@ Data:
 
 Data (Message) Type:
 * `T_Context` - an arbitrary class that stores the optimizer state accumulated/modified across frames.
-* `T_GraphInput` - a **subclass of `ITransferable`** since this message may be communicated across processes. Contains all the data required to construct the optimization problem.
+* `T_GraphInput` - a **subclass of `ITransferable`** since this message may be communicated across processes. Contains the inputs required to construct the optimization problem.
 * `T_GraphOutput` - a **subclass of `ITransferable`** since this message may be communicated across processes. Contains results (of interest) for the optimization problem.
 
+These message classes are necessary due to the multi-thread module of the optimizer.
 Detailed specification of methods to be implemented is provided below:
 
 ```python

@@ -75,6 +75,7 @@ class DepthCovariance(ICovariance2to3):
 
     def estimate(self, frame: StereoData, kp: torch.Tensor, depth_est: IStereoDepth.Output, depth_cov: torch.Tensor | None, flow_cov: torch.Tensor | None) -> torch.Tensor:
         assert depth_est.cov is not None
+        assert depth_cov is not None
         
         pixel_u, pixel_v = kp[..., 0], kp[..., 1]
         fx, fy, cx, cy = frame.fx, frame.fy, frame.cx, frame.cy
@@ -129,7 +130,7 @@ class MatchCovariance(ICovariance2to3):
             # uncertainty of 0.16
             flow_cov[..., :2].clamp_(min=self.config.min_flow_cov**2)
         else:
-            flow_cov = torch.ones((n_sample, 3), device=self.config.device, dtype=torch.float) * self.config.match_cov_default
+            flow_cov = torch.ones((n_sample, 3), device=torch.device(self.config.device), dtype=torch.float) * self.config.match_cov_default
             assert flow_cov is not None
             flow_cov[..., 2] = 0.
 
@@ -138,17 +139,17 @@ class MatchCovariance(ICovariance2to3):
 
         # Get local depth average and variance
         u_indices = torch.arange(
-            -self.config.kernel_size_hlf, self.config.kernel_size_hlf + 1, dtype=torch.long, device=self.config.device
+            -self.config.kernel_size_hlf, self.config.kernel_size_hlf + 1, dtype=torch.long, device=torch.device(self.config.device)
         )
         v_indices = torch.arange(
-            -self.config.kernel_size_hlf, self.config.kernel_size_hlf + 1, dtype=torch.long, device=self.config.device
+            -self.config.kernel_size_hlf, self.config.kernel_size_hlf + 1, dtype=torch.long, device=torch.device(self.config.device)
         )
         uu, vv = torch.meshgrid(u_indices, v_indices, indexing="ij")
 
         all_u_indices = kp_long[:, 0].unsqueeze(-1) + uu.reshape(1, -1)
         all_v_indices = kp_long[:, 1].unsqueeze(-1) + vv.reshape(1, -1)
 
-        cov_matrices = create_2x2_matrix([[var_u, var_uv], [var_uv, var_v]], n_sample=n_sample, device=self.config.device)
+        cov_matrices = create_2x2_matrix([[var_u, var_uv], [var_uv, var_v]], n_sample=n_sample, device=torch.device(self.config.device))
         local_filters = gaussain_full_kernels(cov_matrices, kernel_size=self.config.kernel_size)
         
         patches = depth_est.depth[..., all_v_indices, all_u_indices].view(

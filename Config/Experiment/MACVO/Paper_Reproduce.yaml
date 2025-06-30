@@ -1,14 +1,19 @@
 #
-# This configuration is **not** used to report numbers in the paper.
-# To reproduce result in the paper, please use MACVO_evaluate.yaml
+# This configuration is used to report numbers in the paper 
+#   https://arxiv.org/abs/2409.09479
+#
+# This config file is "old" and didn't release the full power of our system.
+# Unless you are reproducing the results in the paper, you should always try the 
+# MACVO_Performant.yaml and MACVO_Fast.yaml first.
 #
 
 Common:
   # Some configurations are shared across multiple modules in Odometry, so I write them here.
   device: &device cuda
+  max_depth: &max_depth auto
 
 Odometry:
-  name: MACVO
+  name: MACVO-PaperReproduce
   args:
     # Device directive to the VO system
     # NOTE: the system may not follow this device config strictly since some module
@@ -38,13 +43,15 @@ Odometry:
         min_flow_cov: 0.25
 
   keypoint:
-    type: CovAwareSelector_NoDepth
+    type: CovAwareSelector
     args:
       device: *device
       kernel_size: 7
       mask_width: 32
+      max_depth: *max_depth
+      max_depth_cov: 250.0
       max_match_cov: 100.0
-
+  
   mappoint:
     # Mapping feature can be conveniently turn off by using 
     # "type: NoKeypointSelector" instead of the config below.
@@ -60,17 +67,29 @@ Odometry:
     args:
       device: *device
       weight: ./Model/MACVO_FrontendCov.pth
-      dtype: fp32
-      max_flow: -1
+      enc_dtype: fp32
+      dec_dtype: fp32
+      decoder_depth: 12
       enforce_positive_disparity: false
 
   motion:
-    type: StaticMotionModel
+    type: TartanMotionNet
     args:
+      weight: ./Model/MACVO_posenet.pkl
+      device: *device
 
   outlier:
-    type: CovarianceSanityFilter
+    type: FilterCompose
     args:
+      filter_args:
+        - type: CovarianceSanityFilter
+          args:
+        - type: SimpleDepthFilter
+          args:
+            min_depth: 0.05
+            max_depth: *max_depth
+        - type: LikelyFrontOfCamFilter
+          args:
   
   postprocess:
     type: MotionInterpolate
@@ -81,13 +100,13 @@ Odometry:
     args:
   
   optimizer:
-    type: ReprojectOptimizer
+    type: TwoFrame_PGO
     args:
       device: cpu
       vectorize: true
       parallel: true
-      use_fancy_cov: false
-      constraint: disparity
+      graph_type: icp
+      autodiff: true
 
-Data: !include ../../Sequence/TartanAir_example.yaml
+Data: !include ../Common/EvaluationDataset.yaml
 Preprocess: !include ../Common/Preprocess.yaml

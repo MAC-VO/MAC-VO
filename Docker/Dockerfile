@@ -38,6 +38,6 @@ RUN sudo pip3 install --no-cache-dir timm==0.9.12 rerun-sdk==0.21.0 yacs
 RUN sudo pip3 install --no-cache-dir numpy 
 RUN sudo pip3 install --no-cache-dir pyyaml wandb pillow scipy flow_vis h5py 
 RUN sudo pip3 install --no-cache-dir xformers==0.0.27.post2 onnx
-RUN sudo pip3 install --no-cache-dir torchvision
+RUN sudo pip3 install --no-cache-dir torchvision jaxtyping typeguard==2.13.3
 
 CMD /bin/bash

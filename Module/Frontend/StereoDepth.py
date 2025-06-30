@@ -1,21 +1,21 @@
 from __future__ import annotations
 
 import torch
+import jaxtyping as Jt
+from typeguard import typechecked
 from types import SimpleNamespace
-from typing import TypeVar, Generic, TypedDict, overload, Any
+from typing import overload
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 from DataLoader import StereoData
-from Utility.Utils import padTo
+from Utility.Utils import padTo, reflect_torch_dtype
 from Utility.Extensions import ConfigTestableSubclass, OnCallCompiler
 
 # Stereo Depth interface ###
-# T_Context = The internal state of stereo depth estimator
-T_Context = TypeVar("T_Context")
 
 
-class IStereoDepth(ABC, Generic[T_Context], ConfigTestableSubclass):
+class IStereoDepth(ABC, ConfigTestableSubclass):
     """
     Estimate dense depth map of current stereo image.
     
@@ -30,24 +30,21 @@ class IStereoDepth(ABC, Generic[T_Context], ConfigTestableSubclass):
     * mask          - Bx1xHxW shaped torch.Tensor or None, the position with `True` value means valid (not occluded) 
                     prediction regions.
     """
+    @Jt.jaxtyped(typechecker=typechecked)
     @dataclass
     class Output:
-        depth: torch.Tensor                    # torch.Tensor of shape B x 1 x H x W
-        disparity: torch.Tensor | None = None  # torch.Tensor of shape B x 1 x H x W OR None if not applicable  
-        disparity_uncertainty: torch.Tensor | None = None
-        cov  : torch.Tensor | None = None      # torch.Tensor of shape B x 1 x H x W OR None if not applicable
-        mask : torch.Tensor | None = None      # torch.Tensor of shape B x 1 x H x W OR None if not applicable
+        depth    : Jt.Float32[torch.Tensor, "B 1 H W"]                
+        disparity: Jt.Float32[torch.Tensor, "B 1 H W"] | None = None  # None if not applicable  
+        cov      : Jt.Float32[torch.Tensor, "B 1 H W"] | None = None  # None if not applicable
+        mask     : Jt.Bool   [torch.Tensor, "B 1 H W"] | None = None  # None if not applicable
+        disparity_uncertainty: Jt.Float32[torch.Tensor, "B 1 H W"] | None = None
     
     def __init__(self, config: SimpleNamespace):
         self.config : SimpleNamespace = config
-        self.context: T_Context       = self.init_context()
     
     @property
     @abstractmethod
     def provide_cov(self) -> bool: ...
-    
-    @abstractmethod
-    def init_context(self) -> T_Context: ...
     
     @abstractmethod
     def estimate(self, frame: StereoData) -> Output: ...
@@ -80,21 +77,14 @@ class IStereoDepth(ABC, Generic[T_Context], ConfigTestableSubclass):
 
 
 # Stereo Depth Implementation ###
-# Contexts
 
-class ModelContext(TypedDict):
-    model: torch.nn.Module
 
-# Implementations
-
-class GTDepth(IStereoDepth[None]):
+class GTDepth(IStereoDepth):
     """
     Always returns the ground truth depth. input frame must have `gtDepth` attribute non-empty.
     """
     @property
     def provide_cov(self) -> bool: return False
-    
-    def init_context(self) -> None: return None
     
     def estimate(self, frame: StereoData) -> IStereoDepth.Output:
         assert frame.gt_depth is not None
@@ -106,29 +96,33 @@ class GTDepth(IStereoDepth[None]):
     def is_valid_config(cls, config: SimpleNamespace | None) -> None: return
 
 
-class FlowFormerDepth(IStereoDepth[ModelContext]):
+class FlowFormerDepth(IStereoDepth):
     """
     Use FlowFormer to estimate disparity between rectified stereo image. Does not generate depth_cov.
     
     See FlowFormerCovDepth for jointly estimating depth and depth_cov
     """
-    @property
-    def provide_cov(self) -> bool: return False
-    
-    def init_context(self) -> ModelContext:
+    def __init__(self, config: SimpleNamespace):
+        super().__init__(config)
         from ..Network.FlowFormer.configs.submission import get_cfg
-        from ..Network.FlowFormer.core.FlowFormer import build_flowformer
-        model = build_flowformer(get_cfg(), self.config.device)
+        from ..Network.FlowFormer.core import build_flowformer
+        model = build_flowformer(get_cfg())
         ckpt  = torch.load(self.config.weight, weights_only=True)
         model.load_ddp_state_dict(ckpt)
         model.to(self.config.device)
         
         model.eval()
-        return ModelContext(model=model)
+        self.model = model 
+    
+    @property
+    def provide_cov(self) -> bool: return False
         
     @torch.inference_mode()
     def estimate(self, frame: StereoData) -> IStereoDepth.Output:
-        est_flow, _ = self.context["model"].inference(frame.imageL, frame.imageR)
+        est_flow, _ = self.model.inference(
+            frame.imageL.to(self.config.device),
+            frame.imageR.to(self.config.device),
+        )
         disparity = est_flow[:1].abs().unsqueeze(0)
         depth_map = disparity_to_depth(disparity, frame.frame_baseline, frame.fx)
         return IStereoDepth.Output(depth=depth_map, disparity=disparity)
@@ -141,27 +135,36 @@ class FlowFormerDepth(IStereoDepth[ModelContext]):
             })
 
 
-class FlowFormerCovDepth(IStereoDepth[ModelContext]):
+class FlowFormerCovDepth(IStereoDepth):
     """
     Use modified FlowFormer to estimate diparity between rectified stereo image and uncertainty of disparity.
     """
-    @property
-    def provide_cov(self) -> bool: return True
-    
-    def init_context(self) -> ModelContext:
+    def __init__(self, config: SimpleNamespace):
+        super().__init__(config)
+        
         from ..Network.FlowFormer.configs.submission import get_cfg
         from ..Network.FlowFormerCov import build_flowformer
-        model = build_flowformer(get_cfg(), self.config.device)
+        model = build_flowformer(
+            get_cfg(),
+            reflect_torch_dtype(config.enc_dtype),
+            reflect_torch_dtype(config.dec_dtype)
+        )
         ckpt  = torch.load(self.config.weight, weights_only=True)
         model.load_ddp_state_dict(ckpt)
         model.to(self.config.device)
-        
         model.eval()
-        return ModelContext(model=model)
+        
+        self.model = model
+
+    @property
+    def provide_cov(self) -> bool: return True
         
     @torch.inference_mode()
     def estimate(self, frame: StereoData) -> IStereoDepth.Output:
-        est_flow, est_cov = self.context["model"].inference(frame.imageL, frame.imageR)
+        est_flow, est_cov = self.model.inference(
+            frame.imageL.to(self.config.device),
+            frame.imageR.to(self.config.device),
+        )
         disparity, disparity_cov = est_flow[:, :1].abs(), est_cov[:, :1]
         
         depth_map = disparity_to_depth(disparity, frame.frame_baseline, frame.fx)
@@ -175,20 +178,21 @@ class FlowFormerCovDepth(IStereoDepth[ModelContext]):
         cls._enforce_config_spec(config, {
                 "weight"    : lambda s: isinstance(s, str),
                 "device"    : lambda s: isinstance(s, str) and (("cuda" in s) or (s == "cpu")),
+                "enc_dtype" : lambda s: s in {"fp16", "bf16", "fp32"},  # Precision casting for encoder, the network's input and output will still be in fp32.
+                "dec_dtype" : lambda s: s in {"fp16", "bf16", "fp32"},  # Precision casting for decoder, the network's input and output will still be in fp32.
             })
 
 
-class TartanVODepth(IStereoDepth[ModelContext]):
+class TartanVODepth(IStereoDepth):
     """
     Use the StereoNet from TartanVO to estimate diparity between stereo image. 
     
     Does not estimate depth_cov if config.cov_mode set to 'None'.
     where config.cov_mode = {'None', 'Est'}
     """
-    @property
-    def provide_cov(self) -> bool: return self.config.cov_mode == "Est"
-    
-    def init_context(self) -> ModelContext:
+    def __init__(self, config: SimpleNamespace):
+        super().__init__(config)
+        
         from Utility.Config import build_dynamic_config
         from Module.Network.StereoCov import StereoCovNet
         
@@ -197,13 +201,16 @@ class TartanVODepth(IStereoDepth[ModelContext]):
         ckpt = torch.load(self.config.weight, weights_only=True)
         model.load_ddp_state_dict(ckpt)
         model.to(self.config.device)
-        
         model.eval()
-        return ModelContext(model=model)
+        
+        self.model = model
+    
+    @property
+    def provide_cov(self) -> bool: return self.config.cov_mode == "Est"
         
     @torch.inference_mode()
     def estimate(self, frame: StereoData) -> IStereoDepth.Output:
-        depth, depth_cov = self.context["model"].inference(frame)
+        depth, depth_cov = self.model.inference(frame)
         
         depth_map = padTo(depth, (frame.height, frame.width), dim=(-2, -1), value=float('nan'))
         
@@ -226,7 +233,7 @@ class TartanVODepth(IStereoDepth[ModelContext]):
 # Modifier(IStereoDepth) -> IStereoDepth'
 
 
-class ApplyGTDepthCov(IStereoDepth[IStereoDepth]):
+class ApplyGTDepthCov(IStereoDepth):
     """
     A higher-order-module that encapsulates a IStereoDepth module. 
     
@@ -235,18 +242,18 @@ class ApplyGTDepthCov(IStereoDepth[IStereoDepth]):
     
     Will raise AssertionError if frame does not have gtDepth.
     """
+    def __init__(self, config: SimpleNamespace):
+        super().__init__(config)
+        self.internal_module = IStereoDepth.instantiate(self.config.module.type, self.config.module.args)
+
     @property
     def provide_cov(self) -> bool: return True
-    
-    def init_context(self) -> IStereoDepth:
-        internal_module = IStereoDepth.instantiate(self.config.module.type, self.config.module.args)
-        return internal_module
     
     @torch.inference_mode()
     def estimate(self, frame: StereoData) -> IStereoDepth.Output:
         assert frame.gt_depth is not None
         
-        output = self.context.estimate(frame)
+        output = self.internal_module.estimate(frame)
         error = frame.gt_depth.to(output.depth.device) - output.depth
         gt_cov = error.square()
         

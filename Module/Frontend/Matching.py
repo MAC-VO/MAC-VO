@@ -1,37 +1,42 @@
 from __future__ import annotations
 
 import torch
+import jaxtyping as Jt
+from typeguard import typechecked
 from types import SimpleNamespace
-from typing import TypeVar, Generic, TypedDict, overload, Any
+from typing import overload
 from abc import ABC, abstractmethod
 
 from dataclasses import dataclass
 
 from DataLoader import StereoData
-from Utility.Utils import padTo
+from Utility.Utils import padTo, reflect_torch_dtype
 from Utility.Extensions import ConfigTestableSubclass
 from Utility.Config import build_dynamic_config
 
 # Matching interface ###
-T_Context = TypeVar("T_Context")
 
 
-class IMatcher(ABC, Generic[T_Context], ConfigTestableSubclass):
+class IMatcher(ABC, ConfigTestableSubclass):
+    @Jt.jaxtyped(typechecker=typechecked)
     @dataclass
     class Output:
-        flow: torch.Tensor                 # B x 2 x H x W, float32
-        cov : torch.Tensor | None = None   # B x 3 x H x W, float32 OR None if not applicable
-        mask: torch.Tensor | None = None   # B x 1 x H x W, bool    OR None if not applicable
-    
-        @property
-        def as_full_cov(self) -> "IMatcher.Output":
-            if self.cov is None or self.cov.size(1) == 3: return self
-            B, C, H, W = self.cov.shape
-            assert C == 2, f"number of channel for cov must be either 2 or 3, get {C=}"
-            return IMatcher.Output(
-                flow=self.flow,
-                cov =torch.cat([self.cov, torch.zeros((B, 1, H, W), device=self.cov.device, dtype=self.cov.dtype)], dim=1),
-                mask=self.mask
+        flow: Jt.Float32[torch.Tensor, "B 2 H W"]                 # B x 2 x H x W, float32
+        cov : Jt.Float32[torch.Tensor, "B 3 H W"] | None = None   # B x 3 x H x W, float32 OR None if not applicable
+        mask: Jt.Bool   [torch.Tensor, "B 1 H W"] | None = None   # B x 1 x H x W, bool    OR None if not applicable
+        
+        @classmethod
+        def from_partial_cov(cls,
+            flow: Jt.Float32[torch.Tensor, "B 2 H W"],
+            cov : Jt.Float32[torch.Tensor, "B 2 H W"],
+            mask: Jt.Bool   [torch.Tensor, "B 1 H W"] | None = None 
+        ) -> "IMatcher.Output":
+            B, C, H, W = cov.shape
+            assert C == 2, "Partial cov is the matcher output where only \\sigma_uu, \\sigma_vv are available."
+            return cls(
+                flow=flow,
+                cov =torch.cat([cov, torch.zeros((B, 1, H, W)).to(cov)], dim=1),
+                mask=mask
             )
         
     """
@@ -52,14 +57,10 @@ class IMatcher(ABC, Generic[T_Context], ConfigTestableSubclass):
     """
     def __init__(self, config: SimpleNamespace):
         self.config : SimpleNamespace = config
-        self.context: T_Context       = self.init_context()
     
     @property
     @abstractmethod
     def provide_cov(self) -> bool: ...
-    
-    @abstractmethod
-    def init_context(self) -> T_Context: ...
     
     @abstractmethod
     def forward(self, frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output: ...
@@ -95,14 +96,9 @@ class IMatcher(ABC, Generic[T_Context], ConfigTestableSubclass):
 # End #######################
 
 # Dense Matching Implementation ###
-# Contexts
-
-class ModelContext(TypedDict):
-    model: torch.nn.Module
-
 # Implementations
 
-class GTMatcher(IMatcher[None]):
+class GTMatcher(IMatcher):
     """
     A matcher that returns ground truth optical flow.
     
@@ -110,8 +106,6 @@ class GTMatcher(IMatcher[None]):
     """
     @property
     def provide_cov(self) -> bool: return False
-    
-    def init_context(self) -> None: return None
     
     def forward(self, frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output:
         assert frame_t1.gt_flow is not None
@@ -123,84 +117,101 @@ class GTMatcher(IMatcher[None]):
     def is_valid_config(cls, config: SimpleNamespace | None) -> None: return
 
 
-class FlowFormerMatcher(IMatcher[ModelContext]):
+class FlowFormerMatcher(IMatcher):
     """
     Use FlowFormer to estimate optical flow betweeen two frames. Does not generate match_cov.
     
     See FlowFormerCovMatcher for jointly estimating depth and match_cov
     """
-    @property
-    def provide_cov(self) -> bool: return False
-    
-    def init_context(self) -> ModelContext:
+    def __init__(self, config: SimpleNamespace):
+        super().__init__(config)
         from ..Network.FlowFormer.configs.submission import get_cfg
-        from ..Network.FlowFormer.core.FlowFormer import build_flowformer
+        from ..Network.FlowFormer.core import build_flowformer
         
-        model = build_flowformer(get_cfg(), self.config.device)
+        model = build_flowformer(get_cfg())
         ckpt  = torch.load(self.config.weight, weights_only=True)
         model.load_ddp_state_dict(ckpt)
         model.to(self.config.device)
-        
         model.eval()
-        return ModelContext(model=model)
+        
+        self.model = model
+    
+    @property
+    def provide_cov(self) -> bool: return False
     
     def forward(self, frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output:
-        flow, _ = self.context["model"].inference(frame_t1.imageL, frame_t2.imageL)
+        flow, _ = self.model.inference(
+            frame_t1.imageL.to(self.config.device),
+            frame_t2.imageL.to(self.config.device),
+        )
         return IMatcher.Output(flow=flow.unsqueeze(0))
     
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None:
         cls._enforce_config_spec(config, {
-                "weight"    : lambda s: isinstance(s, str),
-                "device"    : lambda s: isinstance(s, str) and (("cuda" in s) or (s == "cpu")),
-            })
+            "weight"    : lambda s: isinstance(s, str),
+            "device"    : lambda s: isinstance(s, str) and (("cuda" in s) or (s == "cpu")),
+        })
 
 
-class FlowFormerCovMatcher(IMatcher[ModelContext]):
+class FlowFormerCovMatcher(IMatcher):
     """
     Use the modified FlowFormer proposed by us to jointly estimate optical flow betweeen two frames.
     """
-    @property
-    def provide_cov(self) -> bool: return True
-    
-    def init_context(self) -> ModelContext:
+    def __init__(self, config: SimpleNamespace):
+        super().__init__(config)
+        
         from ..Network.FlowFormer.configs.submission import get_cfg
         from ..Network.FlowFormerCov import build_flowformer
         
-        model = build_flowformer(get_cfg(), self.config.device)
+        model = build_flowformer(
+            get_cfg(),
+            encoder_dtype=reflect_torch_dtype(self.config.enc_dtype),
+            decoder_dtype=reflect_torch_dtype(self.config.dec_dtype)
+        )
         ckpt  = torch.load(self.config.weight, weights_only=True)
         model.load_ddp_state_dict(ckpt)
         model.to(self.config.device)
-        
         model.eval()
-        return ModelContext(model=model)
+        
+        self.model = model
+    
+    @property
+    def provide_cov(self) -> bool: return True
 
     def forward(self, frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output:
-        flow, flow_cov = self.context["model"].inference(frame_t1.imageL, frame_t2.imageL)
-        return IMatcher.Output(flow=flow, cov=flow_cov).as_full_cov
+        flow, flow_cov = self.model.inference(
+            frame_t1.imageL.to(self.config.device),
+            frame_t2.imageL.to(self.config.device),
+        )
+        return IMatcher.Output.from_partial_cov(flow=flow, cov=flow_cov)
     
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None:
         cls._enforce_config_spec(config, {
                 "weight"    : lambda s: isinstance(s, str),
                 "device"    : lambda s: isinstance(s, str) and (("cuda" in s) or (s == "cpu")),
+                "enc_dtype" : lambda s: s in {"fp16", "bf16", "fp32"},  # Precision casting for encoder, the network's input and output will still be in fp32.
+                "dec_dtype" : lambda s: s in {"fp16", "bf16", "fp32"},  # Precision casting for decoder, the network's input and output will still be in fp32.
             })
 
 
-class TartanVOMatcher(IMatcher[ModelContext]):
+class TartanVOMatcher(IMatcher):
     """
     Use TartanVO to estimate optical flow between two frames.
     """
-    @property
-    def provide_cov(self) -> bool: return False
-    
-    def init_context(self) -> ModelContext:
+    def __init__(self, config: SimpleNamespace):
+        super().__init__(config)
+        
         from ..Network.TartanVOStereo.StereoVO_Interface import TartanStereoVOMatch
         model = TartanStereoVOMatch(self.config.weight, True, self.config.device)
-        return ModelContext(model=model)    #type: ignore
+        self.model = model
+    
+    @property
+    def provide_cov(self) -> bool: return False        
 
     def forward(self, frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output:
-        flow = self.context["model"].inference(frame_t1, frame_t1.imageL, frame_t2.imageL).unsqueeze(0)
+        flow = self.model.inference(frame_t1, frame_t1.imageL, frame_t2.imageL).unsqueeze(0)
         
         mask = torch.zeros_like(flow[:, :1], dtype=torch.bool)
         pad_height = (frame_t1.height - flow.size(-2)) // 2
@@ -219,15 +230,14 @@ class TartanVOMatcher(IMatcher[ModelContext]):
             })
 
 
-class TartanVOCovMatcher(IMatcher[ModelContext]):
+class TartanVOCovMatcher(IMatcher):
     """
     Use a modified version of TartanVO frontend network to jointly estimate optical flow
     and its covariance between two frames.
     """
-    @property
-    def provide_cov(self) -> bool: return True
-    
-    def init_context(self) -> ModelContext:
+    def __init__(self, config: SimpleNamespace):
+        super().__init__(config)
+        
         from Module.Network.PWCNet import RAFTFlowCovNet
         cfg, _ = build_dynamic_config({
             "decoder": "raft", "dim": 64, "dropout": 0.1,
@@ -236,13 +246,16 @@ class TartanVOCovMatcher(IMatcher[ModelContext]):
         ckpt = torch.load(self.config.weight, map_location="cpu", weights_only=True)
         model = RAFTFlowCovNet(cfg, self.config.device)
         model.load_ddp_state_dict(ckpt)
-
-        model.eval()
         model = model.to(self.config.device)
-        return ModelContext(model=model)
+        model.eval()
+
+        self.model = model
+    
+    @property
+    def provide_cov(self) -> bool: return True
     
     def forward(self, frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output:
-        flow, flow_cov = self.context["model"].inference(frame_t1.imageL, frame_t2.imageL)
+        flow, flow_cov = self.model.inference(frame_t1.imageL, frame_t2.imageL)
         
         mask = torch.zeros_like(flow[:, :1], dtype=torch.bool)
         pad_height = (frame_t1.height - flow.size(-2)) // 2
@@ -251,7 +264,7 @@ class TartanVOCovMatcher(IMatcher[ModelContext]):
         
         flow     = padTo(flow    , (frame_t1.height, frame_t1.width), dim=(-2, -1), value=float('nan'))
         flow_cov = padTo(flow_cov, (frame_t1.height, frame_t1.width), dim=(-2, -1), value=float('nan'))
-        return IMatcher.Output(flow=flow, cov=flow_cov, mask=mask).as_full_cov
+        return IMatcher.Output.from_partial_cov(flow=flow, cov=flow_cov, mask=mask)
 
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None:    
@@ -265,7 +278,7 @@ class TartanVOCovMatcher(IMatcher[ModelContext]):
 # Modifier(IMatcher) -> IMatcher'
 
 
-class ApplyGTMatchCov(IMatcher[IMatcher]):
+class ApplyGTMatchCov(IMatcher):
     """
     A higher-order-module that encapsulates a IMatcher module. 
     
@@ -278,21 +291,53 @@ class ApplyGTMatchCov(IMatcher[IMatcher]):
     covariance matrix (that maximize log-likelihood of ground truth flow) is degenerated for a full
     2x2 matrix setup.
     """
+    def __init__(self, config: SimpleNamespace):
+        super().__init__(config)
+        
+        self.internal_module = IMatcher.instantiate(self.config.module.type, self.config.module.args)
+    
     @property
     def provide_cov(self) -> bool: return True
     
-    def init_context(self) -> IMatcher:
-        internal_module = IMatcher.instantiate(self.config.module.type, self.config.module.args)
-        return internal_module
-    
     def forward(self, frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output:
         assert frame_t1.gt_flow is not None
-        out = self.context.estimate(frame_t1, frame_t2)
+        out = self.internal_module.estimate(frame_t1, frame_t2)
         
         flow_error = out.flow - frame_t1.gt_flow.to(out.flow.device)
         flow_cov   = flow_error.square()
-        out.cov = flow_cov
-        return out.as_full_cov
+        return IMatcher.Output.from_partial_cov(flow=out.flow, cov=flow_cov, mask=out.mask)
+    
+    @classmethod
+    def is_valid_config(cls, config: SimpleNamespace | None) -> None:
+        assert config is not None
+        IMatcher.is_valid_config(config.module)
+
+
+class ApplyGTMatchMask(IMatcher):
+    """
+    A higher-order-module that encapsulates a IMatcher module. 
+    
+    Always compare the estimated output of encapsulated IMatcher with ground truth matching and convert
+    error in estimation to 'estimated' covariance.
+    
+    Will raise AssertionError if frame does not have gtFlow.
+    
+    NOTE: This modifier only creates estimation to Sigma matrix as a diagonal form, since the optimum 
+    covariance matrix (that maximize log-likelihood of ground truth flow) is degenerated for a full
+    2x2 matrix setup.
+    """
+    def __init__(self, config: SimpleNamespace):
+        super().__init__(config)
+        self.internal_module = IMatcher.instantiate(self.config.module.type, self.config.module.args)
+    
+    @property
+    def provide_cov(self) -> bool: return self.internal_module.provide_cov
+    
+    def forward(self, frame_t1: StereoData, frame_t2: StereoData) -> IMatcher.Output:
+        assert frame_t1.flow_mask is not None
+        out = self.internal_module.estimate(frame_t1, frame_t2)
+        out.mask = frame_t1.flow_mask
+        return out
     
     @classmethod
     def is_valid_config(cls, config: SimpleNamespace | None) -> None:

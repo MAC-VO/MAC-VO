@@ -1,6 +1,11 @@
 #
 # This configuration is **not** used to report numbers in the paper.
-# To reproduce result in the paper, please use MACVO_evaluate.yaml
+# To reproduce result in the paper, please use Paper_Reproduce.yaml
+#
+# MACVO-Performant generally performs better than Paper_Reproduce.yaml on outdoor scenes.
+#
+# MACVO-Performant can run at 6.5fps on RTX Ada 6000 GPU with image resolution of 480x640.
+# For 12.5fps speed with minute (~5%) increase in RTE & ROE, use MACVO_Fast.yaml
 #
 
 Common:
@@ -8,7 +13,7 @@ Common:
   device: &device cuda
 
 Odometry:
-  name: MACVO
+  name: MACVO-Performant
   args:
     # Device directive to the VO system
     # NOTE: the system may not follow this device config strictly since some module
@@ -25,7 +30,7 @@ Odometry:
     profile: false
 
     # Mapping mode provides the dense mapping
-    mapping: false
+    mapping: true
 
   cov:
     obs:
@@ -60,8 +65,9 @@ Odometry:
     args:
       device: *device
       weight: ./Model/MACVO_FrontendCov.pth
-      dtype: fp32
-      max_flow: -1
+      enc_dtype: fp32
+      dec_dtype: fp32
+      decoder_depth: 12
       enforce_positive_disparity: false
 
   motion:
@@ -81,13 +87,13 @@ Odometry:
     args:
   
   optimizer:
-    type: ReprojectOptimizer
+    type: TwoFrame_PGO
     args:
       device: cpu
       vectorize: true
       parallel: true
-      use_fancy_cov: false
-      constraint: disparity
+      graph_type: disp
+      autodiff: false
 
-Data: !include ../Common/EvaluationDataset.yaml
+Data: !include ../../Sequence/TartanAir_example.yaml
 Preprocess: !include ../Common/Preprocess.yaml

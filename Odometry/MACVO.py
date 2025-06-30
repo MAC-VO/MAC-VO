@@ -19,7 +19,7 @@ from Utility.Extensions import ConfigTestable
 from .Interface import IOdometry
 
 T_SensorFrame = T.TypeVar("T_SensorFrame", bound=StereoFrame)
-T_MACVO       = T.TypeVar("T_MACVO", bound="MACVO")
+
 
 class MACVO(IOdometry[T_SensorFrame], ConfigTestable):
     # Type alias of callback hooks for MAC-VO system. Will be called by the system on
@@ -78,7 +78,7 @@ class MACVO(IOdometry[T_SensorFrame], ConfigTestable):
         self.report_config()
     
     @classmethod
-    def from_config(cls: type[T_MACVO], cfg: SimpleNamespace) -> T_MACVO:
+    def from_config(cls, cfg: SimpleNamespace):
         odomcfg = cfg.Odometry
         # Initialize modules for VO
         Frontend            = Module.IFrontend.instantiate(odomcfg.frontend.type, odomcfg.frontend.args)
@@ -144,6 +144,7 @@ class MACVO(IOdometry[T_SensorFrame], ConfigTestable):
         Module.IKeypointSelector.is_valid_config(config.keypoint)
         Module.ICovariance2to3.is_valid_config(config.cov.obs)
         Module.IFrontend.is_valid_config(config.frontend)
+        Module.IOptimizer.is_valid_config(config.optimizer)
         
         cls._enforce_config_spec(config.args, {
             "device"            : lambda s: isinstance(s, str) and (("cuda" in s) or (s == "cpu")),
@@ -155,7 +156,7 @@ class MACVO(IOdometry[T_SensorFrame], ConfigTestable):
         })
 
     def initialize(self, frame0: T_SensorFrame):
-        depth0, _       = self.Frontend.estimate(None, frame0.stereo)
+        depth0          = self.Frontend.estimate_depth(frame0.stereo)
         est_pose        = self.MotionEstimator.predict(frame0, None, depth0.depth).unsqueeze(0)
         
         frame_idx = self.graph.frames.push(FrameNode.init({
@@ -178,7 +179,7 @@ class MACVO(IOdometry[T_SensorFrame], ConfigTestable):
             return
         
         depth0          = self.prev_keyframe[2]
-        depth1, match01 = self.Frontend.estimate(frame0.stereo, frame1.stereo)
+        depth1, match01 = self.Frontend.estimate_pair(frame0.stereo, frame1.stereo)
 
         # Receive optimization result from previous step (if exists) ####################
         # NOTE: should always writeback optimized pose to global map before selecting new 
@@ -305,7 +306,9 @@ class MACVO(IOdometry[T_SensorFrame], ConfigTestable):
             self.graph.frames.data["need_interp"][frame_idx] = True
             return
         else:
-            self.Optimizer.optimize(self.graph, frame_idx)
+            self.Optimizer.start_optimize(
+                self.Optimizer.get_graph_data(self.graph, frame_idx)
+            )
         
         # Add (dense) mapping points to the map #########################################
         if self.mapping:

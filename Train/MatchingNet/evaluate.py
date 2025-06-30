@@ -77,7 +77,7 @@ if __name__ == "__main__":
     modlecfg.update(vars(args))
     datacfg = cfg.Evaluate
 
-    model = nn.DataParallel(build_flowformer(namespace_to_cfgnode(cfg.Model), "cuda"))
+    model = nn.DataParallel(build_flowformer(namespace_to_cfgnode(cfg.Model), torch.float32, torch.float32))
     model.load_state_dict(torch.load(args.ckpt), strict = False)
     model.cuda()
 

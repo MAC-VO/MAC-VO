@@ -39,7 +39,7 @@ class SequenceBase(IterableDataset[T_Data], ABC, ConfigTestableSubclass):
         The 'actual index' refer to the index in the original sequence,
         In contrast with the 'logical index' (index after mask is applied) used by the user.
         """
-        return self.indices[local_index]
+        return self.indices[local_index].item()
 
     @final
     def clip(self, start_idx: int | None = None, end_idx: int | None = None, step: int | None = None) -> Self:

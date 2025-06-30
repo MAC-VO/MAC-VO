@@ -2,3 +2,5 @@ type: FlowFormerCovDepth
 args:
   device: cuda
   weight: ./Model/MACVO_FrontendCov.pth
+  enc_dtype: fp32
+  dec_dtype: fp32
