@@ -1,3 +1,4 @@
+
 # <div align="center">MAC-VO: Metrics-aware Covariance for Learning-based Stereo Visual Odometry</div>
 
 ### <div align="center">🥇 ICRA 2025 Best Conference Paper Award<br/>🥇 ICRA 2025 Best Paper Award on Robot Perception</div>
@@ -25,7 +26,7 @@
 
 ## 🔥 Updates
 
-* [Jun 2025] We release the **MAC-VO Fast Mode** - with faster pose graph optimization and mixed-precision inference, we achieve 2x speedup compare to previous version and reach speed of 12.5fps on 480x640 images. 
+* [Jun 2025] We release the **MAC-VO Fast Mode** - with faster pose graph optimization and mixed-precision inference, we achieve 2x speedup compared to previous version and reach speed of 12.5fps on 480x640 images. 
 
   See `Config/Experiment/MACVO/MACVO_Fast.yaml` for detail. 
   
@@ -40,6 +41,16 @@
 Clone the repository using the following command to include all submodules automatically.
 
 `git clone https://github.com/MAC-VO/MAC-VO.git --recursive`
+
+## 🔧 Minimum Requirements
+
+| Component      | Minimum Version | Notes |
+|----------------|-----------------|------|
+| **GPU Driver** | NVIDIA ≥ 545    | CUDA 12.4+ |
+| **CUDA Toolkit / Runtime** | ≥ 12.2 | Dockerfile installs correct version |
+| **Python**     | 3.10+           |  |
+| **VRAM**       | ≥ 6 GB          | 640×480 @ 7 FPS; fast mode needs ≈ 3 GB |
+| **Disk**       | ≥ 3 GB          | demo + weights |
 
 
 ## 📦 Installation & Environment
@@ -93,9 +104,42 @@ To run the Docker with visualization:
 
 ### 3/4 Run MAC-VO
 
+For dataset configuration, MAC-VO reads each sequence through a small **YAML** file under `Config/Sequence/`.  
+A minimal **TartanAir** example:
+
+```yaml
+# Config/Sequence/TartanAir_example.yaml
+
+# (1) Which loader to use
+#     TartanAir        – monocular or stereo + optional IMU
+#     TartanAir_NoIMU  – stereo only, no inertial
+#     KITTI_ODOM …     – other loaders are defined in Dataset/
+
+type: TartanAir_NoIMU   # loader class name
+name: abf001            # will appear in log / plots
+
+args:
+  root: /data/P001_select   # directory you mounted
+  compressed: true          # true = RGB-D stored as .npz, false = raw png
+
+  # toggle supervision sources
+  gtDepth: true             # set to true if depth.npy exists
+  gtFlow:  true             # set to true if flow.npy  exists
+  gtPose:  true             # ground-truth pose (required for EvalSeq)
+```
+
+
+| **Key**                     | **What it controls**                                        |
+| --------------------------- | ----------------------------------------------------------- |
+| `type`                      | Dataset loader class (see `Dataset/` folder)                |
+| `root`                      | Absolute / container-internal path of the sequence folder   |
+| `compressed`                | `true` if your frames are packed as `rgb.npz` / `depth.npz` |
+| `gtDepth / gtFlow / gtPose` | Turn on if the corresponding `.npy` file is present         |
+
+
 We will use `Config/Experiment/MACVO/MACVO_example.yaml` as the configuration file for MAC-VO.
 
-1. Change the `root` in the data config file 'Config/Sequence/TartanAir_example.yaml' to reflect the actual path to the demo sequence downloaded.
+1. Change the `root` in the data config file 'Config/Sequence/TartanAir_example.yaml' to reflect the actual path to the demo sequence downloaded. 
 2. Run with one of the following command:
 
     *Performant Mode* - best performance with moderate speed (7.5fps on 480x640 image)
@@ -115,6 +159,7 @@ We will use `Config/Experiment/MACVO/MACVO_example.yaml` as the configuration fi
 > [!NOTE]
 >
 > See `python MACVO.py --help` for more flags and configurations.
+> The demo sequence is RGB‑only. If your dataset includes depth.npy and/or flow.npy, set both flags to true.
 
 ### 4/4 Visualize and Evaluate Result
 
@@ -219,8 +264,8 @@ Expand All (2 commands)
 **World Coordinate** - `NED` convention, `+x -> North`, `+y -> East`, `+z -> Down` with the first frame being world origin having identity SE3 pose.
 
 
-## 🤗 Customization, Extension and Future Developement
+## 🤗 Customization, Extension and Future Development
 
-> This codebase is designed with *modularization* in mind so it's easy to modify, replace, and re-configure modules of MAC-VO. One can easily use or replase the provided modules like flow estimator, depth estimator, keypoint selector, etc. to create a new visual odometry.
+> This codebase is designed with *modularization* in mind so it's easy to modify, replace, and re-configure modules of MAC-VO. One can easily use or replace the provided modules like flow estimator, depth estimator, keypoint selector, etc. to create a new visual odometry.
 
 We welcome everyone to extend and redevelop the MAC-VO. For documentation please visit the [Documentation Site](https://mac-vo.github.io/wiki/)
