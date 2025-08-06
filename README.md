@@ -104,56 +104,63 @@ To run the Docker with visualization:
 
 ### 3/4 Run MAC-VO
 
-For dataset configuration, MAC-VO reads each sequence through a small **YAML** file under `Config/Sequence/`.  
-A minimal **TartanAir** example:
+Dataset configuration
+MAC-VO reads each sequence through a small YAML file in data `{PATH_TO_YOUR_ZED_FILE}`.
+Here is a minimal ZED configuration:
 
 ```yaml
-# Config/Sequence/TartanAir_example.yaml
+# {PATH_TO_YOUR_ZED_FILE}
 
 # (1) Which loader to use
-#     TartanAir        – monocular or stereo + optional IMU
-#     TartanAir_NoIMU  – stereo only, no inertial
-#     KITTI_ODOM …     – other loaders are defined in Dataset/
+#     GeneralStereo – generic stereo loader (see Dataset/GeneralStereo.py)
 
-type: TartanAir_NoIMU   # loader class name
-name: abf001            # will appear in log / plots
+type: GeneralStereo
+name: kit2kit_manual_dyna     # will appear in logs / plots
 
 args:
-  root: /data/P001_select   # directory you mounted
-  compressed: true          # true = RGB-D stored as .npz, false = raw png
+  root: ${DATA_ROOT}/dsta_zed/07-19-run1/dsta_zed_07-19-run1  # sequence folder
 
-  # toggle supervision sources
-  gtDepth: true             # set to true if depth.npy exists
-  gtFlow:  true             # set to true if flow.npy  exists
-  gtPose:  true             # ground-truth pose (required for EvalSeq)
+  # camera calibration
+  camera:
+    fx: 735.9240
+    fy: 735.7140
+    cx: 964.8520
+    cy: 622.2050
+  bl: 0.119981              # stereo baseline in metres
+  format: png               # image extension
 ```
 
 
 | **Key**                     | **What it controls**                                        |
 | --------------------------- | ----------------------------------------------------------- |
-| `type`                      | Dataset loader class (see `Dataset/` folder)                |
-| `root`                      | Absolute / container-internal path of the sequence folder   |
-| `compressed`                | `true` if your frames are packed as `rgb.npz` / `depth.npz` |
-| `gtDepth / gtFlow / gtPose` | Turn on if the corresponding `.npy` file is present         |
+| `type`                      | Dataset loader class (see Dataset/)                         |
+| `root`                      | Absolute / container-internal path of the sequence          |
+| `camera`                    | Intrinsic parameters of the left camera                     |
+| `bl`                        | Stereo baseline (metres)                                    |
+| `format`                    | Image file extension (png, jpg, …)                          |
 
 
-We will use `Config/Experiment/MACVO/MACVO_example.yaml` as the configuration file for MAC-VO.
+Run MAC-VO
+We will use `{PATH_TO_YOUR_ZED_FILE}` as the configuration file for MAC-VO.
 
-1. Change the `root` in the data config file 'Config/Sequence/TartanAir_example.yaml' to reflect the actual path to the demo sequence downloaded. 
-2. Run with one of the following command:
+1. Adjust args.root in `{PATH_TO_YOUR_ZED_FILE}` to point to your data. 
+2. Launch MAC-VO in one of two modes:
 
     *Performant Mode* - best performance with moderate speed (7.5fps on 480x640 image)
 
     ```bash
-    $ cd workspace
-    $ python3 MACVO.py --odom Config/Experiment/MACVO/MACVO_Performant.yaml --data Config/Sequence/TartanAir_example.yaml
+    python3 MACVO.py \
+    --odom Config/Experiment/MACVO/MACVO_Performant.yaml \
+    --data {PATH_TO_YOUR_ZED_FILE}
     ```
 
     *Fast Mode* - slightly degraded performance (~5% increase in RTE and ROE) with most speed (12.5fps on 480x640 image)
 
     ```bash
     $ cd workspace
-    $ python3 MACVO.py --odom Config/Experiment/MACVO/MACVO_Fast.yaml --data Config/Sequence/TartanAir_example.yaml
+    $ python3 MACVO.py \
+    --odom Config/Experiment/MACVO/MACVO_Fast.yaml \
+    --data {PATH_TO_YOUR_ZED_FILE}
     ```
 
 > [!NOTE]
