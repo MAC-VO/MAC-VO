@@ -25,7 +25,7 @@
 
 ## 🔥 Updates
 
-* [Jun 2025] We release the **MAC-VO Fast Mode** - with faster pose graph optimization and mixed-precision inference, we achieve 2x speedup compare to previous version and reach speed of 12.5fps on 480x640 images. 
+* [Jun 2025] We release the **MAC-VO Fast Mode** - with faster pose graph optimization and mixed-precision inference, we achieve 2x speedup compared to previous version and reach speed of 12.5fps on 480x640 images. 
 
   See `Config/Experiment/MACVO/MACVO_Fast.yaml` for detail. 
   
@@ -40,6 +40,15 @@
 Clone the repository using the following command to include all submodules automatically.
 
 `git clone https://github.com/MAC-VO/MAC-VO.git --recursive`
+
+
+## 🔧 Minimum Requirements
+
+| Component        | Minimum Version | Notes                                            |
+|------------------|-----------------|--------------------------------------------------|
+| **CUDA Runtime** | ≥ 12.4          | Dockerfile installs correct version              |
+| **Python**       | ≥ 3.10          |                                                  |
+| **VRAM**         | ≥ 6 GB          | 640×480; fast mode (mixed precision) needs 2.7GB |
 
 
 ## 📦 Installation & Environment
@@ -105,7 +114,7 @@ We will use `Config/Experiment/MACVO/MACVO_example.yaml` as the configuration fi
     $ python3 MACVO.py --odom Config/Experiment/MACVO/MACVO_Performant.yaml --data Config/Sequence/TartanAir_example.yaml
     ```
 
-    *Fast Mode* - slightly degraded performance (~5% increase in RTE and ROE) with most speed (12.5fps on 480x640 image)
+    *Fast Mode* - slightly degraded performance (<5% increase in RTE and ROE) with most speed (12.5fps on 480x640 image)
 
     ```bash
     $ cd workspace
@@ -115,6 +124,9 @@ We will use `Config/Experiment/MACVO/MACVO_example.yaml` as the configuration fi
 > [!NOTE]
 >
 > See `python MACVO.py --help` for more flags and configurations.
+>
+> The demo sequence is RGB‑only. If your dataset includes depth.npy and/or flow.npy, set both flags to true.
+>
 
 ### 4/4 Visualize and Evaluate Result
 
@@ -224,3 +236,9 @@ Expand All (2 commands)
 > This codebase is designed with *modularization* in mind so it's easy to modify, replace, and re-configure modules of MAC-VO. One can easily use or replase the provided modules like flow estimator, depth estimator, keypoint selector, etc. to create a new visual odometry.
 
 We welcome everyone to extend and redevelop the MAC-VO. For documentation please visit the [Documentation Site](https://mac-vo.github.io/wiki/)
+
+### Custom Data Format
+
+To test MAC-VO on your custom data format, you use `GeneralStereo` dataloader class in `DataLoader/Dataset/GeneralStereo.py` as a starting point.
+
+This dataloader class corresponds to the `Config/Sequence/Example_GeneralStereo.yaml` configuration file, where you can manually set the camera intrinsic and stereo basline etc.

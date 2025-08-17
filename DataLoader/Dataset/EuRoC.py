@@ -214,7 +214,9 @@ class EurocMonocularDataset(Dataset):
         self.cam_timestamps = self.cam_timestamps[cam_mask]
 
     def load_png(self, path: Path) -> np.ndarray:
-        return self.correct_distortion(cv2.imread(str(path)))
+        image = cv2.imread(str(path))
+        assert image is not None
+        return self.correct_distortion(image)
 
     def __len__(self):
         return self.length

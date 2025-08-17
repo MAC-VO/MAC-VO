@@ -49,6 +49,8 @@ class VBRMonocularDataset(Dataset):
     
     def __getitem__(self, index) -> torch.Tensor:
         image = cv2.imread(str(self.file_names[index]), cv2.IMREAD_UNCHANGED)
+        assert image is not None
+        
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image = self.correct_distortion(image)
         image_tensor = torch.tensor(image, dtype=torch.float).permute(2, 0, 1).unsqueeze(0)

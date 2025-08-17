@@ -82,7 +82,9 @@ def evaluate_flowcov(matcher: IMatcher, seq: SequenceBase[StereoFrame], max_flow
         error       = est_flow - gt_flow
         error2      = error.square()
         
+        mask: torch.Tensor
         if use_gt_mask:
+            assert prev_frame.stereo.flow_mask is not None
             mask = prev_frame.stereo.flow_mask
         else:
             mask        = est_flow < max_flow
