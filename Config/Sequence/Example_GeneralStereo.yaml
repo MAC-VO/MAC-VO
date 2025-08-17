@@ -1,0 +1,14 @@
+type: GeneralStereo
+name: sequence_name_here
+args:
+  root: ${DATA_ROOT}/path/to/your/dataset/
+
+  # Camera Calibration
+  camera:
+    fx: 735.9240
+    fy: 735.7140
+    cx: 964.8520
+    cy: 622.2050
+  
+  bl: 0.119981    # Unit: meter
+  format: png

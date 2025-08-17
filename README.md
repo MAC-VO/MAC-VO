@@ -1,4 +1,3 @@
-
 # <div align="center">MAC-VO: Metrics-aware Covariance for Learning-based Stereo Visual Odometry</div>
 
 ### <div align="center">🥇 ICRA 2025 Best Conference Paper Award<br/>🥇 ICRA 2025 Best Paper Award on Robot Perception</div>
@@ -42,15 +41,14 @@ Clone the repository using the following command to include all submodules autom
 
 `git clone https://github.com/MAC-VO/MAC-VO.git --recursive`
 
+
 ## 🔧 Minimum Requirements
 
-| Component      | Minimum Version | Notes |
-|----------------|-----------------|------|
-| **GPU Driver** | NVIDIA ≥ 545    | CUDA 12.4+ |
-| **CUDA Toolkit / Runtime** | ≥ 12.2 | Dockerfile installs correct version |
-| **Python**     | 3.10+           |  |
-| **VRAM**       | ≥ 6 GB          | 640×480 @ 7 FPS; fast mode needs ≈ 3 GB |
-| **Disk**       | ≥ 3 GB          | demo + weights |
+| Component        | Minimum Version | Notes                                            |
+|------------------|-----------------|--------------------------------------------------|
+| **CUDA Runtime** | ≥ 12.4          | Dockerfile installs correct version              |
+| **Python**       | ≥ 3.10          |                                                  |
+| **VRAM**         | ≥ 6 GB          | 640×480; fast mode (mixed precision) needs 2.7GB |
 
 
 ## 📦 Installation & Environment
@@ -104,69 +102,31 @@ To run the Docker with visualization:
 
 ### 3/4 Run MAC-VO
 
-Dataset configuration
-MAC-VO reads each sequence through a small YAML file in data `{PATH_TO_YOUR_ZED_FILE}`.
-Here is a minimal ZED configuration:
+We will use `Config/Experiment/MACVO/MACVO_example.yaml` as the configuration file for MAC-VO.
 
-```yaml
-# {PATH_TO_YOUR_ZED_FILE}
-
-# (1) Which loader to use
-#     GeneralStereo – generic stereo loader (see Dataset/GeneralStereo.py)
-
-type: GeneralStereo
-name: kit2kit_manual_dyna     # will appear in logs / plots
-
-args:
-  root: ${DATA_ROOT}/dsta_zed/07-19-run1/dsta_zed_07-19-run1  # sequence folder
-
-  # camera calibration
-  camera:
-    fx: 735.9240
-    fy: 735.7140
-    cx: 964.8520
-    cy: 622.2050
-  bl: 0.119981              # stereo baseline in metres
-  format: png               # image extension
-```
-
-
-| **Key**                     | **What it controls**                                        |
-| --------------------------- | ----------------------------------------------------------- |
-| `type`                      | Dataset loader class (see Dataset/)                         |
-| `root`                      | Absolute / container-internal path of the sequence          |
-| `camera`                    | Intrinsic parameters of the left camera                     |
-| `bl`                        | Stereo baseline (metres)                                    |
-| `format`                    | Image file extension (png, jpg, …)                          |
-
-
-Run MAC-VO
-We will use `{PATH_TO_YOUR_ZED_FILE}` as the configuration file for MAC-VO.
-
-1. Adjust args.root in `{PATH_TO_YOUR_ZED_FILE}` to point to your data. 
-2. Launch MAC-VO in one of two modes:
+1. Change the `root` in the data config file 'Config/Sequence/TartanAir_example.yaml' to reflect the actual path to the demo sequence downloaded.
+2. Run with one of the following command:
 
     *Performant Mode* - best performance with moderate speed (7.5fps on 480x640 image)
 
     ```bash
-    python3 MACVO.py \
-    --odom Config/Experiment/MACVO/MACVO_Performant.yaml \
-    --data {PATH_TO_YOUR_ZED_FILE}
+    $ cd workspace
+    $ python3 MACVO.py --odom Config/Experiment/MACVO/MACVO_Performant.yaml --data Config/Sequence/TartanAir_example.yaml
     ```
 
-    *Fast Mode* - slightly degraded performance (~5% increase in RTE and ROE) with most speed (12.5fps on 480x640 image)
+    *Fast Mode* - slightly degraded performance (<5% increase in RTE and ROE) with most speed (12.5fps on 480x640 image)
 
     ```bash
     $ cd workspace
-    $ python3 MACVO.py \
-    --odom Config/Experiment/MACVO/MACVO_Fast.yaml \
-    --data {PATH_TO_YOUR_ZED_FILE}
+    $ python3 MACVO.py --odom Config/Experiment/MACVO/MACVO_Fast.yaml --data Config/Sequence/TartanAir_example.yaml
     ```
 
 > [!NOTE]
 >
 > See `python MACVO.py --help` for more flags and configurations.
+>
 > The demo sequence is RGB‑only. If your dataset includes depth.npy and/or flow.npy, set both flags to true.
+>
 
 ### 4/4 Visualize and Evaluate Result
 
@@ -271,8 +231,14 @@ Expand All (2 commands)
 **World Coordinate** - `NED` convention, `+x -> North`, `+y -> East`, `+z -> Down` with the first frame being world origin having identity SE3 pose.
 
 
-## 🤗 Customization, Extension and Future Development
+## 🤗 Customization, Extension and Future Developement
 
-> This codebase is designed with *modularization* in mind so it's easy to modify, replace, and re-configure modules of MAC-VO. One can easily use or replace the provided modules like flow estimator, depth estimator, keypoint selector, etc. to create a new visual odometry.
+> This codebase is designed with *modularization* in mind so it's easy to modify, replace, and re-configure modules of MAC-VO. One can easily use or replase the provided modules like flow estimator, depth estimator, keypoint selector, etc. to create a new visual odometry.
 
 We welcome everyone to extend and redevelop the MAC-VO. For documentation please visit the [Documentation Site](https://mac-vo.github.io/wiki/)
+
+### Custom Data Format
+
+To test MAC-VO on your custom data format, you use `GeneralStereo` dataloader class in `DataLoader/Dataset/GeneralStereo.py` as a starting point.
+
+This dataloader class corresponds to the `Config/Sequence/Example_GeneralStereo.yaml` configuration file, where you can manually set the camera intrinsic and stereo basline etc.

@@ -181,6 +181,8 @@ class TartanAirMonocularDataset(Dataset):
     @staticmethod
     def load_png_format(path: Path) -> np.ndarray:
         image = cv2.imread(str(path), cv2.IMREAD_COLOR)
+        assert image is not None
+        
         return cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
     def __len__(self):
