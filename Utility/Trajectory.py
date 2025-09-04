@@ -170,9 +170,7 @@ class Trajectory:
         return MotionSequence(motions, duration, self.frame_status[1:], pp.SE3(self.poses[0]), start_time)
 
     def align_time(self, new_time: torch.Tensor) -> Trajectory:
-        aligned_pose, frame_status = interpolate_pose(self.poses, self.time, new_time)
-        # TODO: may want to also do 'interpolate' on frame_status (e.g. find nearest neighbor and 
-        # get corresponding frame_status flag).
+        aligned_pose, frame_status = interpolate_pose(self.poses, self.time, new_time, self.frame_status)
         return Trajectory(aligned_pose, new_time, frame_status)
 
     def align_SE3(self, ref_traj: Trajectory) -> Trajectory:
