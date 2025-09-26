@@ -241,6 +241,7 @@ We welcome everyone to extend and redevelop the MAC-VO. For documentation please
 
 To test MAC-VO on your custom data format, you use `GeneralStereo` dataloader class in `DataLoader/Dataset/GeneralStereo.py` as a starting point.
 
+This dataloader class corresponds to the `Config/Sequence/Example_GeneralStereo.yaml` configuration file, where you can manually set the camera intrinsic and stereo basline etc.
 
 
 ```latex
@@ -253,5 +254,3 @@ To test MAC-VO on your custom data format, you use `GeneralStereo` dataloader cl
  organization={IEEE}
 }
 ```
-
-This dataloader class corresponds to the `Config/Sequence/Example_GeneralStereo.yaml` configuration file, where you can manually set the camera intrinsic and stereo basline etc.
