@@ -241,4 +241,17 @@ We welcome everyone to extend and redevelop the MAC-VO. For documentation please
 
 To test MAC-VO on your custom data format, you use `GeneralStereo` dataloader class in `DataLoader/Dataset/GeneralStereo.py` as a starting point.
 
+
+
+```latex
+@inproceedings{qiu2025mac,
+ title={MAC-VO: Metrics-Aware Covariance for Learning-Based Stereo Visual Odometry mac-vo. github. io},
+ author={Qiu, Yuheng and Chen, Yutian and Zhang, Zihao and Wang, Wenshan and Scherer, Sebastian},
+ booktitle={2025 IEEE International Conference on Robotics and Automation (ICRA)},
+ pages={3803--3814},
+ year={2025},
+ organization={IEEE}
+}
+```
+
 This dataloader class corresponds to the `Config/Sequence/Example_GeneralStereo.yaml` configuration file, where you can manually set the camera intrinsic and stereo basline etc.
