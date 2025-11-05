@@ -93,32 +93,61 @@ def gaussian_mixture_mean_var(batch_means: torch.Tensor, batch_vars: torch.Tenso
     return calc_mean, calc_var / 2
 
 
-def interpolate_pose(Ps: pp.LieTensor, ts: torch.Tensor, ts_ev: torch.Tensor) -> tuple[pp.LieTensor, torch.Tensor]:
-    assert (ts[..., :-1] < ts[..., 1:]).all() # check ts is sorted and no duplication.
-
+def interpolate_pose(Ps: pp.LieTensor, ts: torch.Tensor, ts_ev: torch.Tensor, frame_status: torch.Tensor) -> tuple[pp.LieTensor, torch.Tensor]:
     P_container = torch.empty((*ts_ev.shape, 7), dtype=Ps.dtype)
-    before_mask, after_mask = ts_ev <= ts[..., 0], ts_ev >= ts[..., -1]
+    status_container = torch.zeros(ts_ev.shape, dtype=torch.bool, device=frame_status.device)
+
+    # masks
+    before_mask = ts_ev <= ts[..., 0]
+    after_mask  = ts_ev >= ts[..., -1]
     interp_mask = ~torch.logical_or(before_mask, after_mask)
 
-    if before_mask.sum().item() > 0: P_container[before_mask] = Ps[..., 0, :]
-    if after_mask.sum().item() > 0 : P_container[after_mask]  = Ps[..., -1, :]
+    # before → copy pose[0], status[0]
+    if before_mask.any():
+        P_container[before_mask] = Ps[..., 0, :]
+        status_container[before_mask] = frame_status[..., 0]
 
-    ts_ev = ts_ev[interp_mask]
-    idx_ev_end   = torch.searchsorted(ts, ts_ev, right=False)
-    idx_ev_start = idx_ev_end - 1
+    # after → copy pose[-1], status[-1]
+    if after_mask.any():
+        P_container[after_mask] = Ps[..., -1, :]
+        status_container[after_mask] = frame_status[..., -1]
 
-    P_seg_start: pp.LieTensor = Ps[..., idx_ev_start, :]    #type: ignore
-    P_seg_end  : pp.LieTensor = Ps[..., idx_ev_end, :]  #type: ignore
-    t_seg_start = ts[..., idx_ev_start]
-    t_seg_end   = ts[..., idx_ev_end]
-    t_ev_prop   = (ts_ev - t_seg_start) / (t_seg_end - t_seg_start)
+    # interpolation
+    ts_ev_interp = ts_ev[interp_mask]
+    if ts_ev_interp.numel() > 0:
+        idx_ev_end   = torch.searchsorted(ts, ts_ev_interp, right=False)
+        idx_ev_start = idx_ev_end - 1
 
-    lie_algebra_diff =(P_seg_end @ P_seg_start.Inv()).Log()
-    lie_type = lie_algebra_diff.ltype
+        P_seg_start: pp.LieTensor = Ps[..., idx_ev_start, :]  # type: ignore
+        P_seg_end  : pp.LieTensor = Ps[..., idx_ev_end, :]    # type: ignore
+        t_seg_start = ts[..., idx_ev_start]
+        t_seg_end   = ts[..., idx_ev_end]
+        t_ev_prop   = (ts_ev_interp - t_seg_start) / (t_seg_end - t_seg_start)
 
-    P_interp = pp.LieTensor(t_ev_prop.unsqueeze(-1) * lie_algebra_diff, ltype=lie_type).Exp().to(P_seg_start) @ P_seg_start
-    if interp_mask.sum().item() > 0: P_container[interp_mask] = P_interp    
-    return pp.SE3(P_container), ~interp_mask
+        lie_algebra_diff = (P_seg_end @ P_seg_start.Inv()).Log()
+        lie_type = lie_algebra_diff.ltype
+
+        P_interp = (
+            pp.LieTensor(t_ev_prop.unsqueeze(-1) * lie_algebra_diff, ltype=lie_type)
+            .Exp()
+            .to(P_seg_start)
+            @ P_seg_start
+        )
+
+        # assign
+        P_container[interp_mask] = P_interp
+        status_container[interp_mask] = False
+
+    # exact matches (event timestamps that equal one of ts)
+    # they should keep both pose & status from the trajectory
+    idx_exact = torch.isin(ts_ev, ts)
+    if idx_exact.any():
+        # find matching indices in ts
+        match_indices = torch.searchsorted(ts, ts_ev[idx_exact])
+        P_container[idx_exact] = Ps[..., match_indices, :]
+        status_container[idx_exact] = frame_status[..., match_indices]
+
+    return pp.SE3(P_container), status_container
 
 
 def NormalizeQuat(x: pp.LieTensor) -> pp.LieTensor:
