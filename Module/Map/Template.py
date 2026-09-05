@@ -8,7 +8,8 @@ FrameFeature = T.Literal[
     "pose",         # Nx7   , dtype=float32, pose of sensor under world frame.
     "T_BS",         # Nx7   , dtype=float32, body-to-sensor SE3 transformation.
     "need_interp",  # Nx1   , dtype=bool
-    "time_ns"       # Nx1   , dtype=long
+    "time_ns",      # Nx1   , dtype=long
+    "time_raw",     # Nx1   , dtype=float64, original dataset timestamp unit
 ]
 MatchingFeature = T.Literal[
     "pixel1_uv",    # Nx2   , dtype=float32

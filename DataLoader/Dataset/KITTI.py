@@ -67,14 +67,16 @@ class KITTI_StereoSequence(SequenceBase[StereoFrame]):
                 T_BS    = cast(pp.LieTensor, self.T_BS),
                 K       = self.cam2_K,
                 baseline= torch.tensor([self.baseline]),
-                time_ns = [self.imageL.cam_timestamps[index]],
+                time_ns = [int(self.imageL.cam_timestamps[index])],
+                time_raw= [float(self.imageL.cam_timestamps_raw[index])],
                 height  = imageL.size(2),
                 width   = imageL.size(3),
                 imageL  = imageL,
                 imageR  = self.imageR[index]
             ),
             idx=[local_index],
-            time_ns=[self.imageL.cam_timestamps[index]],
+            time_ns=[int(self.imageL.cam_timestamps[index])],
+            time_raw=[float(self.imageL.cam_timestamps_raw[index])],
             gt_pose= None if self.gtPose_data is None else cast(pp.LieTensor, self.gtPose_data[index].unsqueeze(0))
         )
     
@@ -91,9 +93,10 @@ class KITTIMonocularDataset(Dataset):
         super().__init__()
         self.file_names = sorted([file for file in image_path.glob("*.png")])
         self.length = len(self.file_names)
-        self.cam_timestamps = (np.loadtxt(
+        self.cam_timestamps_raw = np.loadtxt(
             Path(image_path, "..", "times.txt"), delimiter=" ", dtype=np.float64
-        ) * 1_000_000_000).astype(np.int64)
+        )
+        self.cam_timestamps = (self.cam_timestamps_raw * 1_000_000_000).astype(np.int64)
     
     def __len__(self) -> int: return self.length
     

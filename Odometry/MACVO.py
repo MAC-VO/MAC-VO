@@ -164,6 +164,7 @@ class MACVO(IOdometry[T_SensorFrame], ConfigTestable):
             "T_BS"        : frame0.stereo.T_BS,
             "need_interp" : torch.tensor([0], dtype=torch.bool),
             "time_ns"     : torch.tensor([frame0.stereo.frame_ns], dtype=torch.long),
+            "time_raw"    : torch.tensor([frame0.stereo.frame_time_raw], dtype=torch.float64),
             "K"           : frame0.stereo.K,
             "baseline"    : frame0.stereo.baseline,
         }))
@@ -342,6 +343,7 @@ class MACVO(IOdometry[T_SensorFrame], ConfigTestable):
             "T_BS"        : frame.stereo.T_BS,
             "need_interp" : torch.tensor([need_interp], dtype=torch.bool),
             "time_ns"     : torch.tensor([frame.stereo.frame_ns], dtype=torch.long),
+            "time_raw"    : torch.tensor([frame.stereo.frame_time_raw], dtype=torch.float64),
             "K"           : frame.stereo.K,
             "baseline"    : frame.stereo.baseline,
         }))

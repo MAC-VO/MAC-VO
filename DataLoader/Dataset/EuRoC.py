@@ -50,6 +50,7 @@ class EuRoC_Sequence(SequenceBase[StereoInertialFrame]):
         return StereoInertialFrame(
             idx=[local_index],
             time_ns=stereo_frame.time_ns,
+            time_raw=stereo_frame.time_raw,
             gt_pose=stereo_frame.gt_pose,
             stereo=stereo_frame.stereo,
             imu=imu, gt_attitude=attitude
@@ -126,7 +127,8 @@ class EuRoC_StereoSequence(SequenceBase[StereoFrame]):
 
         return StereoFrame(
             idx=[local_index],
-            time_ns=[int(self.cam_timestamps[index].item())], 
+            time_ns=[int(self.cam_timestamps[index].item())],
+            time_raw=[float(self.cam_timestamps[index].item())],
             stereo=StereoData(
                 T_BS=self.T_BS_lcam,
                 K   =self.K,
@@ -134,6 +136,7 @@ class EuRoC_StereoSequence(SequenceBase[StereoFrame]):
                 width=self.width,
                 height=self.height,
                 time_ns=[int(self.cam_timestamps[index].item())],
+                time_raw=[float(self.cam_timestamps[index].item())],
                 imageL=self.ImageL[index],
                 imageR=self.ImageR[index],
             ),

@@ -32,6 +32,7 @@ class DeepPatchVO(IOdometry[StereoFrame]):
         
         self.Ks, self.poses, self.timestep = [], None, None
         self.Ts    = []
+        self.Ts_raw = []
         self.T_BSs = []
     
     @classmethod
@@ -45,6 +46,7 @@ class DeepPatchVO(IOdometry[StereoFrame]):
         self.Ks.append(frame.stereo.K)
         self.T_BSs.append(frame.stereo.T_BS)
         self.Ts.append(frame.stereo.frame_ns)
+        self.Ts_raw.append(frame.stereo.frame_time_raw)
         # NOTE: DPVO will perform /255 operation internally.
         image_cu = frame.stereo.imageL.cuda()[0] * 255
         intrinsic_cu = torch.tensor([frame.stereo.fx, frame.stereo.fy, frame.stereo.cx, frame.stereo.cy], device="cuda")
@@ -73,4 +75,5 @@ class DeepPatchVO(IOdometry[StereoFrame]):
             "K"   : torch.cat(self.Ks, dim=0),
             "need_interp": torch.zeros((n_frame,), dtype=torch.bool),
             "time_ns"    : torch.tensor(self.Ts, dtype=torch.long),
+            "time_raw"   : torch.tensor(self.Ts_raw, dtype=torch.float64),
         }))

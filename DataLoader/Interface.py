@@ -59,7 +59,8 @@ class StereoData(Collatable):
     T_BS: pp.LieTensor      # torch.float32, pp.SE3 of shape Bx7
     K   : torch.Tensor      # torch.float32 of shape Bx3x3
     baseline: torch.Tensor   # Baseline (m) between left and right camera, len(list) = B
-    time_ns : list[int]     # Time (ns) of data received, len(list) = B
+    time_ns : list[int]     # Time (ns) for internal VO / map math, len(list) = B
+    time_raw: list[float]   # Original dataset timestamp unit (e.g. seconds or ns), len(list) = B
     height: int             # H
     width : int             # W
     
@@ -67,6 +68,10 @@ class StereoData(Collatable):
     def frame_ns(self) -> int:
         assert len(self.time_ns) == 1, "Can only use frame_ns on unbatched data."
         return self.time_ns[0]
+    @property
+    def frame_time_raw(self) -> float:
+        assert len(self.time_raw) == 1, "Can only use frame_time_raw on unbatched data."
+        return self.time_raw[0]
     @property
     def frame_ms(self) -> float: return self.frame_ns / 1000.
     @property
@@ -170,8 +175,10 @@ class DataFrame(Collatable):
     # Ground truth pose under body frame
     gt_pose  : pp.LieTensor | None = None   # pp.SE3 of shape Bx7
     
-    # Time in nanoseconds
+    # Time in nanoseconds (internal)
     time_ns  : list[int]
+    # Original dataset timestamp (same unit/value as in the source file)
+    time_raw : list[float]
     
     @property
     def frame_idx(self) -> int:
@@ -182,6 +189,11 @@ class DataFrame(Collatable):
     def frame_time_ns(self) -> int:
         assert len(self.time_ns) == 1, "frame_time_ns property is only valid on unbatched data"
         return self.time_ns[0]
+
+    @property
+    def frame_time_raw(self) -> float:
+        assert len(self.time_raw) == 1, "frame_time_raw property is only valid on unbatched data"
+        return self.time_raw[0]
 
 T_Data = T.TypeVar("T_Data", bound=DataFrame)
 

@@ -133,13 +133,15 @@ class VBR_StereoSequence(SequenceBase[StereoFrame]):
                 T_BS    = cast(pp.LieTensor, self.T_BS),
                 K       = self.cam_l_K,
                 baseline= torch.tensor([self.baseline]),
-                time_ns = [self.imageL.cam_stamps[index]],
+                time_ns = [int(self.imageL.cam_stamps[index])],
+                time_raw= [float(self.imageL.cam_stamps[index])],
                 height  = imageL.size(2),
                 width   = imageL.size(3),
                 imageL  = imageL,
                 imageR  = self.imageR[index]
             ),
-            time_ns = [self.imageL.cam_stamps[index]],
+            time_ns = [int(self.imageL.cam_stamps[index])],
+            time_raw= [float(self.imageL.cam_stamps[index])],
             idx=[local_index],
             gt_pose= None if self.gtPose_data is None else cast(pp.LieTensor, self.gtPose_data[index].unsqueeze(0))
         )

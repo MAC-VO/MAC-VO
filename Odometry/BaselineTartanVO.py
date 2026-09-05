@@ -40,6 +40,7 @@ class TartanVO(IOdometry[StereoFrame], ConfigTestableSubclass):
                 "baseline"   : frame.stereo.baseline,
                 "need_interp": torch.tensor([1], dtype=torch.bool),
                 "time_ns"    : torch.tensor(frame.stereo.time_ns, dtype=torch.long),
+                "time_raw"   : torch.tensor(frame.stereo.time_raw, dtype=torch.float64),
                 "pose"       : self.gmap.frames.data["pose"][-1:],
                 "T_BS"       : self.gmap.frames.data["T_BS"][-1:],
             }))
@@ -58,6 +59,7 @@ class TartanVO(IOdometry[StereoFrame], ConfigTestableSubclass):
             "baseline"   : frame.stereo.baseline,
             "need_interp": torch.tensor([0], dtype=torch.bool),
             "time_ns"    : torch.tensor(frame.stereo.time_ns, dtype=torch.long),
+            "time_raw"   : torch.tensor(frame.stereo.time_raw, dtype=torch.float64),
             "pose"       : est_pose,
             "T_BS"       : frame.stereo.T_BS,
         }))
