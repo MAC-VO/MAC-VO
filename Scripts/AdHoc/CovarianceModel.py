@@ -48,6 +48,7 @@ def simulate_cov_model(
             K=K,
             baseline=torch.tensor([bl]),
             time_ns=[0],
+            time_raw=[0.0],
             width=640, height=640,
             
             imageL=torch.empty((1, 3, 640, 640), dtype=torch.float32),

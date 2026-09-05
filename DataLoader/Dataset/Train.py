@@ -19,7 +19,7 @@ class TrainDataset(SequenceBase[DataFramePair[T_Data]]):
     def __getitem__(self, local_index: int) -> DataFramePair[T_Data]:
         index = self.get_index(local_index)
         frame, next_frame = self.sequence[index], self.sequence[index + 1]
-        data = DataFramePair(idx=frame.idx, cur=frame, nxt=next_frame, time_ns=frame.time_ns)
+        data = DataFramePair(idx=frame.idx, cur=frame, nxt=next_frame, time_ns=frame.time_ns, time_raw=frame.time_raw)
         return data
 
     def transform_source(self, actions: list[T.Callable[[T_Data], T_Data]]):

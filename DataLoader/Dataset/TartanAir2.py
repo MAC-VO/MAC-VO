@@ -53,7 +53,8 @@ class TartanAirV2_Sequence(SequenceBase[StereoInertialFrame]):
             stereo=stereo_frame.stereo,
             imu=imu_data, gt_attitude=attitude_data,
             gt_pose=stereo_frame.gt_pose,
-            time_ns=stereo_frame.time_ns
+            time_ns=stereo_frame.time_ns,
+            time_raw=stereo_frame.time_raw,
         )
     
     @classmethod
@@ -91,10 +92,11 @@ class TartanAirV2_StereoSequence(SequenceBase[StereoFrame]):
         
         cam_time_file_path = Path(cfg.root, "imu", "cam_time.txt")
         if cam_time_file_path.exists():
-            self.lcam_time   = (np.loadtxt(str(cam_time_file_path), dtype=np.float64) * 1_000_000_000).astype(np.int64)
+            self.lcam_time_raw = np.loadtxt(str(cam_time_file_path), dtype=np.float64)
         else:
             # Fake data, assume 10Hz image
-            self.lcam_time = (np.arange(len(self.lcam_loader), dtype=np.float64) * 0.1 * 1_000_000_000).astype(np.int64)
+            self.lcam_time_raw = np.arange(len(self.lcam_loader), dtype=np.float64) * 0.1
+        self.lcam_time = (self.lcam_time_raw * 1_000_000_000).astype(np.int64)
 
         if cfg.gtDepth:
             from .TartanAir import TartanAirGTDepthDataset
@@ -124,7 +126,8 @@ class TartanAirV2_StereoSequence(SequenceBase[StereoFrame]):
                 T_BS      = self.lcam_T_BS,
                 K         = self.lcam_K,
                 baseline  = torch.tensor([self.baseline]),
-                time_ns   = [self.lcam_time[index].item()],  # Fake data, assume 10Hz image
+                time_ns   = [int(self.lcam_time[index].item())],
+                time_raw  = [float(self.lcam_time_raw[index].item())],
                 height    = 640,
                 width     = 640,
                 imageL    = self.lcam_loader[index],
@@ -135,7 +138,8 @@ class TartanAirV2_StereoSequence(SequenceBase[StereoFrame]):
                 gt_flow   = gt_flow[0] if gt_flow else None,
                 flow_mask = gt_flow[1] if gt_flow else None,
             ),
-            time_ns   = [self.lcam_time[index].item()],  # Fake data, assume 10Hz image
+            time_ns   = [int(self.lcam_time[index].item())],
+            time_raw  = [float(self.lcam_time_raw[index].item())],
             gt_pose   = cast(pp.LieTensor, self.gt_poses[index].unsqueeze(0)) if (self.gt_poses is not None) else None,
         )
     

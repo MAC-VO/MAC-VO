@@ -48,6 +48,7 @@ class GeneralStereoSequence(SequenceBase[StereoFrame]):
         return StereoFrame(
             idx    = [local_index],
             time_ns= [local_index * 1000],         # FIXME: a fake timestamp.
+            time_raw=[float(local_index * 1000)],  # FIXME: a fake timestamp.
             stereo = StereoData(
                 T_BS     = self.T_BS,
                 K        = self.K[index:index+1],
@@ -55,6 +56,7 @@ class GeneralStereoSequence(SequenceBase[StereoFrame]):
                 width    = imageL.size(-1),
                 height   = imageL.size(-2),
                 time_ns  = [local_index * 1000],   # FIXME: a fake timestamp.
+                time_raw = [float(local_index * 1000)],
                 imageL   = imageL,
                 imageR   = imageR
             )

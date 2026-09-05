@@ -26,7 +26,8 @@ class VisualMap:
                 "pose"       : AutoScalingTensor((self.init_size, 7   ), grow_on=0, dtype=torch.float32),
                 "T_BS"       : AutoScalingTensor((self.init_size, 7   ), grow_on=0, dtype=torch.float32),
                 "need_interp": AutoScalingTensor((self.init_size,     ), grow_on=0, dtype=torch.bool),
-                "time_ns"    : AutoScalingTensor((self.init_size,     ), grow_on=0, dtype=torch.long)
+                "time_ns"    : AutoScalingTensor((self.init_size,     ), grow_on=0, dtype=torch.long),
+                "time_raw"   : AutoScalingTensor((self.init_size,     ), grow_on=0, dtype=torch.float64),
             }
         )
         
