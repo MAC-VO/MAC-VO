@@ -178,8 +178,19 @@ class MACVO(IOdometry[T_SensorFrame], ConfigTestable):
             self.push_keyframe(frame1, self.graph.frames.data["pose"][self.prev_keyframe[1]].unsqueeze(0), need_interp=True)
             return
         
-        depth0          = self.prev_keyframe[2]
         depth1, match01 = self.Frontend.estimate_pair(frame0.stereo, frame1.stereo)
+        self.run_pair_from_estimate(frame0, frame1, depth1, match01)
+
+    def run_pair_from_estimate(
+        self,
+        frame0: T_SensorFrame,
+        frame1: T_SensorFrame,
+        depth1: Module.IStereoDepth.Output,
+        match01: Module.IMatcher.Output,
+    ) -> None:
+        """Build tracking factors from already-computed frontend outputs."""
+        assert self.prev_keyframe is not None
+        depth0 = self.prev_keyframe[2]
 
         # Receive optimization result from previous step (if exists) ####################
         # NOTE: should always writeback optimized pose to global map before selecting new 

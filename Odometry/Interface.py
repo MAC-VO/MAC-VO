@@ -24,6 +24,8 @@ class IOdometry(ABC, Generic[T_Data]):
     
     def receive_frames(self, sequence: SequenceBase[T_Data], saveto: Sandbox, on_frame_finished: None | Callable[[T_Data, Self, ColoredTqdm], None]=None):
         try:
+            if hasattr(self, "set_runtime_folder"):
+                self.set_runtime_folder(saveto.folder)
             reference_poses, reference_time = [], []
             pb = ColoredTqdm(sequence)
             frame: T_Data

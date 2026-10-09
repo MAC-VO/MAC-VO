@@ -1,0 +1,5 @@
+type: EuRoC
+name: MH03
+args:
+    root: /media/zzh/data/EUROC_Dataset/EuRoC/MH_03_medium/mav0
+    gt_pose: true

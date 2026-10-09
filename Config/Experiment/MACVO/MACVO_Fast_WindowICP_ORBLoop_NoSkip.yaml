@@ -1,0 +1,95 @@
+# Online WindowICP ablation without t-2 -> t skip matching.
+Common:
+  device: &device cuda
+Odometry:
+  type: OnlineLoopWindowMACVO
+  name: MACVO-Fast-WindowICP5-ORBLoop-NoSkip
+  args:
+    device: *device
+    edgewidth: 32
+    num_point: 200
+    match_cov_default: 0.25
+    profile: false
+    mapping: false
+    window_size: 5
+    skip_matching: false
+    window_iterations: 10
+    window_huber_delta: 3.0
+    global_refine: false
+    global_iterations: 5
+    global_huber_delta: 3.0
+    online_loop:
+      enabled: true
+      keyframe_stride: 5
+      min_temporal_gap: 30
+      bow_top_k: 3
+      max_candidates_per_target: 1
+      candidate_nms_frames: 10
+      max_candidate_queue: 8
+      max_pending_targets: 8
+      min_bow_score: 0.005
+      min_frames_between_loop_matches: 25
+      orb_sidecar: ./build/orb_bow/macvo_orb_bow
+      vocabulary: ./cache/ORBvoc.txt
+    pairwise_icp:
+      iterations: 5
+      huber_delta: 3.0
+    pose_graph:
+      iterations: 10
+      huber_delta: 3.0
+      skip_information_cap: 0.5
+      switch_prior: 1.0
+  cov:
+    obs:
+      type: MatchCovariance
+      args:
+        device: *device
+        kernel_size: 31
+        match_cov_default: 0.25
+        min_depth_cov: 0.05
+        min_flow_cov: 0.25
+  keypoint:
+    type: CovAwareSelector_NoDepth
+    args:
+      device: *device
+      kernel_size: 7
+      mask_width: 32
+      max_match_cov: 100.0
+  mappoint:
+    type: MappingPointSelector
+    args:
+      device: *device
+      max_depth: 5.0
+      max_depth_cov: 0.005
+      mask_width: 32
+  frontend:
+    type: CUDAGraph_FlowFormerCovFrontend
+    args:
+      device: *device
+      weight: ./Model/MACVO_FrontendCov.pth
+      enc_dtype: fp16
+      dec_dtype: bf16
+      decoder_depth: 12
+      enforce_positive_disparity: false
+  motion:
+    type: StaticMotionModel
+    args:
+  outlier:
+    type: CovarianceSanityFilter
+    args:
+  postprocess:
+    type: MotionInterpolate
+    args:
+  keyframe:
+    type: AllKeyframe
+    args:
+  optimizer:
+    type: TwoFrame_PGO
+    args:
+      device: cpu
+      vectorize: true
+      parallel: false
+      graph_type: icp
+      autodiff: false
+Data: !include ../../Sequence/TartanAir_example.yaml
+Preprocess: !include ../Common/Preprocess.yaml

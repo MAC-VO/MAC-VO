@@ -9,7 +9,7 @@ NEED_ALIGN_SCALE = {"dpvo", "droid", "tartanvo_mono"}
 def evaluateRTE(gt_traj: PosePath3D, est_traj: PosePath3D, correct_scale=False):
     result = main_rpe.rpe(gt_traj, est_traj, 
                           pose_relation=PoseRelation.translation_part,
-                          align_origin=True,
+                          align_origin=False,
                           align=True,
                           correct_scale=correct_scale,
                           delta=1, delta_unit=Unit.frames)
@@ -18,7 +18,7 @@ def evaluateRTE(gt_traj: PosePath3D, est_traj: PosePath3D, correct_scale=False):
 def evaluateATE(gt_traj: PosePath3D, est_traj: PosePath3D, correct_scale=False):
     result = main_ape.ape(gt_traj, est_traj, 
                           pose_relation=PoseRelation.translation_part,
-                          align_origin=True,
+                          align_origin=False,
                           align=True,
                           correct_scale=correct_scale)
     return result
@@ -34,7 +34,7 @@ def evaluateROE(gt_traj: PosePath3D, est_traj: PosePath3D, correct_scale=False):
     # to 1e-4 (or a more relaxed value)
     result = main_rpe.rpe(gt_traj, est_traj,
                           pose_relation=PoseRelation.rotation_angle_deg,
-                          align_origin=True,
+                          align_origin=False,
                           align=True,
                           correct_scale=correct_scale,
                           delta=1, delta_unit=Unit.frames)
@@ -46,6 +46,6 @@ def evaluateRPE(gt_traj: PosePath3D, est_traj: PosePath3D, correct_scale=False):
     """
     result = main_rpe.rpe(gt_traj, est_traj,
                           pose_relation=PoseRelation.full_transformation,
-                          align_origin=True, align=True, correct_scale=correct_scale,
+                          align_origin=False, align=True, correct_scale=correct_scale,
                           delta=1, delta_unit=Unit.frames)
     return result

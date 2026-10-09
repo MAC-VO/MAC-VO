@@ -1,0 +1,8 @@
+type: TartanAirv2_NoIMU
+name: WindowFixture
+args:
+  root: ./Scripts/UnitTest/assets/test_sequence/TartanAir2_abs_P000
+  compressed: true
+  gtFlow: false
+  gtDepth: false
+  gtPose: true

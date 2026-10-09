@@ -1,0 +1,5 @@
+type: EuRoC
+name: V201
+args:
+    root: /media/zzh/data/EUROC_Dataset/EuRoC/V2_01_easy/mav0
+    gt_pose: true

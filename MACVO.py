@@ -3,6 +3,10 @@ import torch
 import rerun as rr
 import numpy as np
 import pypose as pp
+import json
+import random
+import subprocess
+import hashlib
 from pathlib import Path
 
 from DataLoader import SequenceBase, StereoFrame, smart_transform
@@ -48,6 +52,7 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--odom", type=str, default = "Config/Experiment/MACVO/MACVO.yaml")
     parser.add_argument("--data", type=str, default = "Config/Sequence/TartanAir_abandonfac_001.yaml")
+    parser.add_argument("--seed", type=int, default=None, help="Optional random seed recorded with the run.")
     parser.add_argument(
         "--seq_to",
         type=int,
@@ -101,6 +106,10 @@ def get_args():
 
 if __name__ == "__main__":
     args = get_args()
+    if args.seed is not None:
+        random.seed(args.seed)
+        np.random.seed(args.seed)
+        torch.manual_seed(args.seed)
 
     # Metadata setup & visualizer setup
     cfg, cfg_dict = load_config(Path(args.odom))
@@ -114,6 +123,7 @@ if __name__ == "__main__":
         "Project": project_name,
         "Odometry": odomcfg_dict,
         "Data": {"args": datacfg_dict, "end_idx": args.seq_to, "start_idx": args.seq_from},
+        "Preprocess": cfg_dict["Preprocess"],
     }
 
     # Setup logging and visualization
@@ -137,8 +147,48 @@ if __name__ == "__main__":
     if args.preload:
         sequence = sequence.preload()
     
-    system = MACVO[StereoFrame].from_config(asNamespace(exp_space.config))
-    system.receive_frames(sequence, exp_space, on_frame_finished=onFrameFinished)
+    system_type = getattr(odomcfg, "type", "MACVO")
+    if system_type == "WindowMACVO":
+        from Odometry.WindowMACVO import WindowMACVO
+        system_class = WindowMACVO
+    elif system_type == "OnlineLoopWindowMACVO":
+        from Odometry.OnlineLoopWindowMACVO import OnlineLoopWindowMACVO
+        system_class = OnlineLoopWindowMACVO
+    elif system_type == "MACVO":
+        system_class = MACVO
+    else:
+        raise ValueError(f"Unknown odometry type: {system_type}")
+    def git_info(*arguments):
+        result = subprocess.run(["git", *arguments], capture_output=True, text=True)
+        return result.stdout.strip() if result.returncode == 0 else None
+    provenance = {
+        "git_commit": git_info("rev-parse", "HEAD"),
+        "git_branch": git_info("branch", "--show-current"),
+        "git_status": git_info("status", "--short"),
+        "seed": args.seed, "torch": torch.__version__, "pypose": pp.__version__,
+        "sequence_frames": len(sequence), "status": "running",
+        "odom_config_sha256": hashlib.sha256(Path(args.odom).read_bytes()).hexdigest(),
+        "data_config_sha256": hashlib.sha256(Path(args.data).read_bytes()).hexdigest(),
+    }
+    metadata_path = exp_space.path("run_provenance.json")
+    Path(metadata_path).write_text(json.dumps(provenance, indent=2), encoding="utf-8")
+    system = None
+    try:
+        system = system_class.from_config(asNamespace(exp_space.config))
+        system.receive_frames(sequence, exp_space, on_frame_finished=onFrameFinished)
+        output_path = exp_space.path("poses.npy")
+        if not Path(output_path).exists():
+            raise RuntimeError(f"Run did not finish: {exp_space.folder}")
+        output_poses = np.load(output_path)
+        if len(output_poses) != len(sequence) or not np.isfinite(output_poses).all():
+            raise RuntimeError("Output trajectory is incomplete or non-finite")
+        provenance["status"] = "complete"
+    finally:
+        if provenance["status"] != "complete":
+            provenance["status"] = "failed"
+        Path(metadata_path).write_text(json.dumps(provenance, indent=2), encoding="utf-8")
+        if hasattr(system, "save_window_diagnostics"):
+            system.save_window_diagnostics(exp_space.folder)
     
     rr_plt.log_trajectory("/world/est"  , torch.tensor(np.load(exp_space.path("poses.npy"))[:, 1:]))
     try:

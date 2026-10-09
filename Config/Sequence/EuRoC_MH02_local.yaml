@@ -1,0 +1,5 @@
+type: EuRoC
+name: MH02
+args:
+    root: /media/zzh/data/EUROC_Dataset/EuRoC/MH_02_easy/mav0
+    gt_pose: true

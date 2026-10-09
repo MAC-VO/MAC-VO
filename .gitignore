@@ -5,6 +5,7 @@ __pycache__/
 exp/
 Temp/
 cache/
+build/
 **/.venv/
 
 wandb/

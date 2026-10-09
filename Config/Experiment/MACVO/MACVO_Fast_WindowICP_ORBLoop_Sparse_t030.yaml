@@ -1,0 +1,123 @@
+# Online WindowICP with multi-keyframe sparse ORB SE3 loop verification.
+Common:
+  device: &device cuda
+Odometry:
+  type: OnlineLoopWindowMACVO
+  name: MACVO-Fast-WindowICP5-ORBLoop-Sparse-t030
+  args:
+    device: *device
+    edgewidth: 32
+    num_point: 200
+    match_cov_default: 0.25
+    profile: false
+    mapping: false
+    window_size: 5
+    skip_matching: true
+    window_iterations: 10
+    window_huber_delta: 3.0
+    global_refine: false
+    global_iterations: 5
+    global_huber_delta: 3.0
+    online_loop:
+      enabled: true
+      validation_mode: sparse_se3
+      keyframe_stride: 5
+      min_temporal_gap: 30
+      bow_top_k: 3
+      max_candidates_per_target: 1
+      candidate_nms_frames: 10
+      max_candidate_queue: 8
+      max_pending_targets: 8
+      min_bow_score: 0.005
+      min_frames_between_loop_matches: 0
+      orb_ratio_test: 0.80
+      orb_max_matches: 300
+      orb_sidecar: ./build/orb_bow/macvo_orb_bow
+      vocabulary: ./cache/ORBvoc.txt
+      sparse_geometry:
+        min_mutual_matches: 40
+        min_valid_3d: 30
+        min_ransac_inliers: 25
+        min_ransac_ratio: 0.35
+        grid_rows: 4
+        grid_cols: 6
+        min_grid_cells: 6
+        ransac_iterations: 256
+        mahalanobis_threshold: 3.5
+        max_median_reprojection_px: 3.0
+        max_p90_reprojection_px: 6.0
+        min_geometry_ratio: 0.001
+        orb_pixel_variance: 2.25
+      hypothesis:
+        min_supports: 2
+        strong_supports: 3
+        source_cluster_frames: 10
+        target_support_frames: 10
+        max_correction_translation_m: 0.30
+        max_correction_rotation_deg: 10.0
+      sparse_factor:
+        translation_sigma_m: 0.25
+        rotation_sigma_deg: 10.0
+    pairwise_icp:
+      iterations: 5
+      huber_delta: 3.0
+    pose_graph:
+      iterations: 10
+      huber_delta: 3.0
+      skip_information_cap: 0.5
+      switch_prior: 1.0
+      loop_information_scale: 10000.0
+  cov:
+    obs:
+      type: MatchCovariance
+      args:
+        device: *device
+        kernel_size: 31
+        match_cov_default: 0.25
+        min_depth_cov: 0.05
+        min_flow_cov: 0.25
+  keypoint:
+    type: CovAwareSelector_NoDepth
+    args:
+      device: *device
+      kernel_size: 7
+      mask_width: 32
+      max_match_cov: 100.0
+  mappoint:
+    type: MappingPointSelector
+    args:
+      device: *device
+      max_depth: 5.0
+      max_depth_cov: 0.005
+      mask_width: 32
+  frontend:
+    type: CUDAGraph_FlowFormerCovFrontend
+    args:
+      device: *device
+      weight: ./Model/MACVO_FrontendCov.pth
+      enc_dtype: fp16
+      dec_dtype: bf16
+      decoder_depth: 12
+      enforce_positive_disparity: false
+  motion:
+    type: StaticMotionModel
+    args:
+  outlier:
+    type: CovarianceSanityFilter
+    args:
+  postprocess:
+    type: MotionInterpolate
+    args:
+  keyframe:
+    type: AllKeyframe
+    args:
+  optimizer:
+    type: TwoFrame_PGO
+    args:
+      device: cpu
+      vectorize: true
+      parallel: false
+      graph_type: icp
+      autodiff: false
+Data: !include ../../Sequence/TartanAir_example.yaml
+Preprocess: !include ../Common/Preprocess.yaml
